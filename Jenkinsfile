@@ -60,7 +60,6 @@ spec:
         sh 'git rev-parse HEAD > GIT_COMMIT'
         shortCommit = readFile('GIT_COMMIT').take(7)
         echo "GITHUB_TOKEN"
-        echo "${env.GITHUB_TOKEN}"
         echo "${GITHUB_TOKEN}"
     } 
 
