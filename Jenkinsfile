@@ -55,18 +55,29 @@ spec:
 {
 
   node(label) {
-  stage('Checkout SCM') {
+    
+    stage('Checkout SCM') {
         checkout scm
         sh 'git rev-parse HEAD > GIT_COMMIT'
         shortCommit = readFile('GIT_COMMIT').take(7)
-        echo "GITHUB_TOKEN"
-        echo "${GITHUB_TOKEN}"
-    } 
-
-    stage('Build node.js app') {
-        container('nodejs') {
-        sh 'npm install'
+    }
+    
+   
+  
+      
+      
+    stage('Deploy to production') {
+      container('helm') {
+          echo "Deploy app name: app-prod"
+        withKubeConfig([credentialsId: 'kubeconfig']) {
+          sh """
+         helm upgrade --install app-prod --debug --force https://github.com/empikls/node.is/tree/master/app \
+            --namespace="prod" \
+            --set image.tag="app-prod" \
+            --set ingress.hostName="prod-184-173-46-252.nip.io" \
+            --set-string ingress.tls[0].hosts[0]="prod-184-173-46-252.nip.io" \
+            --set-string ingress.tls[0].secretName=acme-prod-tls 
+          """
         }
+      }
     }
-    }
-}
