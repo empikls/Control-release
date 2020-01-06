@@ -71,7 +71,7 @@ spec:
           echo "Deploy app name: app-prod"
         withKubeConfig([credentialsId: 'kubeconfig']) {
           sh """
-         helm upgrade --install app-prod --debug --force https://github.com/empikls/node.is/tree/master/app \
+         helm upgrade --install app-prod --debug --stable-repo-url https://github.com/empikls/node.is/tree/master/app \
             --namespace="prod" \
             --set image.tag="app-prod" \
             --set ingress.hostName="prod-184-173-46-252.nip.io" \
