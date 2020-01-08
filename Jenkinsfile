@@ -63,10 +63,10 @@ spec:
                           doGenerateSubmoduleConfigurations: false,
                           extensions : [
                                   [$class : 'RelativeTargetDirectory',
-                                   relativeTargetDir: 'MyDirectory'
+                                   relativeTargetDir: 'targetDir'
                                   ],
                                   [$class : 'CloneOption',
-                                   reference: '/MyDirectory/repo'
+                                   reference: '/somefolder/repo'
                                   ]
                           ],
                           userRemoteConfigs : [[
