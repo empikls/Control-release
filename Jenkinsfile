@@ -59,7 +59,7 @@ spec:
           checkout(
                   [
                           $class : 'GitSCM',
-                          branches : scm.branches,
+                          branches: [[name: "${env?.CHANGE_ID ? env?.GIT_COMMIT : env?.BRANCH_NAME}"]],
                           doGenerateSubmoduleConfigurations: false,
                           extensions : [
                                   [$class : 'CloneOption'],
