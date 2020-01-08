@@ -58,14 +58,23 @@ spec:
                 stage('Clone another repo') {
                     checkout(
                             [
-                                    $class           : 'GitSCM',
-                                    branches         : [[ name: 'refs/tags/*' ||  name: 'refs/heads/master']],
+                           def buildTag  =       $class           : 'GitSCM',
+                                    branches         : [[ name: 'refs/tags/*' ]],
                                     extensions       : [[$class: 'CloneOption']],
                                     userRemoteConfigs: [[
                                                                 url    : "https://github.com/empikls/node.is.git",
-                                                                refspec: '+refs/tags/*:refs/remotes/origin/tags/*' ||  refspec: '+refs/heads/master:refs/remotes/origin/master'
+                                                                refspec: '+refs/tags/*:refs/remotes/origin/tags/*'
                                                         ]]
                             ]
+                                def gitWithCommit =   [
+                                            $class           : 'GitSCM2',
+                                            branches         : [[ name: 'refs/heads/master']],
+                                            extensions       : [[$class: 'CloneOption']],
+                                            userRemoteConfigs: [[
+                                                                        url    : "https://github.com/empikls/node.is.git",
+                                                                        refspec: '+refs/heads/master:refs/remotes/origin/master'
+                                                                ]]
+                                    ]
                     )
                     sh 'git rev-parse HEAD > GIT_COMMIT'
                     shortCommit = readFile('GIT_COMMIT').take(7)
