@@ -59,7 +59,7 @@ spec:
                     checkout(
                             [
                                     $class           : 'GitSCM',
-                                    branches         : [[name: '**/tags/**']],
+                                    branches         : [[name: 'refs/tags/*']],
                                     extensions       : [[$class: 'CloneOption']],
                                     userRemoteConfigs: [[
                                                                 url    : "https://github.com/empikls/node.is.git",
