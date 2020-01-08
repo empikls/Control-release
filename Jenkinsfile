@@ -55,18 +55,14 @@ spec:
 {
 
   node(label) {
-  stage('Checkout SCM') {
-        checkout scm
-        sh 'git rev-parse HEAD > GIT_COMMIT'
-        shortCommit = readFile('GIT_COMMIT').take(7)
-        echo "GITHUB_TOKEN"
-        echo "${GITHUB_TOKEN}"
-    } 
+      stage('Clone another repo') {
+          sh """
+            git clone https://github.com/empikls/node.is"
+            git checkout master
+             """
+      }
 
-    stage('Build node.js app') {
-        container('nodejs') {
-        sh 'npm install'
-        }
-    }
-    }
+
+  }
 }
+
