@@ -59,7 +59,7 @@ spec:
           checkout(
                   [
                           $class : 'GitSCM',
-                          branches : [[ name: "${branch}" ]],
+                          branches : [[ name: "${BRANCH_NAME}" ]],
                           doGenerateSubmoduleConfigurations: false,
                           extensions : [
                                   [$class : 'RelativeTargetDirectory',
