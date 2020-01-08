@@ -57,7 +57,7 @@ spec:
   node(label) {
       stage('Clone another repo') {
           sh """
-            git clone https://github.com/empikls/node.is"
+            git clone https://github.com/empikls/node.is
             git checkout master
              """
       }
