@@ -56,10 +56,24 @@ spec:
 
   node(label) {
       stage('Clone another repo') {
-          sh """
-            git clone https://github.com/empikls/node.is
-            git checkout master
-             """
+          checkout(
+                  [
+                          $class : 'GitSCM',
+                          branches : [[ name: "${branch}" ]],
+                          doGenerateSubmoduleConfigurations: false,
+                          extensions : [
+                                  [$class : 'RelativeTargetDirectory',
+                                   relativeTargetDir: targetDir
+                                  ],
+                                  [$class : 'CloneOption',
+                                   reference: '/somefolder/repo'
+                                  ]
+                          ],
+                          userRemoteConfigs : [[
+                                                       url : https://github.com/empikls/node.is
+                                               ]]
+                  ]
+          )
       }
   }
 }
