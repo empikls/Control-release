@@ -69,6 +69,24 @@ spec:
                     )
                     sh 'git rev-parse HEAD > GIT_COMMIT'
                     shortCommit = readFile('GIT_COMMIT').take(7)
+                    echo "${shortCommit}"
+                }
+                stage ('Deploy') {
+                    container('helm') {
+                        echo "Release image: ${shortCommit}"
+                        echo "Deploy app name: $appName"
+                        withKubeConfig([credentialsId: 'kubeconfig']) {
+                            sh """
+         helm upgrade --install $appName --debug --force ./app \
+            --namespace=$namespace \
+            --set image.tag="$tagName" \
+            --set ingress.hostName=$hostName \
+            --set-string ingress.tls[0].hosts[0]="$hostName" \
+            --set-string ingress.tls[0].secretName=acme-$appName-tls 
+          """
+                        }
+                    }
+
                 }
             }
         }
@@ -90,7 +108,7 @@ spec:
                     return (env.BRANCH_NAME == "master" )
                 }
 
-        
+
 def deploy( appName, namespace, tagName, hostName ) {
     container('helm') {
         echo "Release image: ${shortCommit}"
