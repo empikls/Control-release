@@ -59,7 +59,7 @@ spec:
           checkout(
                   [
                           $class : 'GitSCM',
-                          branches: [[name: '${SHA1}' ]],
+                          branches: [[name: '${COMMIT_ID}' ]],
                           extensions : [[$class : 'CloneOption']],
                           userRemoteConfigs : [[url : "https://github.com/empikls/node.is.git"]]
                   ]
