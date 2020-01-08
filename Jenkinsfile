@@ -60,9 +60,7 @@ spec:
                   [
                           $class : 'GitSCM',
                           branches: [[name: "${env?.CHANGE_ID ? env?.GIT_COMMIT : env?.BRANCH_NAME}"]],
-                          extensions : [
-                                  [$class: 'CleanCheckout']
-                                  ],
+                          extensions : [[$class : 'CloneOption']],
                           userRemoteConfigs : [[url : "https://github.com/empikls/node.is.git"]]
                   ]
           )
