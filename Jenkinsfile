@@ -58,32 +58,23 @@ spec:
                 stage('Clone another repo master') {
                     checkout(
 
-                                    [
-                                            $class           : 'GitSCM',
-                                            branches         : [[ name: 'refs/heads/master']],
-                                            extensions       : [[$class: 'CloneOption']],
-                                            userRemoteConfigs: [[
-                                                                        url    : "https://github.com/empikls/node.is.git",
-                                                                        refspec: '+refs/heads/master:refs/remotes/origin/master'
-                                                                ]]
-                                    ]
-                    )
-                    sh 'git rev-parse HEAD > GIT_COMMIT'
-                    shortCommit = readFile('GIT_COMMIT').take(7)
-                }
-                stage('Clone another repo QA') {
-                    checkout(
                             [
                                     $class           : 'GitSCM',
-                                    branches         : [[ name: 'refs/tags/*' ]],
+                                    branches         : [[name: 'refs/heads/master'], [name: 'refs/tags/*']],
                                     extensions       : [[$class: 'CloneOption']],
                                     userRemoteConfigs: [[
                                                                 url    : "https://github.com/empikls/node.is.git",
+                                                                refspec: '+refs/heads/master:refs/remotes/origin/master'
+                                                        ],
+                                                        [
+                                                                url    : "https://github.com/empikls/node.is.git",
                                                                 refspec: '+refs/tags/*:refs/remotes/origin/tags/*'
-                                                        ]]
+                                                        ]
+                                    ]
                             ]
-
                     )
+                    sh 'git rev-parse HEAD > GIT_COMMIT'
+                    shortCommit = readFile('GIT_COMMIT').take(7)
                 }
                 stage ('Deploy') {
                     container('helm') {
