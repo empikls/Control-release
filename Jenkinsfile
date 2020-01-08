@@ -55,19 +55,11 @@ spec:
         {
 
             node(label) {
-                stage('Clone another repo') {
+                stage('Clone another repo master') {
                     checkout(
-                    def buildTag  =  [
-                                 $class           : 'GitSCM',
-                                    branches         : [[ name: 'refs/tags/*' ]],
-                                    extensions       : [[$class: 'CloneOption']],
-                                    userRemoteConfigs: [[
-                                                                url    : "https://github.com/empikls/node.is.git",
-                                                                refspec: '+refs/tags/*:refs/remotes/origin/tags/*'
-                                                        ]]
-                            ]
-                                def gitWithCommit =   [
-                                            $class           : 'GitSCM2',
+
+                                    [
+                                            $class           : 'GitSCM',
                                             branches         : [[ name: 'refs/heads/master']],
                                             extensions       : [[$class: 'CloneOption']],
                                             userRemoteConfigs: [[
@@ -78,6 +70,20 @@ spec:
                     )
                     sh 'git rev-parse HEAD > GIT_COMMIT'
                     shortCommit = readFile('GIT_COMMIT').take(7)
+                }
+                stage('Clone another repo QA') {
+                    checkout(
+                            [
+                                    $class           : 'GitSCM',
+                                    branches         : [[ name: 'refs/tags/*' ]],
+                                    extensions       : [[$class: 'CloneOption']],
+                                    userRemoteConfigs: [[
+                                                                url    : "https://github.com/empikls/node.is.git",
+                                                                refspec: '+refs/tags/*:refs/remotes/origin/tags/*'
+                                                        ]]
+                            ]
+
+                    )
                 }
                 stage ('Deploy') {
                     container('helm') {
