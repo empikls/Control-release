@@ -70,7 +70,8 @@ spec:
                     sh 'git rev-parse HEAD > GIT_COMMIT'
                     shortCommit = readFile('GIT_COMMIT').take(7)
                 }
-
+            }
+        }
                 def tagDockerImage
                 def nameStage
                 def hostname
@@ -88,8 +89,8 @@ spec:
                 def isMaster() {
                     return (env.BRANCH_NAME == "master" )
                 }
-            }
-        }
+
+        
 def deploy( appName, namespace, tagName, hostName ) {
     container('helm') {
         echo "Release image: ${shortCommit}"
