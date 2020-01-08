@@ -56,8 +56,17 @@ spec:
 
             node(label) {
                 stage('Clone another repo') {
-                    sh 'git clone "https://github.com/empikls/node.is" '
-                    sh 'git checkout "${env.BRANCH_NAME}"'
+                    checkout(
+                            [
+                                    $class           : 'GitSCM',
+                                    branches         : [[name: 'refs/tags/*']],
+                                    extensions       : [[$class: 'CloneOption']],
+                                    userRemoteConfigs: [[
+                                                                url    : "https://github.com/empikls/node.is.git",
+                                                                refspec: '+refs/tags/*:refs/remotes/origin/tags/*'
+                                                        ]]
+                            ]
+                    )
                     sh 'git rev-parse HEAD > GIT_COMMIT'
                     shortCommit = readFile('GIT_COMMIT').take(7)
                 }
