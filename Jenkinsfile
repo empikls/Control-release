@@ -70,7 +70,7 @@ spec:
                                   ]
                           ],
                           userRemoteConfigs : [[
-                                                       url : https://github.com/empikls/node.is
+                                                       url : "https://github.com/empikls/node.is.git"
                                                ]]
                   ]
           )
