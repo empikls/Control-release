@@ -51,8 +51,7 @@ spec:
     tty: true
 """
   )
-sh 'git rev-parse HEAD > GIT_COMMIT'
-shortCommit = readFile('GIT_COMMIT').take(7)
+
 {
 
   node(label) {
@@ -60,9 +59,13 @@ shortCommit = readFile('GIT_COMMIT').take(7)
           checkout(
                   [
                           $class : 'GitSCM',
-                          branches: [[name: '9dcd07666caac5d7b38be8344acfd5d02113703d']],
+
+                          branches: [[name: 'refs/heads/master' ]],
                           extensions : [[$class : 'CloneOption']],
-                          userRemoteConfigs : [[url: "https://github.com/empikls/node.is"]]
+                          userRemoteConfigs : [[
+                                                       url : "https://github.com/empikls/node.is.git",
+                                                        refspec: '+refs/heads/master:refs/remotes/origin/master'
+                                               ]]
                   ]
           )
       }
