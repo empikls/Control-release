@@ -63,7 +63,7 @@ spec:
                                     extensions       : [[$class: 'CloneOption']],
                                     userRemoteConfigs: [[
                                                                 url    : "https://github.com/empikls/node.is.git",
-                                                                refspec: '+refs/tags/:refs/remotes/origin/tags/'
+                                                                refspec: '+refs/tags/*:refs/remotes/origin/tags/*'
                                                         ]]
                             ]
                     )
