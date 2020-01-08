@@ -61,12 +61,9 @@ shortCommit = readFile('GIT_COMMIT').take(7)
                   [
                           $class : 'GitSCM',
 
-                          branches: [[name: "refs/heads/master"]],
+                          branches: [[name: 'refs/heads/master']],
                           extensions : [[$class : 'CloneOption']],
-                          userRemoteConfigs : [[
-                                                       refspec: '+refs/heads/master:refs/remotes/origin/master',
-                                                       url: "https://github.com/empikls/node.is"
-                                               ]]
+                          userRemoteConfigs : [[url: "https://github.com/empikls/node.is"]]
                   ]
           )
       }
