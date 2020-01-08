@@ -62,10 +62,9 @@ spec:
                     doGenerateSubmoduleConfigurations: false,
                     extensions: [[$class: 'CloneOption',
                                   noTags: false,
-                                  reference: '/var/lib/jenkins/.git-references/apm-agent-go.git',
                                   shallow: false]],
                     submoduleCfg: [],
-                    userRemoteConfigs: [[credentialsId: 'UserAndToken',
+                    userRemoteConfigs: [[
                                                          url: "https://github.com/empikls/node.is"]]]
           )
 
