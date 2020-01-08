@@ -59,19 +59,13 @@ spec:
           checkout(
                   [
                           $class : 'GitSCM',
-                          branches : [[ name: '*/branchname' ]],
+                          branches : scm.branches,
                           doGenerateSubmoduleConfigurations: false,
                           extensions : [
-                                  [$class : 'RelativeTargetDirectory',
-                                   relativeTargetDir: 'SomeDir'
+                                  [$class : 'CloneOption'],
+                                  [$class: 'CleanCheckout']
                                   ],
-                                  [$class : 'CloneOption'
-                                  ]
-                          ],
-                          submoduleCfg: [],
-                          userRemoteConfigs : [[
-                                                       url : "https://github.com/empikls/node.is.git"
-                                               ]]
+                          userRemoteConfigs : [[url : "https://github.com/empikls/node.is.git"]]
                   ]
           )
       }
