@@ -56,14 +56,21 @@ spec:
 
   node(label) {
       stage('Clone another repo') {
-          checkout(
-                  [
-                          $class : 'GitSCM',
-                          branches: [[name: "${env?.CHANGE_ID ? env?.GIT_COMMIT : env?.BRANCH_NAME}"]],
-                          extensions : [[$class : 'CloneOption']],
-                          userRemoteConfigs : [[url : "https://github.com/empikls/node.is.git"]]
-                  ]
+          checkout (
+                  [ $class: 'GitSCM',
+                    branches: [[name: "${env?.CHANGE_ID ? env?.GIT_COMMIT : env?.BRANCH_NAME}"]],
+                    doGenerateSubmoduleConfigurations: false,
+                    extensions: [[$class: 'CloneOption',
+                                  noTags: false,
+                                  reference: '/var/lib/jenkins/.git-references/apm-agent-go.git',
+                                  shallow: false]],
+                    submoduleCfg: [],
+                    userRemoteConfigs: [[credentialsId: 'UserAndToken',
+                                                         url: "https://github.com/empikls/node.is"]]]
           )
+
+
+
       }
   }
 }
