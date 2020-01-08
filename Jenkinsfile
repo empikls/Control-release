@@ -60,16 +60,17 @@ spec:
 
                             [
                                     $class           : 'GitSCM',
-                                    branches         : [[name: 'refs/heads/master'], [name: 'refs/tags/*']],
+                                    branches         : [[name: 'refs/tags/*'],[name: 'refs/heads/master']],
                                     extensions       : [[$class: 'CloneOption']],
                                     userRemoteConfigs: [[
                                                                 url    : "https://github.com/empikls/node.is.git",
-                                                                refspec: '+refs/heads/master:refs/remotes/origin/master'
+                                                                refspec: '+refs/tags/*:refs/remotes/origin/tags/*'
                                                         ],
                                                         [
                                                                 url    : "https://github.com/empikls/node.is.git",
-                                                                refspec: '+refs/tags/*:refs/remotes/origin/tags/*'
+                                                                refspec: '+refs/heads/master:refs/remotes/origin/master'
                                                         ]
+
                                     ]
                             ]
                     )
