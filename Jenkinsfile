@@ -85,7 +85,7 @@ spec:
               deploy( nameStage, namespace, tagDockerImage, hostname )
           }
       }
-      boolean isMaster() {
+      def isMaster() {
           return (env.BRANCH_NAME == "master" )
       }
   }
