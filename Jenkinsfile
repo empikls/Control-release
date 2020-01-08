@@ -69,37 +69,19 @@ spec:
                     )
                     sh 'git rev-parse HEAD > GIT_COMMIT'
                     shortCommit = readFile('GIT_COMMIT').take(7)
-                    echo "${shortCommit}"
-                }
-                def tagDockerImage
-                def nameStage
-                def hostname
-                def job
-
-                if ( isMaster() ) {
-                    stage('Deploy dev version') {
-                        nameStage = "app-dev"
-                        namespace = "dev"
-                        tagDockerImage = readFile('GIT_COMMIT').take(7)
-                        hostname = "dev-184-173-46-252.nip.io"
-                        deploy(nameStage, namespace, tagDockerImage, hostname)
-                    }
-                }
-                def isMaster() {
-                    return (env.BRANCH_NAME == "master" )
                 }
                 stage ('Deploy') {
                     container('helm') {
                         echo "Release image: ${shortCommit}"
-                        echo "Deploy app name: $appName"
+                        echo "Deploy app name: app-dev"
                         withKubeConfig([credentialsId: 'kubeconfig']) {
                             sh """
-         helm upgrade --install $appName --debug --force ./app \
-            --namespace=$namespace \
-            --set image.tag="$tagName" \
-            --set ingress.hostName=$hostName \
-            --set-string ingress.tls[0].hosts[0]="$hostName" \
-            --set-string ingress.tls[0].secretName=acme-$appName-tls 
+         helm upgrade --install "app-dev" --debug --force ./app \
+            --namespace=dev \
+            --set image.tag="${shortCommit}" \
+            --set ingress.hostName="dev-184-173-46-252.nip.io" \
+            --set-string ingress.tls[0].hosts[0]="dev-184-173-46-252.nip.io" \
+            --set-string ingress.tls[0].secretName=acme-app-dev-tls 
           """
                         }
                     }
