@@ -55,43 +55,12 @@ spec:
 {
 
   node(label) {
-<<<<<<< HEAD
       stage('Clone another repo') {
           sh """
             git clone https://github.com/empikls/node.is"
             git checkout master
              """
       }
-
-
-=======
-    
-    stage('Checkout SCM') {
-        checkout scm
-        sh 'git rev-parse HEAD > GIT_COMMIT'
-        shortCommit = readFile('GIT_COMMIT').take(7)
-    }
-    
-   
-  
-      
-      
-    stage('Deploy to production') {
-      container('helm') {
-          echo "Deploy app name: app-prod"
-        withKubeConfig([credentialsId: 'kubeconfig']) {
-          sh """
-         helm upgrade --install app-prod --debug --stable-repo-url https://github.com/empikls/node.is/tree/master/app \
-            --namespace="prod" \
-            --set image.tag="app-prod" \
-            --set ingress.hostName="prod-184-173-46-252.nip.io" \
-            --set-string ingress.tls[0].hosts[0]="prod-184-173-46-252.nip.io" \
-            --set-string ingress.tls[0].secretName=acme-prod-tls 
-          """
-        }
-      }
-    }
->>>>>>> b473985c62bbfe94a38d532d9313072800f1ad16
   }
 }
 
