@@ -68,6 +68,7 @@ spec:
                                   [$class : 'CloneOption'
                                   ]
                           ],
+                          submoduleCfg: [],
                           userRemoteConfigs : [[
                                                        url : "https://github.com/empikls/node.is.git"
                                                ]]
