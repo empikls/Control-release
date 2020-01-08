@@ -57,8 +57,8 @@ spec:
             node(label) {
                 stage('Clone another repo') {
                     checkout(
-                            [
-                           def buildTag  =       $class           : 'GitSCM',
+                    def buildTag  =  [
+                                 $class           : 'GitSCM',
                                     branches         : [[ name: 'refs/tags/*' ]],
                                     extensions       : [[$class: 'CloneOption']],
                                     userRemoteConfigs: [[
