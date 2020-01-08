@@ -52,41 +52,42 @@ spec:
 """
   )
 
-{
+        {
 
-  node(label) {
-      stage('Clone another repo') {
-          checkout(
-                  [
-                          $class : 'GitSCM',
-                          branches: [[name: 'refs/heads/master' ]],
-                          extensions : [[$class : 'CloneOption']],
-                          userRemoteConfigs : [[
-                                                       url : "https://github.com/empikls/node.is.git",
-                                                        refspec: '+refs/heads/master:refs/remotes/origin/master'
-                                               ]]
-                  ]
-          )
-          sh 'git rev-parse HEAD > GIT_COMMIT'
-          shortCommit = readFile('GIT_COMMIT').take(7)
-      }
+            node(label) {
+                stage('Clone another repo') {
+                    checkout(
+                            [
+                                    $class           : 'GitSCM',
+                                    branches         : [[name: 'refs/heads/master']],
+                                    extensions       : [[$class: 'CloneOption']],
+                                    userRemoteConfigs: [[
+                                                                url    : "https://github.com/empikls/node.is.git",
+                                                                refspec: '+refs/heads/master:refs/remotes/origin/master'
+                                                        ]]
+                            ]
+                    )
+                    sh 'git rev-parse HEAD > GIT_COMMIT'
+                    shortCommit = readFile('GIT_COMMIT').take(7)
+                }
 
-      def tagDockerImage
-      def nameStage
-      def hostname
-      def job
+                def tagDockerImage
+                def nameStage
+                def hostname
+                def job
 
-      def isMaster() {
-          stage('Deploy dev version') {
-              nameStage = "app-dev"
-              namespace = "dev"
-              tagDockerImage = readFile('GIT_COMMIT').take(7)
-              hostname = "dev-184-173-46-252.nip.io"
-              deploy( nameStage, namespace, tagDockerImage, hostname )
-          }
-     
-  }
-}
+                def isMaster() {
+                    stage('Deploy dev version') {
+                        nameStage = "app-dev"
+                        namespace = "dev"
+                        tagDockerImage = readFile('GIT_COMMIT').take(7)
+                        hostname = "dev-184-173-46-252.nip.io"
+                        deploy(nameStage, namespace, tagDockerImage, hostname)
+                    }
+
+                }
+            }
+        }
 def deploy( appName, namespace, tagName, hostName ) {
     container('helm') {
         echo "Release image: ${shortCommit}"
