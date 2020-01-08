@@ -59,14 +59,14 @@ spec:
           checkout(
                   [
                           $class : 'GitSCM',
-                          branches : [[ name: "${BRANCH_NAME}" ]],
+                          branches : [[ name: '*/branchname' ]],
                           doGenerateSubmoduleConfigurations: false,
                           extensions : [
                                   [$class : 'RelativeTargetDirectory',
-                                   relativeTargetDir: targetDir
+                                   relativeTargetDir: 'MyDirectory'
                                   ],
                                   [$class : 'CloneOption',
-                                   reference: '/somefolder/repo'
+                                   reference: '/MyDirectory/repo'
                                   ]
                           ],
                           userRemoteConfigs : [[
