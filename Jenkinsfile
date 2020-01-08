@@ -85,12 +85,15 @@ spec:
               deploy( nameStage, namespace, tagDockerImage, hostname )
           }
       }
-      def deploy( appName, namespace, tagName, hostName ) {
-          container('helm') {
-              echo "Release image: ${shortCommit}"
-              echo "Deploy app name: $appName"
-              withKubeConfig([credentialsId: 'kubeconfig']) {
-                  sh """
+
+  }
+}
+def deploy( appName, namespace, tagName, hostName ) {
+    container('helm') {
+        echo "Release image: ${shortCommit}"
+        echo "Deploy app name: $appName"
+        withKubeConfig([credentialsId: 'kubeconfig']) {
+            sh """
          helm upgrade --install $appName --debug --force ./app \
             --namespace=$namespace \
             --set image.tag="$tagName" \
@@ -98,9 +101,6 @@ spec:
             --set-string ingress.tls[0].hosts[0]="$hostName" \
             --set-string ingress.tls[0].secretName=acme-$appName-tls 
           """
-              }
-          }
-      }
-  }
+        }
+    }
 }
-
