@@ -76,7 +76,7 @@ spec:
       def hostname
       def job
 
-      isMaster() {
+      def isMaster() {
           stage('Deploy dev version') {
               nameStage = "app-dev"
               namespace = "dev"
@@ -84,10 +84,7 @@ spec:
               hostname = "dev-184-173-46-252.nip.io"
               deploy( nameStage, namespace, tagDockerImage, hostname )
           }
-      }
-      def isMaster() {
-          return (env.BRANCH_NAME == "master" )
-      }
+     
   }
 }
 def deploy( appName, namespace, tagName, hostName ) {
