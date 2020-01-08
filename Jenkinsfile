@@ -56,7 +56,7 @@ spec:
 
             node(label) {
                 stage('Clone another repo') {
-                    git clone "https://github.com/empikls/node.is"
+                    sh 'git clone "https://github.com/empikls/node.is" '
                     checkout scm
                     sh 'git rev-parse HEAD > GIT_COMMIT'
                     shortCommit = readFile('GIT_COMMIT').take(7)
