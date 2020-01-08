@@ -85,7 +85,9 @@ spec:
               deploy( nameStage, namespace, tagDockerImage, hostname )
           }
       }
-
+      boolean isMaster() {
+          return (env.BRANCH_NAME == "master" )
+      }
   }
 }
 def deploy( appName, namespace, tagName, hostName ) {
