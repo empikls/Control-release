@@ -58,6 +58,7 @@ spec:
                 stage('Clone another repo master') {
                     checkout ( [$class: 'GitSCM',
                                 branches: [[name: ${params.BRANCH_NAME} ]],
+                                extensions       : [[$class: 'CloneOption']],
                                 userRemoteConfigs: [[
                                                             credentialsId: 'gitHub_key',
                                                             url: "https://github.com/empikls/node.is"]]])
