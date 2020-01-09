@@ -56,12 +56,11 @@ spec:
 
             node(label) {
                 stage('Clone another repo master') {
-                    echo "${params.BRANCH_NAME}"
-                    sh """
-                       git clone https://github.com/empikls/node.is
-                       git checkout -f ${params.BRANCH_NAME}
-                        """
-
+                    checkout ( [$class: 'GitSCM',
+                                branches: [[name: ${params.BRANCH_NAME} ]],
+                                userRemoteConfigs: [[
+                                                            credentialsId: 'gitHub_key',
+                                                            url: "https://github.com/empikls/node.is"]]])
                 }
         }
 }
