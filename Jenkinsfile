@@ -60,7 +60,10 @@ spec:
                                 branches: [[name: "${params.BRANCH_NAME}"]],
                                 extensions       : [],
                                 userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
+                echo "${params.GIT_TAG}"
                 }
+
+
         }
 }
 
