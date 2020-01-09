@@ -63,7 +63,7 @@ spec:
                     sh 'git rev-parse HEAD > GIT_COMMIT'
                     shortCommit = readFile('GIT_COMMIT').take(7)
                     echo "${shortCommit}"
-                echo "${params.TAG}"
+                    echo "${params.TAG}"
                     echo "${params.COMMIT}"
                 }
 
@@ -93,13 +93,13 @@ spec:
                     tagDockerImage = "${params.TAG}"
                     hostname = "qa-184-173-46-252.nip.io"
                     deploy( nameStage, namespace, tagDockerImage, hostname )
-                 }
-}
-def isMaster() {
+                    }
+                }
+                def isMaster() {
                     return ("${params.TAG}" == "master" )
                 }
                 def isBuildingTag() {
-                    return ("${params.TAG}" ==~ /^v\d.\d.\d$/ || env.BRANCH_NAME ==~ /^\d.\d.\d$/ )
+                    return ("${params.TAG}" ==~ /^v\d.\d.\d$/ || "${params.TAG}" ==~ /^\d.\d.\d$/ )
                 }
 
 
