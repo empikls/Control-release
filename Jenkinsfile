@@ -57,7 +57,7 @@ spec:
             node(label) {
                 stage('Clone another repo master') {
                     checkout ( [$class: 'GitSCM',
-                                branches: [[name: ${params.BRANCH_NAME} ]],
+                                branches: [[name: '${params.BRANCH_NAME}']],
                                 extensions       : [[$class: 'CloneOption']],
                                 userRemoteConfigs: [[
                                                             credentialsId: 'gitHub_key',
