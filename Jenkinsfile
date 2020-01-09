@@ -74,6 +74,7 @@ spec:
                                     ]
                             ]
                     )
+                    echo "${params.GIT_COMMIT}"
                     sh 'git rev-parse HEAD > GIT_COMMIT'
                     shortCommit = readFile('GIT_COMMIT').take(7)
                 }
