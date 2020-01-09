@@ -102,15 +102,7 @@ def isMaster() {
                     return (${params.TAG} ==~ /^v\d.\d.\d$/ || env.BRANCH_NAME ==~ /^\d.\d.\d$/ )
                 }
 
-                if ( isMaster() ) {
-                    stage('Deploy dev version') {
-                        nameStage = "app-dev"
-                        namespace = "dev"
-                        tagDockerImage = readFile('GIT_COMMIT').take(7)
-                        hostname = "dev-184-173-46-252.nip.io"
-                        deploy( nameStage, namespace, tagDockerImage, hostname )
-                    }
-                })
+
 def deploy( appName, namespace, tagName, hostName ) {
     container('helm') {
         echo "Release image: ${shortCommit}"
