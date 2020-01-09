@@ -56,30 +56,15 @@ spec:
 
             node(label) {
                 stage('Clone another repo master') {
-
                     echo "${params.GIT_COMMIT}"
                     sh """
                        git clone https://github.com/empikls/node.is
+                        """
                 }
-                stage ('Deploy') {
-                    container('helm') {
-                        echo "Release image: ${shortCommit}"
-                        echo "Deploy app name: app-dev"
-                        withKubeConfig([credentialsId: 'kubeconfig']) {
-                            sh """
-         helm upgrade --install "app-dev" --debug --force ./app \
-            --namespace=dev \
-            --set image.tag="${shortCommit}" \
-            --set ingress.hostName="dev-184-173-46-252.nip.io" \
-            --set-string ingress.tls[0].hosts[0]="dev-184-173-46-252.nip.io" \
-            --set-string ingress.tls[0].secretName=acme-app-dev-tls 
-          """
-                        }
-                    }
-
-                }
-            }
         }
+}
+
+
                 def tagDockerImage
                 def nameStage
                 def hostname
