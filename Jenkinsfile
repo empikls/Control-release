@@ -59,8 +59,9 @@ spec:
                     echo "${params.BRANCH_NAME}"
                     sh """
                        git clone https://github.com/empikls/node.is
+                       git checkout -f ${params.BRANCH_NAME}
                         """
-                    checkout scm
+
                 }
         }
 }
