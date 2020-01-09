@@ -57,11 +57,11 @@ spec:
             node(label) {
                 stage('Clone another repo master') {
                     checkout ( [$class: 'GitSCM',
-                                branches: [[name: "${params.BRANCH_NAME}"]],
+                                branches: [[name: "${params.COMMIT}"]],
                                 extensions       : [],
                                 userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                 echo "${params.TAG}"
-                    echo "${params.BRANCH_NAME}"
+                    echo "${params.COMMIT}"
                 }
 
 
