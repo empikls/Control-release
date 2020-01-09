@@ -56,7 +56,7 @@ spec:
 
             node(label) {
                 stage('Clone another repo master') {
-                    echo "${params.GIT_COMMIT}"
+                    echo "${params.COMMIT_ID}"
                     sh """
                        git clone https://github.com/empikls/node.is
                         """
