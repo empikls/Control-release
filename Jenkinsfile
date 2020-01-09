@@ -61,6 +61,7 @@ spec:
                                 extensions       : [],
                                 userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                 echo "${params.TAG}"
+                    echo "${params.BRANCH_NAME}"
                 }
 
 
