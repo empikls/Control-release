@@ -60,6 +60,9 @@ spec:
                                 branches: [[name: "${params.COMMIT}"]],
                                 extensions       : [],
                                 userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
+                    sh 'git rev-parse HEAD > GIT_COMMIT'
+                    shortCommit = readFile('GIT_COMMIT').take(7)
+                    echo "${shortCommit}"
                 echo "${params.TAG}"
                     echo "${params.COMMIT}"
                 }
@@ -83,11 +86,31 @@ spec:
                         deploy(nameStage, namespace, tagDockerImage, hostname)
                     }
                 }
-                def isMaster() {
-                    return (env.BRANCH_NAME == "master" )
+                if ( isBuildingTag() ) {
+                    stage('Deploy to QA stage') {
+                    nameStage = "app-qa"
+                    namespace = "qa"
+                    tagDockerImage = "${params.TAG}"
+                    hostname = "qa-184-173-46-252.nip.io"
+                    deploy( nameStage, namespace, tagDockerImage, hostname )
+                 }
+}
+def isMaster() {
+                    return (${params.TAG} == "master" )
+                }
+                def isBuildingTag() {
+                    return (${params.TAG} ==~ /^v\d.\d.\d$/ || env.BRANCH_NAME ==~ /^\d.\d.\d$/ )
                 }
 
-
+                if ( isMaster() ) {
+                    stage('Deploy dev version') {
+                        nameStage = "app-dev"
+                        namespace = "dev"
+                        tagDockerImage = readFile('GIT_COMMIT').take(7)
+                        hostname = "dev-184-173-46-252.nip.io"
+                        deploy( nameStage, namespace, tagDockerImage, hostname )
+                    }
+                })
 def deploy( appName, namespace, tagName, hostName ) {
     container('helm') {
         echo "Release image: ${shortCommit}"
