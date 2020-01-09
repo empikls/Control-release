@@ -96,10 +96,10 @@ spec:
                  }
 }
 def isMaster() {
-                    return (${params.TAG} == "master" )
+                    return ("${params.TAG}" == "master" )
                 }
                 def isBuildingTag() {
-                    return (${params.TAG} ==~ /^v\d.\d.\d$/ || env.BRANCH_NAME ==~ /^\d.\d.\d$/ )
+                    return ("${params.TAG}" ==~ /^v\d.\d.\d$/ || env.BRANCH_NAME ==~ /^\d.\d.\d$/ )
                 }
 
 
