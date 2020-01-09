@@ -59,6 +59,7 @@ spec:
                     echo "${params.GIT_COMMIT}"
                     sh """
                        git clone https://github.com/empikls/node.is
+                       checkout scm
                         """
                 }
         }
