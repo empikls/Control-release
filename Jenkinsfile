@@ -56,10 +56,10 @@ spec:
 
             node(label) {
                 stage('Clone another repo master') {
-                    checkout ( [$class: 'GitSCM',
-                                branches: [[name: "${params.COMMIT}"]],
-                                extensions       : [],
-                                userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
+                    checkout([$class           : 'GitSCM',
+                              branches         : [[name: "${params.COMMIT}"]],
+                              extensions       : [],
+                              userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                     sh 'git rev-parse HEAD > GIT_COMMIT'
                     shortCommit = readFile('GIT_COMMIT').take(7)
                     echo "${shortCommit}"
@@ -68,16 +68,12 @@ spec:
                 }
 
 
-        }
-}
-
-
                 def tagDockerImage
                 def nameStage
                 def hostname
                 def job
 
-                if ( isMaster() ) {
+                if (isMaster()) {
                     stage('Deploy dev version') {
                         nameStage = "app-dev"
                         namespace = "dev"
@@ -86,15 +82,17 @@ spec:
                         deploy(nameStage, namespace, tagDockerImage, hostname)
                     }
                 }
-                if ( isBuildingTag() ) {
+                if (isBuildingTag()) {
                     stage('Deploy to QA stage') {
-                    nameStage = "app-qa"
-                    namespace = "qa"
-                    tagDockerImage = "${params.TAG}"
-                    hostname = "qa-184-173-46-252.nip.io"
-                    deploy( nameStage, namespace, tagDockerImage, hostname )
+                        nameStage = "app-qa"
+                        namespace = "qa"
+                        tagDockerImage = "${params.TAG}"
+                        hostname = "qa-184-173-46-252.nip.io"
+                        deploy(nameStage, namespace, tagDockerImage, hostname)
                     }
                 }
+            }
+        }
                 def isMaster() {
                     return ("${params.TAG}" == "master" )
                 }
