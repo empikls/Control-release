@@ -56,27 +56,10 @@ spec:
 
             node(label) {
                 stage('Clone another repo master') {
-                    checkout(
 
-                            [
-                                    $class           : 'GitSCM',
-                                    branches         : [[name: 'refs/tags/*'],[name: 'refs/heads/master']],
-                                    extensions       : [[$class: 'CloneOption']],
-                                    userRemoteConfigs: [[
-                                                                url    : "https://github.com/empikls/node.is.git",
-                                                                refspec: '+refs/tags/*:refs/remotes/origin/tags/*'
-                                                        ],
-                                                        [
-                                                                url    : "https://github.com/empikls/node.is.git",
-                                                                refspec: '+refs/heads/master:refs/remotes/origin/master'
-                                                        ]
-
-                                    ]
-                            ]
-                    )
                     echo "${params.GIT_COMMIT}"
-                    sh 'git rev-parse HEAD > GIT_COMMIT'
-                    shortCommit = readFile('GIT_COMMIT').take(7)
+                    sh """
+                       git clone https://github.com/empikls/node.is
                 }
                 stage ('Deploy') {
                     container('helm') {
