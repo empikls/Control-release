@@ -78,7 +78,7 @@ spec:
 //                    List values = parser.load(("values.yaml" as File).text)
 //
 //                    values.each{println it.tag}
-                }
+            }
 //                stage('Deploy DEV release') {
 //                    if (isMaster()) {
 //                        nameStage = "app-dev"
@@ -97,19 +97,19 @@ spec:
 //                        deploy(nameStage, namespace, tagDockerImage, hostname)
 //                    }
 //                }
-                stage('Deploy PROD release') {
-                    container('helm') {
-                        echo "Release image: ${shortCommit}"
-                        echo "Deploy app name: $appName"
-                        withKubeConfig([credentialsId: 'kubeconfig']) {
-                            sh """
-                            helm upgrade --install prod --debug ./Application/app --values ./Application/values.yaml
+            stage('Deploy PROD release') {
+                container('helm') {
+                    echo "Release image: ${shortCommit}"
+                    echo "Deploy app name: $appName"
+                    withKubeConfig([credentialsId: 'kubeconfig']) {
+                        sh """
+                            helm upgrade --install prod --debug ./App/app --values ./values.yaml
                             """
-                        }
                     }
                 }
+            }
 
-                
+        }
 
                 def tagDockerImage
                 def nameStage
@@ -134,7 +134,7 @@ spec:
 //                        deploy(nameStage, namespace, tagDockerImage, hostname)
 //                            }
 //                        }
-                    }
+
 //                }
                 boolean isMaster() {
                     return ("${params.TAG}" == "master" )
