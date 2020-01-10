@@ -64,10 +64,10 @@ spec:
 //                              userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
 //                    sh 'git rev-parse HEAD > GIT_COMMIT'
                     checkout scm
-                    shortCommit = readFile('GIT_COMMIT').take(7)
-                    echo "${shortCommit}"
-                    echo "${params.TAG}"
-                    echo "${params.COMMIT}"
+//                    shortCommit = readFile('GIT_COMMIT').take(7)
+//                    echo "${shortCommit}"
+//                    echo "${params.TAG}"
+//                    echo "${params.COMMIT}"
 
                     Yaml parser = new Yaml()
                     List example = parser.load(("values.yaml" as File).text)
