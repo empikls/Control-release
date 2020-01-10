@@ -1,0 +1,8 @@
+image:
+  tag: 1.1.1
+ingress:
+  hostName: prod-173-193-112-65.nip.io
+  tls:
+    - hosts:
+        - prod-173-193-112-65.nip.io
+      secretName: acme-app-prod-tls
