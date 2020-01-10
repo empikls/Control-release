@@ -65,8 +65,8 @@ spec:
                     sh 'pwd'
 
 
-                    def currentDir = new File('.')
-                    println 'list files from java'
+                    def currentDir = new File("${env.WORKSPACE}")
+                    println 'list files of workspace from java'
                     currentDir.eachFile {
                         println it
                     }
