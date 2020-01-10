@@ -2,7 +2,7 @@
 
 
 def label = "jenkins"
-env.DOCKERHUB_IMAGE = "devops53/hello-world"
+
 
 podTemplate(label: label, yaml: """
 apiVersion: v1
