@@ -57,10 +57,15 @@ spec:
         {
 
             node(label) {
+
+                stage('Clone config repo') {
+                    checkout scm
+                }
+
                 stage('Clone another repo master') {
                     checkout([$class           : 'GitSCM',
                               branches         : [[name: "${params.COMMIT}"]],
-                              extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'Application']],
+                              extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
                               userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                     sh 'git rev-parse HEAD > GIT_COMMIT'
                     shortCommit = readFile('GIT_COMMIT').take(7)
@@ -68,9 +73,7 @@ spec:
                     echo "${params.TAG}"
                     echo "${params.COMMIT}"
                 }
-//                stage('Clone config repo') {
-//                    checkout scm
-//                }
+
 //                    Yaml parser = new Yaml()
 //                    List values = parser.load(("values.yaml" as File).text)
 //
