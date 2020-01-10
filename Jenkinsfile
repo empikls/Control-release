@@ -67,15 +67,8 @@ spec:
                     echo "${params.TAG}"
                     echo "${params.COMMIT}"
                 }
-
-
-                def tagDockerImage
-                def nameStage
-                def hostname
-
-
-                if (isMaster()) {
-                    stage('Deploy dev version') {
+                stage('Deploy DEV release') {
+                    if (isMaster()) {
                         nameStage = "app-dev"
                         namespace = "dev"
                         tagDockerImage = readFile('GIT_COMMIT').take(7)
@@ -83,15 +76,40 @@ spec:
                         deploy(nameStage, namespace, tagDockerImage, hostname)
                     }
                 }
-                if (isBuildingTag()) {
-                    stage('Deploy to QA stage') {
+                stage('Deploy QA release') {
+                    if (isBuildingTag()) {
                         nameStage = "app-qa"
                         namespace = "qa"
                         tagDockerImage = "${params.TAG}"
                         hostname = "qa-173-193-112-65.nip.io"
                         deploy(nameStage, namespace, tagDockerImage, hostname)
-                            }
-                        }
+                    }
+                }
+
+
+                def tagDockerImage
+                def nameStage
+                def hostname
+
+
+//                if (isMaster()) {
+//                    stage('Deploy dev version') {
+//                        nameStage = "app-dev"
+//                        namespace = "dev"
+//                        tagDockerImage = readFile('GIT_COMMIT').take(7)
+//                        hostname = "dev-173-193-112-65.nip.io"
+//                        deploy(nameStage, namespace, tagDockerImage, hostname)
+//                    }
+//                }
+//                if (isBuildingTag()) {
+//                    stage('Deploy to QA stage') {
+//                        nameStage = "app-qa"
+//                        namespace = "qa"
+//                        tagDockerImage = "${params.TAG}"
+//                        hostname = "qa-173-193-112-65.nip.io"
+//                        deploy(nameStage, namespace, tagDockerImage, hostname)
+//                            }
+//                        }
                     }
                 }
                 boolean isMaster() {
