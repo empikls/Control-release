@@ -61,7 +61,12 @@ spec:
                 stage('Clone config repo') {
                     checkout scm
                     sh 'ls -la'
+                    sh 'current dir from sh'
+                    sh 'pwd'
 
+
+                    def currentDirJava = new File('.')
+                    println "current dir java : ${currentDirJava.absolutePath}"
                     Yaml parser = new Yaml()
                     List values = parser.load(("values.yaml" as File).text)
                     values.each{println it.tag}
