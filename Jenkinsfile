@@ -100,7 +100,7 @@ spec:
                         echo "Deploy app name: $appName"
                         withKubeConfig([credentialsId: 'kubeconfig']) {
                             sh """
-                            helm upgrade --install prod --debug app-prod --values ./values.yaml
+                            helm upgrade --install prod --debug ./Application/app --values ./values.yaml
                             """
                         }
                     }
