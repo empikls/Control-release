@@ -60,12 +60,9 @@ spec:
 
                 stage('Clone config repo') {
                     checkout scm
-
-                    Yaml parser = new Yaml()
-                    def valuesStr = readFile("${env.WORKSPACE}/values.yaml")
-                    println "values text: ${valuesStr?.isEmpty()}"
-                    def values = parser.load(valuesStr)
-                    values.each{println it.tag}
+                    def values = readYaml(file: 'values.yaml')
+                    println "tag from yaml: ${values.tag}"
+                   
                 }
 
                 stage('Clone another repo master') {
