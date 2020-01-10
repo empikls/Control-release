@@ -24,11 +24,27 @@ spec:
     command:
     - cat
     tty: true
+  - name: nodejs
+    image: node:latest
+    command:
+    - cat
+    tty: true
   - name: kubectl
     image: bitnami/kubectl:latest
     command:
     - cat
     tty: true
+  - name: docker
+    image: docker:19.03.3-git
+    command:
+    - cat
+    tty: true
+    env:
+    - name: DOCKER_HOST
+      value: tcp://docker-dind:2375
+    volumeMounts:
+    - mountPath: /var/lib/docker
+      name: dind-storage 
   - name: helm
     image: lachlanevenson/k8s-helm:v2.16.1
     command:
@@ -74,31 +90,42 @@ spec:
                         tagDockerImage = "${params.TAG}"
                         hostname = "qa-173-193-112-65.nip.io"
                         deploy(nameStage, namespace, tagDockerImage, hostname)
+                            }
+                        }
                     }
                 }
-            }
-        }
-                def isMaster() {
+                boolean isMaster() {
                     return ("${params.TAG}" == "master" )
                 }
-                def isBuildingTag() {
+                boolean isBuildingTag() {
                     return ("${params.TAG}" ==~ /^v\d.\d.\d$/ || "${params.TAG}" ==~ /^\d.\d.\d$/ )
                 }
 
+                boolean isChangeSet() {
 
-def deploy( appName, namespace, tagName, hostName ) {
-    container('helm') {
-        echo "Release image: ${shortCommit}"
-        echo "Deploy app name: $appName"
-        withKubeConfig([credentialsId: 'kubeconfig']) {
-            sh """
-         helm upgrade --install $appName --debug --force ./app \
-            --namespace=$namespace \
-            --set image.tag="$tagName" \
-            --set ingress.hostName=$hostName \
-            --set-string ingress.tls[0].hosts[0]="$hostName" \
-            --set-string ingress.tls[0].secretName=acme-$appName-tls 
-          """
-        }
-    }
+                currentBuild.changeSets.any { changeSet ->
+                    changeSet.items.any { entry ->
+                        entry.affectedFiles.any { file ->
+                            if (file.path.equals("values.yaml")) {
+                                return true
+                                }
+                            }
+                        }
+                    }
+                }
+                def deploy( appName, namespace, tagName, hostName ) {
+                    container('helm') {
+                        echo "Release image: ${shortCommit}"
+                        echo "Deploy app name: $appName"
+                        withKubeConfig([credentialsId: 'kubeconfig']) {
+                            sh """
+                         helm upgrade --install $appName --debug --force ./app \
+                            --namespace=$namespace \
+                            --set image.tag="$tagName" \
+                            --set ingress.hostName=$hostName \
+                            --set-string ingress.tls[0].hosts[0]="$hostName" \
+                            --set-string ingress.tls[0].secretName=acme-$appName-tls 
+                          """
+                        }
+                    }
 }
