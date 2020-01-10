@@ -62,8 +62,8 @@ spec:
                     checkout scm
 
                     Yaml parser = new Yaml()
-                    def valuesStr = readFile('values.yaml')
-                    println "values text:\n${valuesStr}"
+                    def valuesStr = readFile("${env.WORKSPACE}/values.yaml")
+                    println "values text: ${valuesStr?.isEmpty()}"
                     def values = parser.load(valuesStr)
                     values.each{println it.tag}
                 }
