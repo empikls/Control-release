@@ -68,9 +68,9 @@ spec:
                     echo "${params.TAG}"
                     echo "${params.COMMIT}"
                 }
-//                stage('Clone config repo') {
-//                    checkout scm
-//                }
+                stage('Clone config repo') {
+                    checkout scm
+                }
 //                    Yaml parser = new Yaml()
 //                    List values = parser.load(("values.yaml" as File).text)
 //
