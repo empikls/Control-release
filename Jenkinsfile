@@ -71,7 +71,7 @@ spec:
                      sh 'ls -la'
 
                     Yaml parser = new Yaml()
-                    List values = parser.load("values.yaml" as File)
+                    List values = parser.load(("values.yaml" as File).text)
 
                     values.each{println it.tag}
                 }
