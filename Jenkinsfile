@@ -61,8 +61,7 @@ spec:
                 stage('Clone config repo') {
                     checkout scm
                     def values = readYaml(file: 'values.yaml')
-                    println "tag from yaml: ${values.tag}"
-                   
+                    println "tag from yaml: ${values.image.tag}"
                 }
 
                 stage('Clone another repo master') {
