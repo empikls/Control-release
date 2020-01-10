@@ -58,42 +58,55 @@ spec:
 
             node(label) {
                 stage('Clone another repo master') {
-//                    checkout([$class           : 'GitSCM',
-//                              branches         : [[name: '1.1.1']],
-//                              extensions       : [],
-//                              userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
-//                    sh 'git rev-parse HEAD > GIT_COMMIT'
+                    checkout([$class           : 'GitSCM',
+                              branches         : [[name: '1.1.1']],
+                              extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'Application']],
+                              userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
+                    sh 'git rev-parse HEAD > GIT_COMMIT'
+                    shortCommit = readFile('GIT_COMMIT').take(7)
+                    echo "${shortCommit}"
+                    echo "${params.TAG}"
+                    echo "${params.COMMIT}"
+                }
+                stage('Clone config repo') {
                     checkout scm
-//                    shortCommit = readFile('GIT_COMMIT').take(7)
-//                    echo "${shortCommit}"
-//                    echo "${params.TAG}"
-//                    echo "${params.COMMIT}"
-                     sh 'ls -la'
-
-                    Yaml parser = new Yaml()
-                    List values = parser.load(("values.yaml" as File).text)
-
-                    values.each{println it.tag}
                 }
-                stage('Deploy DEV release') {
-                    if (isMaster()) {
-                        nameStage = "app-dev"
-                        namespace = "dev"
-                        tagDockerImage = readFile('GIT_COMMIT').take(7)
-                        hostname = "dev-173-193-112-65.nip.io"
-                        deploy(nameStage, namespace, tagDockerImage, hostname)
+//                    Yaml parser = new Yaml()
+//                    List values = parser.load(("values.yaml" as File).text)
+//
+//                    values.each{println it.tag}
+                }
+//                stage('Deploy DEV release') {
+//                    if (isMaster()) {
+//                        nameStage = "app-dev"
+//                        namespace = "dev"
+//                        tagDockerImage = readFile('GIT_COMMIT').take(7)
+//                        hostname = "dev-173-193-112-65.nip.io"
+//                        deploy(nameStage, namespace, tagDockerImage, hostname)
+//                    }
+//                }
+//                stage('Deploy QA release') {
+//                    if (isBuildingTag()) {
+//                        nameStage = "app-qa"
+//                        namespace = "qa"
+//                        tagDockerImage = "${params.TAG}"
+//                        hostname = "qa-173-193-112-65.nip.io"
+//                        deploy(nameStage, namespace, tagDockerImage, hostname)
+//                    }
+//                }
+                stage('Deploy PROD release') {
+                    container('helm') {
+                        echo "Release image: ${shortCommit}"
+                        echo "Deploy app name: $appName"
+                        withKubeConfig([credentialsId: 'kubeconfig']) {
+                            sh """
+                            helm upgrade --install prod --debug app-prod --values ./values.yaml
+                            """
+                        }
                     }
                 }
-                stage('Deploy QA release') {
-                    if (isBuildingTag()) {
-                        nameStage = "app-qa"
-                        namespace = "qa"
-                        tagDockerImage = "${params.TAG}"
-                        hostname = "qa-173-193-112-65.nip.io"
-                        deploy(nameStage, namespace, tagDockerImage, hostname)
-                    }
-                }
 
+                
 
                 def tagDockerImage
                 def nameStage
@@ -127,31 +140,31 @@ spec:
                     return ("${params.TAG}" ==~ /^v\d.\d.\d$/ || "${params.TAG}" ==~ /^\d.\d.\d$/ )
                 }
 
-                boolean isChangeSet() {
+//                boolean isChangeSet() {
 
-                currentBuild.changeSets.any { changeSet ->
-                    changeSet.items.any { entry ->
-                        entry.affectedFiles.any { file ->
-                            if (file.path.equals("values.yaml")) {
-                                return true
-                                }
-                            }
-                        }
-                    }
-                }
-                def deploy( appName, namespace, tagName, hostName ) {
-                    container('helm') {
-                        echo "Release image: ${shortCommit}"
-                        echo "Deploy app name: $appName"
-                        withKubeConfig([credentialsId: 'kubeconfig']) {
-                            sh """
-                         helm upgrade --install $appName --debug --force ./app \
-                            --namespace=$namespace \
-                            --set image.tag="$tagName" \
-                            --set ingress.hostName=$hostName \
-                            --set-string ingress.tls[0].hosts[0]="$hostName" \
-                            --set-string ingress.tls[0].secretName=acme-$appName-tls 
-                          """
-                        }
-                    }
-}
+//                currentBuild.changeSets.any { changeSet ->
+//                    changeSet.items.any { entry ->
+//                        entry.affectedFiles.any { file ->
+//                            if (file.path.equals("values.yaml")) {
+//                                return true
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//                def deploy( appName, namespace, tagName, hostName ) {
+//                    container('helm') {
+//                        echo "Release image: ${shortCommit}"
+//                        echo "Deploy app name: $appName"
+//                        withKubeConfig([credentialsId: 'kubeconfig']) {
+//                            sh """
+//                         helm upgrade --install $appName --debug --force ./app \
+//                            --namespace=$namespace \
+//                            --set image.tag="$tagName" \
+//                            --set ingress.hostName=$hostName \
+//                            --set-string ingress.tls[0].hosts[0]="$hostName" \
+//                            --set-string ingress.tls[0].secretName=acme-$appName-tls
+//                          """
+//                        }
+//                    }
+//                }
