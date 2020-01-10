@@ -132,7 +132,7 @@ spec:
 //                            }
 //                        }
                     }
-                }
+//                }
                 boolean isMaster() {
                     return ("${params.TAG}" == "master" )
                 }
