@@ -66,7 +66,7 @@ spec:
 
 
                     def currentDir = new File("${env.WORKSPACE}")
-                    println 'list files of workspace from java'
+                    println "list files of workspace from java : ${env.WORKSPACE} : ${currentDir}"
                     currentDir.eachFile {
                         println it
                     }
