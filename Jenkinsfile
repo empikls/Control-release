@@ -62,7 +62,9 @@ spec:
                     checkout scm
 
                     Yaml parser = new Yaml()
-                    List values = parser.load(readFile('values.yaml'))
+                    def valuesStr = readFile('values.yaml')
+                    println "values text:\n${valuesStr}"
+                    def values = parser.load(valuesStr)
                     values.each{println it.tag}
                 }
 
