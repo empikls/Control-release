@@ -65,10 +65,11 @@ spec:
                     sh 'pwd'
 
 
-                    def valuesYamlFile = new File("${env.WORKSPACE}/values.yaml")
-                    println "file in java : ${valuesYamlFile.exists()}"
-                    def p = pwd()
-                    println "pwd : ${p}"
+                    def currentDir = new File('.')
+                    println 'list files from java'
+                    currentDir.eachFile {
+                        println it
+                    }
                     Yaml parser = new Yaml()
                     List values = parser.load(("${env.WORKSPACE}/values.yaml" as File).text)
                     values.each{println it.tag}
