@@ -58,7 +58,7 @@ spec:
             node(label) {
                 stage('Clone another repo master') {
                     checkout([$class           : 'GitSCM',
-                              branches         : [[name: '**']],
+                              branches         : [[name: "${params.COMMIT}"]],
                               extensions       : [],
                               userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                     sh 'git rev-parse HEAD > GIT_COMMIT'
