@@ -24,27 +24,11 @@ spec:
     command:
     - cat
     tty: true
-  - name: nodejs
-    image: node:latest
-    command:
-    - cat
-    tty: true
   - name: kubectl
     image: bitnami/kubectl:latest
     command:
     - cat
     tty: true
-  - name: docker
-    image: docker:19.03.3-git
-    command:
-    - cat
-    tty: true
-    env:
-    - name: DOCKER_HOST
-      value: tcp://docker-dind:2375
-    volumeMounts:
-    - mountPath: /var/lib/docker
-      name: dind-storage 
   - name: helm
     image: lachlanevenson/k8s-helm:v2.16.1
     command:
