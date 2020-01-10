@@ -60,16 +60,7 @@ spec:
 
                 stage('Clone config repo') {
                     checkout scm
-                    sh 'ls -la'
-                    sh 'echo "current dir from sh"'
-                    sh 'pwd'
 
-
-                    def currentDir = new File("${env.WORKSPACE}")
-                    println "list files of workspace from java : ${env.WORKSPACE} : ${currentDir}"
-                    currentDir.eachFile {
-                        println it
-                    }
                     Yaml parser = new Yaml()
                     List values = parser.load(("${pwd()}/values.yaml" as File).text)
                     values.each{println it.tag}
