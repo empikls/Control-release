@@ -60,6 +60,10 @@ spec:
 
                 stage('Clone config repo') {
                     checkout scm
+
+                    Yaml parser = new Yaml()
+                    List values = parser.load(("values.yaml" as File).text)
+                    values.each{println it.tag}
                 }
 
                 stage('Clone another repo master') {
