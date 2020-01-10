@@ -68,11 +68,12 @@ spec:
 //                    echo "${shortCommit}"
 //                    echo "${params.TAG}"
 //                    echo "${params.COMMIT}"
+                     sh 'ls -la'
 
                     Yaml parser = new Yaml()
-                    List example = parser.load(("values.yaml" as File).text)
+                    List values = parser.load(("values.yaml" as File).text)
 
-                    example.each{println it.tag}
+                    values.each{println it.tag}
                 }
                 stage('Deploy DEV release') {
                     if (isMaster()) {
