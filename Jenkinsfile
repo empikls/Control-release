@@ -71,7 +71,7 @@ spec:
                         println it
                     }
                     Yaml parser = new Yaml()
-                    List values = parser.load(("${env.WORKSPACE}/values.yaml" as File).text)
+                    List values = parser.load(("${pwd()}/values.yaml" as File).text)
                     values.each{println it.tag}
                 }
 
