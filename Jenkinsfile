@@ -68,9 +68,9 @@ spec:
                     echo "${params.TAG}"
                     echo "${params.COMMIT}"
                 }
-                stage('Clone config repo') {
-                    checkout scm
-                }
+//                stage('Clone config repo') {
+//                    checkout scm
+//                }
 //                    Yaml parser = new Yaml()
 //                    List values = parser.load(("values.yaml" as File).text)
 //
@@ -100,7 +100,7 @@ spec:
                         echo "Deploy app name: $appName"
                         withKubeConfig([credentialsId: 'kubeconfig']) {
                             sh """
-                            helm upgrade --install prod --debug ./Application/app --values ./values.yaml
+                            helm upgrade --install prod --debug ./Application/app --values ./Application/values.yaml
                             """
                         }
                     }
