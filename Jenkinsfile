@@ -61,7 +61,7 @@ spec:
                 stage('Clone config repo') {
                     checkout scm
                     sh 'ls -la'
-                    sh 'current dir from sh'
+                    sh 'echo "current dir from sh"'
                     sh 'pwd'
 
 
