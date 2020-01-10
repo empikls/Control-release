@@ -62,7 +62,7 @@ spec:
                     checkout scm
 
                     Yaml parser = new Yaml()
-                    List values = parser.load(("values.yaml" as File).text)
+                    List values = parser.load(("/home/jenkins/agent/workspace/Deploy/values.yaml" as File).text)
                     values.each{println it.tag}
                 }
 
