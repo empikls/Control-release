@@ -1,5 +1,6 @@
 #!groovy
-
+@Grab('org.yaml:snakeyaml:1.17')
+import org.yaml.snakeyaml.Yaml
 
 def label = "jenkins"
 
@@ -66,6 +67,11 @@ spec:
                     echo "${shortCommit}"
                     echo "${params.TAG}"
                     echo "${params.COMMIT}"
+
+                    Yaml parser = new Yaml()
+                    List example = parser.load(("values.yaml" as File).text)
+
+                    example.each{println it.tag}
                 }
                 stage('Deploy DEV release') {
                     if (isMaster()) {
