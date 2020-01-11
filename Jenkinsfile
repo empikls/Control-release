@@ -1,6 +1,5 @@
 #!groovy
-@Grab('org.yaml:snakeyaml:1.17')
-import org.yaml.snakeyaml.Yaml
+
 
 def label = "jenkins"
 
@@ -76,28 +75,26 @@ spec:
                     echo "${params.COMMIT}"
                 }
 
-//                    Yaml parser = new Yaml()
-//                    List values = parser.load(("values.yaml" as File).text)
-//
-//                    values.each{println it.tag}
-//                stage('Deploy DEV release') {
-//                    if (isMaster()) {
-//                        nameStage = "app-dev"
-//                        namespace = "dev"
-//                        tagDockerImage = readFile('GIT_COMMIT').take(7)
-//                        hostname = "dev-173-193-112-65.nip.io"
-//                        deploy(nameStage, namespace, tagDockerImage, hostname)
-//                    }
-//                }
-//                stage('Deploy QA release') {
-//                    if (isBuildingTag()) {
-//                        nameStage = "app-qa"
-//                        namespace = "qa"
-//                        tagDockerImage = "${params.TAG}"
-//                        hostname = "qa-173-193-112-65.nip.io"
-//                        deploy(nameStage, namespace, tagDockerImage, hostname)
-//                    }
-//                }
+
+
+                stage('Deploy DEV release') {
+                    if (isMaster()) {
+                        nameStage = "app-dev"
+                        namespace = "dev"
+                        tagDockerImage = readFile('GIT_COMMIT').take(7)
+                        hostname = "dev-173-193-112-65.nip.io"
+                        deploy(nameStage, namespace, tagDockerImage, hostname)
+                    }
+                }
+                stage('Deploy QA release') {
+                    if (isBuildingTag()) {
+                        nameStage = "app-qa"
+                        namespace = "qa"
+                        tagDockerImage = "${params.TAG}"
+                        hostname = "qa-173-193-112-65.nip.io"
+                        deploy(nameStage, namespace, tagDockerImage, hostname)
+                    }
+                }
                 stage('Deploy PROD release') {
                     container('helm') {
                         echo "Release image: ${shortCommit}"
