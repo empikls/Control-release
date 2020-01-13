@@ -72,7 +72,7 @@ spec:
                                   extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
                                   userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                     }
-                    if (isMaster()) {
+                    else {
                         checkout([$class           : 'GitSCM',
                                   branches         : [[name: "${params.COMMIT}"]],
                                   extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
@@ -80,7 +80,6 @@ spec:
                     }
                 }
                 sh 'git rev-parse HEAD > GIT_COMMIT'
-                shortCommit = readFile('GIT_COMMIT').take(7)
                 echo "${shortCommit}"
                 echo "${params.TAG}"
                 echo "${params.COMMIT}"
@@ -88,6 +87,7 @@ spec:
 
                 stage('Deploy DEV release') {
                     if (isMaster()) {
+                        sh 'shortCommit = "echo "${params.COMMIT}" | cut -c1-7"'
                         nameStage = "app-dev"
                         namespace = "dev"
                         tagDockerImage = "${shortCommit}"
