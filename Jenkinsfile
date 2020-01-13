@@ -88,7 +88,7 @@ spec:
                         sh 'shortCommit = "${echo "${params.COMMIT}" | cut -c1-7}"'
                         nameStage = "app-dev"
                         namespace = "dev"
-                        tagDockerImage = "${shortCommit}"
+                        tagDockerImage = "$shortCommit"
                         hostname = "dev-173-193-112-65.nip.io"
                         deploy(nameStage, namespace, tagDockerImage, hostname)
                     }
@@ -157,7 +157,7 @@ spec:
                 }
                 def deploy( appName, namespace, tagName, hostName ) {
                     container('helm') {
-                        echo "Release image: ${shortCommit}"
+                        echo "Release image: $shortCommit"
                         echo "Deploy app name: $appName"
                         withKubeConfig([credentialsId: 'kubeconfig']) {
                             sh """
