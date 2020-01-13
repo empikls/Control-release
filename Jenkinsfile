@@ -84,13 +84,10 @@ spec:
 
 
                 stage('Deploy DEV release') {
-                    sh """
-                    shortCommit = "${echo "${params.COMMIT}" | cut -c1-7}"
-                       """
                     if (isMaster()) {
                         nameStage = "app-dev"
                         namespace = "dev"
-                        tagDockerImage = "${shortCommit}"
+                        tagDockerImage = "${params.COMMIT}"
                         hostname = "dev-173-193-112-65.nip.io"
                         deploy(nameStage, namespace, tagDockerImage, hostname)
                     }
