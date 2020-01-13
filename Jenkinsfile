@@ -105,11 +105,13 @@ spec:
                     }
                 }
                 stage('Deploy PROD release') {
-                    container('helm') {
-                        withKubeConfig([credentialsId: 'kubeconfig']) {
-                            sh """
+                    if (isChangeSet()) {
+                        container('helm') {
+                            withKubeConfig([credentialsId: 'kubeconfig']) {
+                                sh """
                             helm upgrade --install prod --debug ./App/app --values ./values.yaml
                             """
+                            }
                         }
                     }
                 }
