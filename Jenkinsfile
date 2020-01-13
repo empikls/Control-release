@@ -95,12 +95,12 @@ spec:
                         container('helm') {
                             withKubeConfig([credentialsId: 'kubeconfig']) {
                                 sh """
-                         helm upgrade --install $appName --debug --force ./App/app \
-                            --namespace=$namespace \
-                            --set image.tag="$tagName" \
-                            --set ingress.hostName=$hostName \
-                            --set-string ingress.tls[0].hosts[0]="$hostName" \
-                            --set-string ingress.tls[0].secretName=acme-$appName-tls
+                         helm upgrade --install app-qa --debug --force ./App/app \
+                            --namespace=qa \
+                            --set image.tag="${params.COMMIT}" \
+                            --set ingress.hostName="qa-173-193-112-65..nip.io" \
+                            --set-string ingress.tls[0].hosts[0]="qa-173-193-112-65..nip.io" \
+                            --set-string ingress.tls[0].secretName=acme-app-qa-tls
                           """
                             }
                         }
@@ -111,12 +111,12 @@ spec:
                         container('helm') {
                             withKubeConfig([credentialsId: 'kubeconfig']) {
                                 sh """
-                         helm upgrade --install $appName --debug --force ./App/app \
-                            --namespace=$namespace \
-                            --set image.tag="$tagName" \
-                            --set ingress.hostName=$hostName \
-                            --set-string ingress.tls[0].hosts[0]="$hostName" \
-                            --set-string ingress.tls[0].secretName=acme-$appName-tls
+                         helm upgrade --install app-dev --debug --force ./App/app \
+                            --namespace = "dev" \
+                            --set image.tag="${params.TAG}" \
+                            --set ingress.hostName="dev-173-193-112-65.nip.io" \
+                            --set-string ingress.tls[0].hosts[0]="dev-173-193-112-65.nip.io" \
+                            --set-string ingress.tls[0].secretName=acme-app-dev-tls
                           """
                             }
                         }
