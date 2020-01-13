@@ -71,7 +71,7 @@ spec:
                                   branches         : [[name: "${tagDockerImageFromFile}"]],
                                   extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
                                   userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
-                    } else {
+                    } if (isMaster()) {
                         checkout([$class           : 'GitSCM',
                                   branches         : [[name: "${params.COMMIT}"]],
                                   extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
@@ -153,19 +153,19 @@ spec:
                         }
                     }
                 }
-//                def deploy( appName, namespace, tagName, hostName ) {
-//                    container('helm') {
-//                        echo "Release image: ${shortCommit}"
-//                        echo "Deploy app name: $appName"
-//                        withKubeConfig([credentialsId: 'kubeconfig']) {
-//                            sh """
-//                         helm upgrade --install $appName --debug --force ./app \
-//                            --namespace=$namespace \
-//                            --set image.tag="$tagName" \
-//                            --set ingress.hostName=$hostName \
-//                            --set-string ingress.tls[0].hosts[0]="$hostName" \
-//                            --set-string ingress.tls[0].secretName=acme-$appName-tls
-//                          """
-//                        }
-//                    }
-//              }
+                def deploy( appName, namespace, tagName, hostName ) {
+                    container('helm') {
+                        echo "Release image: ${shortCommit}"
+                        echo "Deploy app name: $appName"
+                        withKubeConfig([credentialsId: 'kubeconfig']) {
+                            sh """
+                         helm upgrade --install $appName --debug --force ./app \
+                            --namespace=$namespace \
+                            --set image.tag="$tagName" \
+                            --set ingress.hostName=$hostName \
+                            --set-string ingress.tls[0].hosts[0]="$hostName" \
+                            --set-string ingress.tls[0].secretName=acme-$appName-tls
+                          """
+                        }
+                    }
+              }
