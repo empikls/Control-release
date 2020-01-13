@@ -73,18 +73,18 @@ spec:
                                   extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
                                   userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                     }
-                        if (isBuildingTag() ) {
-                        checkout([$class           : 'GitSCM',
-                                  branches         : [[name: "${params.TAG}"]],
-                                  extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
-                                  userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
-                        }
-                    else {
-                        checkout([$class           : 'GitSCM',
-                                  branches         : [[name: "${params.COMMIT}"]],
-                                  extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
-                                  userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
-                    }
+//                        if (isBuildingTag() ) {
+//                        checkout([$class           : 'GitSCM',
+//                                  branches         : [[name: "${params.TAG}"]],
+//                                  extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
+//                                  userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
+//                        }
+//                    else {
+//                        checkout([$class           : 'GitSCM',
+//                                  branches         : [[name: "${params.COMMIT}"]],
+//                                  extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
+//                                  userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
+//                    }
                 }
                 echo "${params.TAG}"
                 echo "${params.COMMIT}"
