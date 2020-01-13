@@ -156,8 +156,6 @@ spec:
                 }
                 def deploy( appName, namespace, tagName, hostName ) {
                     container('helm') {
-                        echo "Release image: $shortCommit"
-                        echo "Deploy app name: $appName"
                         withKubeConfig([credentialsId: 'kubeconfig']) {
                             sh """
                          helm upgrade --install $appName --debug --force ./App/app \
