@@ -162,7 +162,7 @@ spec:
                         echo "Deploy app name: $appName"
                         withKubeConfig([credentialsId: 'kubeconfig']) {
                             sh """
-                         helm upgrade --install $appName --debug --force ./app \
+                         helm upgrade --install $appName --debug --force ./App/app \
                             --namespace=$namespace \
                             --set image.tag="$tagName" \
                             --set ingress.hostName=$hostName \
