@@ -73,18 +73,18 @@ spec:
                                   extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
                                   userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                     }
-//                        if (isBuildingTag() ) {
-//                        checkout([$class           : 'GitSCM',
-//                                  branches         : [[name: "${params.TAG}"]],
-//                                  extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
-//                                  userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
-//                        }
-//                    else {
-//                        checkout([$class           : 'GitSCM',
-//                                  branches         : [[name: "${params.COMMIT}"]],
-//                                  extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
-//                                  userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
-//                    }
+                        if (isBuildingTag() ) {
+                        checkout([$class           : 'GitSCM',
+                                  branches         : [[name: "${params.TAG}"]],
+                                  extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
+                                  userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
+                        }
+                    else {
+                        checkout([$class           : 'GitSCM',
+                                  branches         : [[name: "${params.COMMIT}"]],
+                                  extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
+                                  userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
+                    }
                 }
                 echo "${params.TAG}"
                 echo "${params.COMMIT}"
@@ -163,16 +163,18 @@ spec:
                     for (int i = 0; i < changeLogSets.size(); i++) {
                         def entries = changeLogSets[i].items
                         for (int j = 0; j < entries.length; j++) {
-                            def entry = entries[j]
-                            def files = new ArrayList(entry.affectedFiles)
+                            def files = new ArrayList(entries[j].affectedFiles)
+                            println "affectedFiles"
+                            println files[0].path
+                            println files.path
+
                             for (int k = 0; k < files.size(); k++) {
                                 def file = files[k]
-                                if (file.path.equals("values.yaml")) {
-                                echo " ${file.editType.name} via $file.path"
+                                println k
+                                println file
                             }
                         }
                     }
-                }
                 }
 
 //                def deploy( appName, namespace, tagName, hostName ) {
