@@ -84,12 +84,6 @@ spec:
                     echo "${params.COMMIT}"
                 }
 
-
-
-<<<<<<< HEAD
-
-=======
->>>>>>> a84579355f4ccd66a5ea0f7ad3520ad2afa6b415
                 stage('Deploy DEV release') {
                     if (isMaster()) {
                         nameStage = "app-dev"
