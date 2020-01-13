@@ -65,13 +65,10 @@ spec:
                 }
 
                 stage('Clone another repo master') {
+                    def values = readYaml(file: 'values.yaml')
                     if (isBuildingTag()) {
-                        echo "tag form valuse.yaml - "$tagDockerImage""
-                        echo "tag form valuse.yaml - "${values.image.tag}""
-                        echo "tag form valuse.yaml - "${tagDockerImage}""
-
                         checkout([$class           : 'GitSCM',
-                                  branches         : [[name: "$tagDockerImage"]],
+                                  branches         : [[name: "${values.image.tag}"]],
                                   extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
                                   userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                     } else {
