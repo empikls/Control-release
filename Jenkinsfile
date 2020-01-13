@@ -65,10 +65,19 @@ spec:
                 }
 
                 stage('Clone another repo master') {
-                    checkout([$class           : 'GitSCM',
-                              branches         : [[name: "${params.COMMIT}"]],
-                              extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
-                              userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
+                    if ( isBuildingTag() ) {
+                        checkout([$class           : 'GitSCM',
+                                  branches         : [[name: "${values.image.tag}"]],
+                                  extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
+                                  userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
+                    }
+                }
+                    else  {
+                        checkout([$class           : 'GitSCM',
+                                  branches         : [[name: "${params.COMMIT}"]],
+                                  extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
+                                  userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
+                    }
                     sh 'git rev-parse HEAD > GIT_COMMIT'
                     shortCommit = readFile('GIT_COMMIT').take(7)
                     echo "${shortCommit}"
@@ -76,32 +85,29 @@ spec:
                     echo "${params.COMMIT}"
                 }
 
-//                    Yaml parser = new Yaml()
-//                    List values = parser.load(("values.yaml" as File).text)
-//
-//                    values.each{println it.tag}
-//                stage('Deploy DEV release') {
-//                    if (isMaster()) {
-//                        nameStage = "app-dev"
-//                        namespace = "dev"
-//                        tagDockerImage = readFile('GIT_COMMIT').take(7)
-//                        hostname = "dev-173-193-112-65.nip.io"
-//                        deploy(nameStage, namespace, tagDockerImage, hostname)
-//                    }
-//                }
-//                stage('Deploy QA release') {
-//                    if (isBuildingTag()) {
-//                        nameStage = "app-qa"
-//                        namespace = "qa"
-//                        tagDockerImage = "${params.TAG}"
-//                        hostname = "qa-173-193-112-65.nip.io"
-//                        deploy(nameStage, namespace, tagDockerImage, hostname)
-//                    }
-//                }
+
+
+
+                stage('Deploy DEV release') {
+                    if (isMaster()) {
+                        nameStage = "app-dev"
+                        namespace = "dev"
+                        tagDockerImage = readFile('GIT_COMMIT').take(7)
+                        hostname = "dev-173-193-112-65.nip.io"
+                        deploy(nameStage, namespace, tagDockerImage, hostname)
+                    }
+                }
+                stage('Deploy QA release') {
+                    if (isBuildingTag()) {
+                        nameStage = "app-qa"
+                        namespace = "qa"
+                        tagDockerImage = "${params.TAG}"
+                        hostname = "qa-173-193-112-65.nip.io"
+                        deploy(nameStage, namespace, tagDockerImage, hostname)
+                    }
+                }
                 stage('Deploy PROD release') {
                     container('helm') {
-                        echo "Release image: ${shortCommit}"
-//                        echo "Deploy app name: $appName"
                         withKubeConfig([credentialsId: 'kubeconfig']) {
                             sh """
                             helm upgrade --install prod --debug ./App/app --values ./values.yaml
@@ -110,32 +116,13 @@ spec:
                     }
                 }
             }
-        }
+
 
                 def tagDockerImage
                 def nameStage
                 def hostname
 
 
-//                if (isMaster()) {
-//                    stage('Deploy dev version') {
-//                        nameStage = "app-dev"
-//                        namespace = "dev"
-//                        tagDockerImage = readFile('GIT_COMMIT').take(7)
-//                        hostname = "dev-173-193-112-65.nip.io"
-//                        deploy(nameStage, namespace, tagDockerImage, hostname)
-//                    }
-//                }
-//                if (isBuildingTag()) {
-//                    stage('Deploy to QA stage') {
-//                        nameStage = "app-qa"
-//                        namespace = "qa"
-//                        tagDockerImage = "${params.TAG}"
-//                        hostname = "qa-173-193-112-65.nip.io"
-//                        deploy(nameStage, namespace, tagDockerImage, hostname)
-//                            }
-//                        }
-//                }
                 boolean isMaster() {
                     return ("${params.TAG}" == "master" )
                 }
@@ -143,18 +130,18 @@ spec:
                     return ("${params.TAG}" ==~ /^v\d.\d.\d$/ || "${params.TAG}" ==~ /^\d.\d.\d$/ )
                 }
 
-//                boolean isChangeSet() {
+                boolean isChangeSet() {
 
-//                currentBuild.changeSets.any { changeSet ->
-//                    changeSet.items.any { entry ->
-//                        entry.affectedFiles.any { file ->
-//                            if (file.path.equals("values.yaml")) {
-//                                return true
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
+                currentBuild.changeSets.any { changeSet ->
+                    changeSet.items.any { entry ->
+                        entry.affectedFiles.any { file ->
+                            if (file.path.equals("values.yaml")) {
+                                return true
+                                }
+                            }
+                        }
+                    }
+                }
 //                def deploy( appName, namespace, tagName, hostName ) {
 //                    container('helm') {
 //                        echo "Release image: ${shortCommit}"
