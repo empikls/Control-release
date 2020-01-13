@@ -96,7 +96,7 @@ spec:
                             withKubeConfig([credentialsId: 'kubeconfig']) {
                                 sh """
                          helm upgrade --install app-dev --debug --force ./App/app \
-                            --namespace=qa \
+                            --namespace=dev \
                             --set image.tag="${params.COMMIT}" \
                             --set ingress.hostName="dev-173-193-112-65.nip.io" \
                             --set-string ingress.tls[0].hosts[0]="dev-173-193-112-65.nip.io" \
@@ -112,7 +112,7 @@ spec:
                             withKubeConfig([credentialsId: 'kubeconfig']) {
                                 sh """
                          helm upgrade --install app-qa --debug --force ./App/app \
-                            --namespace = "dev" \
+                            --namespace=qa \
                             --set image.tag="${params.TAG}" \
                             --set ingress.hostName="qa-173-193-112-65.nip.io" \
                             --set-string ingress.tls[0].hosts[0]="qa-173-193-112-65.nip.io" \
