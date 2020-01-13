@@ -62,8 +62,6 @@ spec:
                     def values = readYaml(file: 'values.yaml')
                     println "tag from yaml: ${values.image.tag}"
                     tagDockerImageFromFile = "${values.image.tag}"
-                    shortCommit = sh(echo ${params.COMMIT} | cut -c1-7)
-                    echo "{shortCommit}"
                 }
 
                 stage('Clone another repo master') {
@@ -86,7 +84,9 @@ spec:
 
 
                 stage('Deploy DEV release') {
-                    shortCommit = sh(echo "${params.COMMIT}" | cut -c1-7)
+                    sh """
+                    shortCommit = "${echo "${params.COMMIT}" | cut -c1-7}"
+                       """
                     if (isMaster()) {
                         nameStage = "app-dev"
                         namespace = "dev"
