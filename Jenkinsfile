@@ -149,7 +149,7 @@ spec:
                     return ("${params.TAG}" ==~ /^v\d.\d.\d$/ || "${params.TAG}" ==~ /^\d.\d.\d$/ )
                 }
 
-                def isChangeSet(file_path) {
+                def isChangeSet() {
 //                currentBuild.changeSets.any { changeSet ->
 //                    changeSet.items.any { entry ->
 //                        entry.affectedFiles.any { file ->
@@ -167,7 +167,7 @@ spec:
                             def files = new ArrayList(entry.affectedFiles)
                             for (int k = 0; k < files.size(); k++) {
                                 def file = files[k]
-                                if (file.path.equals(file_path)) {
+                                if (file.path.equals("values.yaml")) {
                                     println $file.path
                                 echo " ${file.editType.name} via $file.path"
                             }
