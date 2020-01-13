@@ -68,7 +68,7 @@ spec:
                     def values = readYaml(file: 'values.yaml')
                     if (isChangeSet()) {
                         checkout([$class           : 'GitSCM',
-                                  branches         : [[name: "$tagDockerImageFromFile"]],
+                                  branches         : [[name: "${tagDockerImageFromFile}"]],
                                   extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
                                   userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                     } else {
