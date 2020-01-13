@@ -126,7 +126,7 @@ spec:
                         container('helm') {
                             withKubeConfig([credentialsId: 'kubeconfig']) {
                                 sh """
-                            helm upgrade --install prod --debug ./App/app --values ./values.yaml
+                            helm upgrade --install prod --debug ./App/app --values ${file.path}
                             """
                             }
                         }
@@ -150,30 +150,30 @@ spec:
 
                 boolean isChangeSet() {
 
-                currentBuild.changeSets.any { changeSet ->
-                    changeSet.items.any { entry ->
-                        entry.affectedFiles.any { file ->
-                           println file.getName()
+//                currentBuild.changeSets.any { changeSet ->
+//                    changeSet.items.any { entry ->
+//                        entry.affectedFiles.any { file ->
+//                           println file.getName()
 //                            if (file.path.equals("values.yaml")) {
 //                                return true
-                                }
-                            }
-                        }
-                    }
-//                }
-//                    def changeLogSets = currentBuild.changeSets
-//                    for (int i = 0; i < changeLogSets.size(); i++) {
-//                        def entries = changeLogSets[i].items
-//                        for (int j = 0; j < entries.length; j++) {
-//                            def entry = entries[j]
-//                            def files = new ArrayList(entry.affectedFiles)
-//                            for (int k = 0; k < files.size(); k++) {
-//                                def file = files[k]
-//                                echo " ${file.editType.name} ${file.name} via ${file.path}"
+//                                }
 //                            }
 //                        }
 //                    }
 //                }
+                    def changeLogSets = currentBuild.changeSets
+                    for (int i = 0; i < changeLogSets.size(); i++) {
+                        def entries = changeLogSets[i].items
+                        for (int j = 0; j < entries.length; j++) {
+                            def entry = entries[j]
+                            def files = new ArrayList(entry.affectedFiles)
+                            for (int k = 0; k < files.size(); k++) {
+                                def file = files[k]
+                                echo " ${file.editType.name} via ${file.path}"
+                            }
+                        }
+                    }
+                }
 //                    def changeLogSets = currentBuild.changeSets
 //                    for (int i = 0; i < changeLogSets.size(); i++) {
 //                        def entries = changeLogSets[i].items
