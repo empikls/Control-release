@@ -69,7 +69,7 @@ spec:
                     println "tag from yaml: ${values.image.tag}"
                     if (isChangeSet()) {
                         checkout([$class           : 'GitSCM',
-                                  branches         : [[name: "a772126b1bf45f2002395d3f22c67f8989ab94fd"]],
+                                  branches         : [[name: "${values.image.tag}"]],
                                   extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
                                   userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                     }
@@ -127,7 +127,7 @@ spec:
                         container('helm') {
                             withKubeConfig([credentialsId: 'kubeconfig']) {
                                 sh """
-                            helm upgrade --install prod2 --debug ./App/app --values ${file.path}
+                            helm upgrade --install prod --debug ./App/app --values ./values.yaml
                             """
                             }
                         }
