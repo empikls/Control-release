@@ -79,12 +79,12 @@ spec:
                                   userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                     }
                 }
-                    sh 'git rev-parse HEAD > GIT_COMMIT'
-                    shortCommit = readFile('GIT_COMMIT').take(7)
-                    echo "${shortCommit}"
-                    echo "${params.TAG}"
-                    echo "${params.COMMIT}"
-                }
+                sh 'git rev-parse HEAD > GIT_COMMIT'
+                shortCommit = readFile('GIT_COMMIT').take(7)
+                echo "${shortCommit}"
+                echo "${params.TAG}"
+                echo "${params.COMMIT}"
+
 
                 stage('Deploy DEV release') {
                     if (isMaster()) {
@@ -116,6 +116,7 @@ spec:
                     }
                 }
             }
+        }
 
 
                 def tagDockerImage
