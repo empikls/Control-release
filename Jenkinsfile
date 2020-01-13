@@ -1,6 +1,5 @@
 #!groovy
-@Grab('org.yaml:snakeyaml:1.17')
-import org.yaml.snakeyaml.Yaml
+
 
 def label = "jenkins"
 
@@ -87,7 +86,10 @@ spec:
 
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> a84579355f4ccd66a5ea0f7ad3520ad2afa6b415
                 stage('Deploy DEV release') {
                     if (isMaster()) {
                         nameStage = "app-dev"
