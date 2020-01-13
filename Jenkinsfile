@@ -66,6 +66,10 @@ spec:
 
                 stage('Clone another repo master') {
                     if (isBuildingTag()) {
+                        echo "tag form valuse.yaml - "$tagDockerImage""
+                        echo "tag form valuse.yaml - "${values.image.tag}""
+                        echo "tag form valuse.yaml - "${tagDockerImage}""
+
                         checkout([$class           : 'GitSCM',
                                   branches         : [[name: "$tagDockerImage"]],
                                   extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
