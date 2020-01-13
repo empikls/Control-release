@@ -69,7 +69,7 @@ spec:
                     println "tag from yaml: ${values.image.tag}"
                     if (isChangeSet()) {
                         checkout([$class           : 'GitSCM',
-                                  branches         : [[name: "2.1.3"]],
+                                  branches         : [[name: "${values.image.tag}"]],
                                   extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
                                   userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                     }
@@ -149,44 +149,33 @@ spec:
                     return ("${params.TAG}" ==~ /^v\d.\d.\d$/ || "${params.TAG}" ==~ /^\d.\d.\d$/ )
                 }
 
-                boolean isChangeSet() {
-
-                currentBuild.changeSets.any { changeSet ->
-                    changeSet.items.any { entry ->
-                        entry.affectedFiles.any { file ->
-                            if (file.path.equals("values.yaml")) {
-                                }
-                            }
-                        }
-                    }
-                }
-//                    def changeLogSets = currentBuild.changeSets
-//                    for (int i = 0; i < changeLogSets.size(); i++) {
-//                        def entries = changeLogSets[i].items
-//                        for (int j = 0; j < entries.length; j++) {
-//                            def entry = entries[j]
-//                            def files = new ArrayList(entry.affectedFiles)
-//                            for (int k = 0; k < files.size(); k++) {
-//                                def file = files[k]
-//                                echo " ${file.editType.name} via $file.path"
-//                            }
-//                        }
-//                    }
-//                }
-//                    def changeLogSets = currentBuild.changeSets
-//                    for (int i = 0; i < changeLogSets.size(); i++) {
-//                        def entries = changeLogSets[i].items
-//                        for (int j = 0; j < entries.length; j++) {
-//                            def files = new ArrayList(entries[j].affectedFiles)
-//                            for (int k = 0; k < files.size(); k++) {
-//                                def file = files[k]
-//                                if (file.path.equals("values.yaml")) {
-//                                    return true
+                boolean isChangeSet(file_path) {
+//                currentBuild.changeSets.any { changeSet ->
+//                    changeSet.items.any { entry ->
+//                        entry.affectedFiles.any { file ->
+//                            if (file.path.equals("values.yaml")) {
 //                                }
 //                            }
 //                        }
 //                    }
 //                }
+                    def changeLogSets = currentBuild.changeSets
+                    for (int i = 0; i < changeLogSets.size(); i++) {
+                        def entries = changeLogSets[i].items
+                        for (int j = 0; j < entries.length; j++) {
+                            def entry = entries[j]
+                            def files = new ArrayList(entry.affectedFiles)
+                            for (int k = 0; k < files.size(); k++) {
+                                def file = files[k]
+                                if (file.path.equals(file_path)) {
+                                    println $file.path
+                                echo " ${file.editType.name} via $file.path"
+                            }
+                        }
+                    }
+                }
+                }
+
                 def deploy( appName, namespace, tagName, hostName ) {
                     container('helm') {
                         withKubeConfig([credentialsId: 'kubeconfig']) {
