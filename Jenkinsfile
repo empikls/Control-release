@@ -90,7 +90,7 @@ spec:
                     if (isMaster()) {
                         nameStage = "app-dev"
                         namespace = "dev"
-                        tagDockerImage = readFile('GIT_COMMIT').take(7)
+                        tagDockerImage = "${shortCommit}"
                         hostname = "dev-173-193-112-65.nip.io"
                         deploy(nameStage, namespace, tagDockerImage, hostname)
                     }
