@@ -149,7 +149,7 @@ spec:
                     return ("${params.TAG}" ==~ /^v\d.\d.\d$/ || "${params.TAG}" ==~ /^\d.\d.\d$/ )
                 }
 
-                boolean isChangeSet(file_path) {
+                def isChangeSet(file_path) {
 //                currentBuild.changeSets.any { changeSet ->
 //                    changeSet.items.any { entry ->
 //                        entry.affectedFiles.any { file ->
