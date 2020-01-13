@@ -168,7 +168,6 @@ spec:
                             for (int k = 0; k < files.size(); k++) {
                                 def file = files[k]
                                 if (file.path.equals("values.yaml")) {
-                                    println $file.path
                                 echo " ${file.editType.name} via $file.path"
                             }
                         }
