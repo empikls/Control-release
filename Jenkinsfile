@@ -62,7 +62,7 @@ spec:
                     def values = readYaml(file: 'values.yaml')
                     println "tag from yaml: ${values.image.tag}"
                     tagDockerImageFromFile = "${values.image.tag}"
-                    sh "shortCommit = "${echo "${params.COMMIT}" | cut -c1-7}""
+                    shortCommit = sh(echo "${params.COMMIT}" | cut -c1-7)
                     echo "{shortCommit}"
                 }
 
@@ -86,7 +86,7 @@ spec:
 
 
                 stage('Deploy DEV release') {
-                    sh 'shortCommit = "${echo "${params.COMMIT}" | cut -c1-7}"'
+                    shortCommit = sh(echo "${params.COMMIT}" | cut -c1-7)
                     if (isMaster()) {
                         nameStage = "app-dev"
                         namespace = "dev"
