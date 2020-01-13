@@ -154,6 +154,7 @@ spec:
                     changeSet.items.any { entry ->
                         entry.affectedFiles.any { file ->
                             if (file.path.equals("values.yaml")) {
+                                return true
                                 }
                             }
                         }
