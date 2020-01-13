@@ -87,7 +87,7 @@ spec:
 
                 stage('Deploy DEV release') {
                     if (isMaster()) {
-                        sh 'shortCommit = "echo "${params.COMMIT}" | cut -c1-7"'
+                        sh 'shortCommit = "${echo "${params.COMMIT}" | cut -c1-7}"'
                         nameStage = "app-dev"
                         namespace = "dev"
                         tagDockerImage = "${shortCommit}"
