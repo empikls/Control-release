@@ -61,14 +61,14 @@ spec:
                     checkout scm
                     def values = readYaml(file: 'values.yaml')
                     println "tag from yaml: ${values.image.tag}"
-                    tagDockerImage = "${values.image.tag}"
+                    tagDockerImageFromFile = "${values.image.tag}"
                 }
 
                 stage('Clone another repo master') {
                     def values = readYaml(file: 'values.yaml')
                     if (isChangeSet()) {
                         checkout([$class           : 'GitSCM',
-                                  branches         : [[name: "${values.image.tag}"]],
+                                  branches         : [[name: "$tagDockerImageFromFile"]],
                                   extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
                                   userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                     } else {
