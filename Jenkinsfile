@@ -79,8 +79,6 @@ spec:
                                   userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                     }
                 }
-                sh 'git rev-parse HEAD > GIT_COMMIT'
-                echo "${shortCommit}"
                 echo "${params.TAG}"
                 echo "${params.COMMIT}"
 
