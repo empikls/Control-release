@@ -62,7 +62,7 @@ spec:
                     def values = readYaml(file: 'values.yaml')
                     println "tag from yaml: ${values.image.tag}"
                     tagDockerImageFromFile = "${values.image.tag}"
-                    shortCommit = sh(echo ${params.COMMIT} | cut -c1-7)
+                    shortCommit = sh(echo "${params.COMMIT}" | cut -c1-7)
                     echo "{shortCommit}"
                 }
 
