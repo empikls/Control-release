@@ -66,6 +66,7 @@ spec:
 
                 stage('Clone another repo master') {
                     def values = readYaml(file: 'values.yaml')
+                    println "tag from yaml: ${values.image.tag}"
                     if (isChangeSet()) {
                         checkout([$class           : 'GitSCM',
                                   branches         : [[name: "${values.image.tag}"]],
