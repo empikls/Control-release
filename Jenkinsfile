@@ -69,7 +69,7 @@ spec:
                     println "tag from yaml: ${values.image.tag}"
                     if (isChangeSet()) {
                         checkout([$class           : 'GitSCM',
-                                  branches         : [[name: "2.1.4"]],
+                                  branches         : [[name: "a772126b1bf45f2002395d3f22c67f8989ab94fd"]],
                                   extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
                                   userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                     }
