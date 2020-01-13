@@ -65,8 +65,7 @@ spec:
                 }
 
                 stage('Clone another repo master') {
-                    def values = readYaml(file: 'values.yaml')
-                    if (isBuildingTag()) {
+                    if (isChangeSet()) {
                         checkout([$class           : 'GitSCM',
                                   branches         : [[name: "${values.image.tag}"]],
                                   extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
@@ -139,6 +138,21 @@ spec:
                         }
                     }
                 }
+//                boolean isChangeSet() {
+//                    def changeLogSets = currentBuild.changeSets
+//                    for (int i = 0; i < changeLogSets.size(); i++) {
+//                        def entries = changeLogSets[i].items
+//                        for (int j = 0; j < entries.length; j++) {
+//                            def files = new ArrayList(entries[j].affectedFiles)
+//                            for (int k = 0; k < files.size(); k++) {
+//                                def file = files[k]
+//                                if (file.path.equals("values.yaml")) {
+//                                    return true
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
 //                def deploy( appName, namespace, tagName, hostName ) {
 //                    container('helm') {
 //                        echo "Release image: ${shortCommit}"
