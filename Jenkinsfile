@@ -98,8 +98,8 @@ spec:
                          helm upgrade --install app-qa --debug --force ./App/app \
                             --namespace=qa \
                             --set image.tag="${params.COMMIT}" \
-                            --set ingress.hostName="qa-173-193-112-65..nip.io" \
-                            --set-string ingress.tls[0].hosts[0]="qa-173-193-112-65..nip.io" \
+                            --set ingress.hostName="qa-173-193-112-65.nip.io" \
+                            --set-string ingress.tls[0].hosts[0]="qa-173-193-112-65.nip.io" \
                             --set-string ingress.tls[0].secretName=acme-app-qa-tls
                           """
                             }
