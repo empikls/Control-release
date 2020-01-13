@@ -91,20 +91,34 @@ spec:
 
                 stage('Deploy DEV release') {
                     if (isMaster()) {
-                        nameStage = "app-dev"
-                        namespace = "dev"
-                        tagDockerImage = "${params.COMMIT}"
-                        hostname = "dev-173-193-112-65.nip.io"
-                        deploy(nameStage, namespace, tagDockerImage, hostname)
+                        container('helm') {
+                            withKubeConfig([credentialsId: 'kubeconfig']) {
+                                sh """
+                         helm upgrade --install $appName --debug --force ./App/app \
+                            --namespace=$namespace \
+                            --set image.tag="$tagName" \
+                            --set ingress.hostName=$hostName \
+                            --set-string ingress.tls[0].hosts[0]="$hostName" \
+                            --set-string ingress.tls[0].secretName=acme-$appName-tls
+                          """
+                            }
+                        }
                     }
                 }
                 stage('Deploy QA release') {
                     if (isBuildingTag()) {
-                        nameStage = "app-qa"
-                        namespace = "qa"
-                        tagDockerImage = "${params.TAG}"
-                        hostname = "qa-173-193-112-65.nip.io"
-                        deploy(nameStage, namespace, tagDockerImage, hostname)
+                        container('helm') {
+                            withKubeConfig([credentialsId: 'kubeconfig']) {
+                                sh """
+                         helm upgrade --install $appName --debug --force ./App/app \
+                            --namespace=$namespace \
+                            --set image.tag="$tagName" \
+                            --set ingress.hostName=$hostName \
+                            --set-string ingress.tls[0].hosts[0]="$hostName" \
+                            --set-string ingress.tls[0].secretName=acme-$appName-tls
+                          """
+                            }
+                        }
                     }
                 }
                 stage('Deploy PROD release') {
