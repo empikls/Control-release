@@ -163,7 +163,7 @@ spec:
                         changeSet.items.any { entry ->
                             entry.affectedFiles.any { file ->
                                 if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/*.yaml$/) {
-                                   return true
+                                    return true
                                 }
                             }
                         }
