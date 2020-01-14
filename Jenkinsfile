@@ -75,13 +75,12 @@ spec:
                                   extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
                                   userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                     }
-                        if (isBuildingTag() ) {
+                    if (isBuildingTag()) {
                         checkout([$class           : 'GitSCM',
                                   branches         : [[name: "${params.TAG}"]],
                                   extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
                                   userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
-                        }
-                    else {
+                    } else {
                         checkout([$class           : 'GitSCM',
                                   branches         : [[name: "${params.COMMIT}"]],
                                   extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
@@ -129,15 +128,16 @@ spec:
                     def yamlFile = list[-1]
                     def dir = yamlFile.tokenize('/')
                     def stage = dir[0]
-                        container('helm') {
-                            withKubeConfig([credentialsId: 'kubeconfig']) {
-                                sh """
+                    container('helm') {
+                        withKubeConfig([credentialsId: 'kubeconfig']) {
+                            sh """
                             helm upgrade --install $stage --debug ./App/app --values $yamlfile
                             """
-                            }
                         }
                     }
-
+                }
+            }
+        }
 
 
 
