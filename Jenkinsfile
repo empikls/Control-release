@@ -139,13 +139,9 @@ spec:
             }
         }
 
-
-
-
                 def tagDockerImage
                 def nameStage
                 def hostname
-
 
                 boolean isMaster() {
                     return ("${params.TAG}" == "master" )
@@ -155,7 +151,7 @@ spec:
                 }
 
                 def changeSetList () {
-                    currentBuild.changeSets.any { changeSet ->
+                    currentBuild.changeSets.each { changeSet ->
                         changeSet.items.each { entry ->
                             entry.affectedFiles.each { file ->
                                 if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/*.yaml$/) {
