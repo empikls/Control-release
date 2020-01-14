@@ -66,7 +66,7 @@ spec:
 
                 stage('Clone another repo master') {
                     if (isChangeSet()) {
-                        def values = readYaml(file: '${nameFile}')
+                        def values = readYaml(file: '${File}')
                         println "tag from yaml: ${values.image.tag}"
                         checkout([$class           : 'GitSCM',
                                   branches         : [[name: "${values.image.tag}"]],
@@ -151,21 +151,22 @@ spec:
 
                 def isChangeSet() {
                     def list
-                        currentBuild.changeSets.any { changeSet ->
-                            changeSet.items.each { entry ->
-                                entry.affectedFiles.each { file ->
+                    currentBuild.changeSets.any { changeSet ->
+                        changeSet.items.each { entry ->
+                            entry.affectedFiles.each { file ->
                                 if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/*.yaml$/) list.add(file.path) {
-                                return list
-                                nameFile = list[-1]
-                                println nameFile
-                                    path = yamlFile.tokenize('/')
-                                    println path
-
-                            }
-                        }
+                                    return list
+                                }
+                                File = list[-1]
+                                println fileName
+                                path = yamlFile.tokenize('/')
+                                println path
                             }
                         }
                     }
+                }
+
+
 
 
 //                def deploy( appName, namespace, tagName, hostName ) {
