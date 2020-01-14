@@ -156,14 +156,14 @@ spec:
                                 entry.affectedFiles.any { file ->
                                 if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/values.yaml$/) list.add(file.path) {
                                 return list
-//                                file = list[-1]
-//                                println(File)
+                                fileName = list[-1]
+                                println(File)
                             }
                         }
                             }
                         }
                     }
-                
+
 
 //                def deploy( appName, namespace, tagName, hostName ) {
 //                    container('helm') {
