@@ -55,26 +55,6 @@ spec:
                               userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                 }
 
-
-//                    if (isChangeSet()) {
-//                        println "tag from yaml: ${values.image.tag}"
-//                        checkout([$class           : 'GitSCM',
-//                                  branches         : [[name: "${values.image.tag}"]],
-//                                  extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
-//                                  userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
-//                    }
-//                    if (isBuildingTag()) {
-//                        checkout([$class           : 'GitSCM',
-//                                  branches         : [[name: "${params.TAG}"]],
-//                                  extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
-//                                  userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
-//                    } else {
-//                        checkout([$class           : 'GitSCM',
-//                                  branches         : [[name: "${params.COMMIT}"]],
-//                                  extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
-//                                  userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
-//                    }
-//
 //                    if (isChangeSet()) {
 //                        def list = changeSetList()
 //                        def yamlFile = list[-1]
@@ -130,7 +110,7 @@ spec:
                     stage('Deploy PROD release') {
                         if (isChangeSet()) {
                             def list = changeSetList()
-                            def yamlFile = list[-1]
+                            def yamlFile = Set[-1]
                             def dir = yamlFile.tokenize('/')
                             def stage = dir[0]
                             def appName = yamlFile.removeExtension()
