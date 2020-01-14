@@ -158,8 +158,8 @@ spec:
                                 if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/*.yaml$/) list.add(file.path) {
                                     return list
                                 }
-                                File  = list[-1]
-                                println File
+                                fileName  = list[-1]
+                                println fileName
                                 path = yamlFile.tokenize('/')
                                 println path
                             }
