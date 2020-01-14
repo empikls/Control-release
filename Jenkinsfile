@@ -126,7 +126,7 @@ spec:
                     return ("${params.TAG}" == "master" )
                 }
                 boolean isBuildingTag() {
-                    return ("${params.TAG}" ==~ /^v\d.\d.\d$/ || "${params.TAG}" ==~ /^\d.\d.\d$/ )
+                    return ("${params.TAG}" ==~ /^v\d+.\d+.\d+$/ || "${params.TAG}" ==~ /^\d+.\d+.\d+$/ )
                 }
 
                 def changeSetList () {
