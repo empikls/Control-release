@@ -49,7 +49,7 @@ spec:
                 }
 
                 stage('Clone another repo master') {
-<<<<<<< HEAD
+
                     def checkout()
 //                    if (isChangeSet()) {
 //                        println "tag from yaml: ${values.image.tag}"
@@ -69,7 +69,7 @@ spec:
 //                                  extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
 //                                  userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
 //                    }
-=======
+
                     if (isChangeSet()) {
                         def list = changeSetList()
                         def yamlFile = list[-1]
@@ -91,7 +91,7 @@ spec:
                                   extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
                                   userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                     }
->>>>>>> 70aceb74f9ac7639adedbf5e21de0287d1d9ad0d
+
                 }
                 stage('Deploy DEV release') {
                     if (isMaster()) {
@@ -147,14 +147,13 @@ spec:
                     }
                     if (isChangeSet()) {
 
-<<<<<<< HEAD
+
                     }
                     if (isMaster()) {
                         namespace = "dev"
                     }
                 }
-=======
->>>>>>> 70aceb74f9ac7639adedbf5e21de0287d1d9ad0d
+
                 boolean isMaster() {
                     return ("${params.TAG}" == "master" )
                 }
@@ -176,7 +175,7 @@ spec:
                     }
                         return Set
                 }
-<<<<<<< HEAD
+
                 def checkout (branchName) {
                     def list = changeSetList()
                     def yamlFile = Set[-1]
@@ -195,6 +194,4 @@ spec:
                               extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
                               userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                 }
-=======
-                
->>>>>>> 70aceb74f9ac7639adedbf5e21de0287d1d9ad0d
+
