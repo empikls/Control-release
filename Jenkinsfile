@@ -49,12 +49,12 @@ spec:
                 }
 
                 stage('Clone another repo master') {
-                        checkout([$class           : 'GitSCM',
-                                  branches         : [[name: "${branchName}"]],
-                                  extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
-                                  userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
-                    }
+                    checkout([$class           : 'GitSCM',
+                              branches         : [[name: "${branchName}"]],
+                              extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
+                              userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                 }
+
 
 //                    if (isChangeSet()) {
 //                        println "tag from yaml: ${values.image.tag}"
