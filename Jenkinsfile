@@ -156,7 +156,7 @@ spec:
                         entry.affectedFiles.any { file ->
                             if ( file.path ==~ /^prod-(ap1|eu1|us1|us2)\/values.yaml$/ ) prodList.add(file.path) {
                                 return list
-                                File = list[-1]
+//                                file = list[-1]
                                 println(File)
                                 }
                             }
