@@ -59,9 +59,9 @@ spec:
 
                 stage('Clone config repo') {
                     checkout scm
-                    def values = readYaml(file: 'values.yaml')
-                    println "tag from yaml: ${values.image.tag}"
-                    tagDockerImageFromFile = "${values.image.tag}"
+//                    def values = readYaml(file: 'values.yaml')
+//                    println "tag from yaml: ${values.image.tag}"
+//                    tagDockerImageFromFile = "${values.image.tag}"
                 }
 
                 stage('Clone another repo master') {
@@ -157,7 +157,7 @@ spec:
                                 if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/*.yaml$/) list.add(file.path) {
                                 return list
                                 fileName = list[-1]
-                                println(File)
+                                println(fileName)
                             }
                         }
                             }
