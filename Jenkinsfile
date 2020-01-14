@@ -66,7 +66,9 @@ spec:
 
                 stage('Clone another repo master') {
                     if (isChangeSet()) {
-                        def values = readYaml(file: 'values.yaml')
+                        def list = changeSetList()
+                        def yamlFile = list[-1]
+                        def values = readYaml(file: yamlFile)
                         println "tag from yaml: ${values.image.tag}"
                         checkout([$class           : 'GitSCM',
                                   branches         : [[name: "${values.image.tag}"]],
@@ -123,18 +125,21 @@ spec:
                     }
                 }
                 stage('Deploy PROD release') {
-                    if (isChangeSet()) {
+                    def list = changeSetList()
+                    def yamlFile = list[-1]
+                    def dir = yamlFile.tokenize('/')
+                    def stage = dir[0]
                         container('helm') {
                             withKubeConfig([credentialsId: 'kubeconfig']) {
                                 sh """
-                            helm upgrade --install prod --debug ./App/app --values ./values.yaml
+                            helm upgrade --install $stage --debug ./App/app --values $yamlfile
                             """
                             }
                         }
                     }
-                }
-            }
-        }
+
+
+
 
 
                 def tagDockerImage
@@ -149,22 +154,33 @@ spec:
                     return ("${params.TAG}" ==~ /^v\d.\d.\d$/ || "${params.TAG}" ==~ /^\d.\d.\d$/ )
                 }
 
-                def isChangeSet() {
+                def changeSetList () {
                     def list
                     currentBuild.changeSets.any { changeSet ->
                         changeSet.items.each { entry ->
                             entry.affectedFiles.each { file ->
-                                if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/*.yaml$/) list.add(file.path) {
-                                    return list
+                                if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/*.yaml$/) {
+                                    list.add(file.path)
                                 }
-                                fileName  = list[-1]
-                                println fileName
-                                path = yamlFile.tokenize('/')
-                                println path
                             }
                         }
                     }
+                    return list
                 }
+                def isChangeSet() {
+                    currentBuild.changeSets.any { changeSet ->
+                        changeSet.items.amy { entry ->
+                            entry.affectedFiles.any { file ->
+                                if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/*.yaml$/) {
+                                   return true
+                                }
+                            }
+                        }
+                    }
+                 return false
+                }
+
+
 
 
 
