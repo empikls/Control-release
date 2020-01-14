@@ -106,7 +106,7 @@ spec:
                         }
                     }
                 }
-                if (list.size() != 0) {
+
                     stage('Deploy PROD release') {
                         if (isChangeSet()) {
                             def list = changeSetList()
@@ -121,7 +121,7 @@ spec:
                             """
                                 }
                             }
-                        }
+
                     }
                 }
             }
