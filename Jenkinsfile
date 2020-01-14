@@ -126,7 +126,7 @@ spec:
                 }
 
                 def changeSetList () {
-                    def list
+                    def list = []
                     currentBuild.changeSets.each { changeSet ->
                         changeSet.items.each { entry ->
                             entry.affectedFiles.each { file ->
