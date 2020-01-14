@@ -162,8 +162,8 @@ spec:
                     currentBuild.changeSets.any { changeSet ->
                         changeSet.items.any { entry ->
                             entry.affectedFiles.any { file ->
-                                if (file.path.equals("value.yaml") {
-                                    echo "file was changed"
+                                if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/*.yaml$/) {
+                                    return true
                                 }
                             }
                         }
