@@ -155,7 +155,6 @@ spec:
                 }
 
                 def changeSetList () {
-                    def list
                     currentBuild.changeSets.any { changeSet ->
                         changeSet.items.each { entry ->
                             entry.affectedFiles.each { file ->
@@ -177,7 +176,6 @@ spec:
                             }
                         }
                     }
-                 return false
                 }
 
 
