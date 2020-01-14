@@ -107,23 +107,22 @@ spec:
                     }
                 }
 
-                    stage('Deploy PROD release') {
-                        if (isChangeSet()) {
-                            def list = changeSetList()
-                            def yamlFile = list[-1]
-                            def dir = yamlFile.tokenize('/')
-                            def stage = dir[0]
-                            def appName = yamlFile.removeExtension()
-                            container('helm') {
-                                withKubeConfig([credentialsId: 'kubeconfig']) {
-                                    sh """
-                            helm upgrade --install $appName --namespace=$stage --debug --force ./App/app --values $yamlfile
-                            """
-                                }
-                            }
-
-                    }
-                }
+//                    stage('Deploy PROD release') {
+//                        if (isChangeSet()) {
+//                            def list = changeSetList()
+//                            def yamlFile = list[-1]
+//                            def dir = yamlFile.tokenize('/')
+//                            def stage = dir[0]
+//                            def appName = yamlFile.removeExtension()
+//                            container('helm') {
+//                                withKubeConfig([credentialsId: 'kubeconfig']) {
+//                                    sh """
+//                            helm upgrade --install $appName --namespace=$stage --debug --force ./App/app --values $yamlfile
+//                            """
+//                                }
+//                            }
+//                    }
+//                }
             }
         }
 //                def deploy() {
