@@ -110,7 +110,7 @@ spec:
                     stage('Deploy PROD release') {
                         if (isChangeSet()) {
                             def list = changeSetList()
-                            def yamlFile = Set[-1]
+                            def yamlFile = list[-1]
                             def dir = yamlFile.tokenize('/')
                             def stage = dir[0]
                             def appName = yamlFile.removeExtension()
@@ -151,18 +151,18 @@ spec:
                         changeSet.items.each { entry ->
                             entry.affectedFiles.each { file ->
                                 if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/*.yaml$/) {
-                                    list.toSet()
+                                    list.add(file.path)
                                 }
                             }
                         }
                  
                     }
-                        return Set
+                        return list
                 }
                 def checkout(branchName) {
                     def list = changeSetList()
-                    def yamlFile = Set[-1]
-                    def values = readYaml(file: yamlFile)
+                    def yamlFile = list[-1]
+                    def values = readYaml file: yamlFile
                     if (isMaster()) {
                         branchName = "${params.COMMIT}"
                     }
