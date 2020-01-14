@@ -109,7 +109,7 @@ spec:
                          helm upgrade --install app-qa --debug --force ./App/app \
                             --namespace=qa \
                             --set image.tag="${params.TAG}" \
-                            --values ./qa/values.yaml
+                            --values /qa/values.yaml
                           """
                             }
                         }
