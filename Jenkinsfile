@@ -151,8 +151,7 @@ spec:
                         namespace = "qa"
                     }
                     if (isChangeSet()) {
-
-
+                        nemespace = "prod"
                     }
                     if (isMaster()) {
                         namespace = "dev"
