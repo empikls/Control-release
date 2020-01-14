@@ -116,16 +116,18 @@ spec:
                     }
                 }
                 stage('Deploy PROD release') {
-                    def list = changeSetList()
-                    def yamlFile = list[-1]
-                    def dir = yamlFile.tokenize('/')
-                    def stage = dir[0]
-                    def appName = yamlFile.removeExtension()
-                    container('helm') {
-                        withKubeConfig([credentialsId: 'kubeconfig']) {
-                            sh """
+                    if (isChangeSet()) {
+                        def list = changeSetList()
+                        def yamlFile = list[-1]
+                        def dir = yamlFile.tokenize('/')
+                        def stage = dir[0]
+                        def appName = yamlFile.removeExtension()
+                        container('helm') {
+                            withKubeConfig([credentialsId: 'kubeconfig']) {
+                                sh """
                             helm upgrade --install $appName --namespace=$stage --debug --force ./App/app --values $yamlfile
                             """
+                            }
                         }
                     }
                 }
