@@ -154,7 +154,7 @@ spec:
                         currentBuild.changeSets.any { changeSet ->
                             changeSet.items.any { entry ->
                                 entry.affectedFiles.any { file ->
-                                if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/values.yaml$/) list.add(file.path) {
+                                if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/*.yaml$/) list.add(file.path) {
                                 return list
                                 fileName = list[-1]
                                 println(File)
