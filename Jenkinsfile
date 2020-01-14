@@ -87,10 +87,6 @@ spec:
                                   userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                     }
                 }
-                echo "${params.TAG}"
-                echo "${params.COMMIT}"
-
-
                 stage('Deploy DEV release') {
                     if (isMaster()) {
                         container('helm') {
