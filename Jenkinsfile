@@ -49,19 +49,6 @@ spec:
                 }
 
                 stage('Clone another repo master') {
-                    def checkout(branchName) {
-                        def list = changeSetList()
-                        def yamlFile = Set[-1]
-                        def values = readYaml(file: yamlFile)
-                        if (isMaster()) {
-                            branchName = "${params.COMMIT}"
-                        }
-                        if (isBuildingTag()) {
-                            branchName = "${params.TAG}"
-                        }
-                        if (changeSetList()) {
-                            branchName = "${values.image.tag}"
-                        }
                         checkout([$class           : 'GitSCM',
                                   branches         : [[name: "${branchName}"]],
                                   extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
@@ -110,7 +97,7 @@ spec:
 //                                  userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
 //                    }
 //
-                
+
                 stage('Deploy DEV release') {
                     if (isMaster()) {
                         container('helm') {
@@ -193,6 +180,18 @@ spec:
                     }
                         return Set
                 }
-
+                def checkout(branchName) {
+                    def list = changeSetList()
+                    def yamlFile = Set[-1]
+                    def values = readYaml(file: yamlFile)
+                    if (isMaster()) {
+                        branchName = "${params.COMMIT}"
+                    }
+                    if (isBuildingTag()) {
+                        branchName = "${params.TAG}"
+                    }
+                    if (changeSetList()) {
+                        branchName = "${values.image.tag}"
+                    }
 
 
