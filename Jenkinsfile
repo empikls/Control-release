@@ -71,7 +71,7 @@ spec:
                         def values = readYaml(file: yamlFile)
                         println "tag from yaml: ${values.image.tag}"
                         checkout([$class           : 'GitSCM',
-                                  branches         : [[name: "${values.image.tag}"]],
+                                  branches         : [[name: "2.1.4"]],
                                   extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
                                   userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                     }
