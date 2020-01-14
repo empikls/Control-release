@@ -193,5 +193,6 @@ spec:
                     if (changeSetList()) {
                         branchName = "${values.image.tag}"
                     }
+                }
 
 
