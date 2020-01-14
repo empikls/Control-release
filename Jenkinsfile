@@ -132,14 +132,17 @@ spec:
                         }
                     }
                 }
+            }
+        }
+
                 def tagDockerImage
                 def nameStage
                 def hostname
 
-                def isMaster() {
+                boolean isMaster() {
                     return ("${params.TAG}" == "master" )
                 }
-                def isBuildingTag() {
+                boolean isBuildingTag() {
                     return ("${params.TAG}" ==~ /^v\d.\d.\d$/ || "${params.TAG}" ==~ /^\d.\d.\d$/ )
                 }
 
@@ -160,33 +163,9 @@ spec:
                         changeSet.items.any { entry ->
                             entry.affectedFiles.any { file ->
                                 if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/*.yaml$/) {
-                                    return true
+                                    echo "file was changed"
                                 }
                             }
                         }
                     }
                 }
-            }
-        }
-
-
-
-
-
-
-
-
-//                def deploy( appName, namespace, tagName, hostName ) {
-//                    container('helm') {
-//                        withKubeConfig([credentialsId: 'kubeconfig']) {
-//                            sh """
-//                         helm upgrade --install $appName --debug --force ./App/app \
-//                            --namespace=$namespace \
-//                            --set image.tag="$tagName" \
-//                            --set ingress.hostName=$hostName \
-//                            --set-string ingress.tls[0].hosts[0]="$hostName" \
-//                            --set-string ingress.tls[0].secretName=acme-$appName-tls
-//                          """
-//                        }
-//                    }
-//              }
