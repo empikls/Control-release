@@ -150,19 +150,20 @@ spec:
                 }
 
                 def isChangeSet() {
-                    def prodList
-                currentBuild.changeSets.any { changeSet ->
-                    changeSet.items.any { entry ->
-                        entry.affectedFiles.any { file ->
-                            if ( file.path ==~ /^prod-(ap1|eu1|us1|us2)\/values.yaml$/ ) prodList.add(file.path) {
+                    def list
+                        currentBuild.changeSets.any { changeSet ->
+                            changeSet.items.any { entry ->
+                                entry.affectedFiles.any { file ->
+                                if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/values.yaml$/) list.add(file.path) {
                                 return list
 //                                file = list[-1]
 //                                println(File)
-                                }
+                            }
+                        }
                             }
                         }
                     }
-                }
+                
 
 //                def deploy( appName, namespace, tagName, hostName ) {
 //                    container('helm') {
