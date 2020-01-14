@@ -157,7 +157,7 @@ spec:
                             if ( file.path ==~ /^prod-(ap1|eu1|us1|us2)\/values.yaml$/ ) prodList.add(file.path) {
                                 return list
 //                                file = list[-1]
-                                println(File)
+//                                println(File)
                                 }
                             }
                         }
