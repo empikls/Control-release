@@ -136,10 +136,10 @@ spec:
                 def nameStage
                 def hostname
 
-                boolean isMaster() {
+                def isMaster() {
                     return ("${params.TAG}" == "master" )
                 }
-                boolean isBuildingTag() {
+                def isBuildingTag() {
                     return ("${params.TAG}" ==~ /^v\d.\d.\d$/ || "${params.TAG}" ==~ /^\d.\d.\d$/ )
                 }
 
