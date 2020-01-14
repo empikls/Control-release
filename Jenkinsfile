@@ -66,7 +66,7 @@ spec:
 
                 stage('Clone another repo master') {
                     if (isChangeSet()) {
-                        def values = readYaml(file: '${File}')
+                        def values = readYaml(file: '${nameFile}')
                         println "tag from yaml: ${values.image.tag}"
                         checkout([$class           : 'GitSCM',
                                   branches         : [[name: "${values.image.tag}"]],
@@ -156,8 +156,8 @@ spec:
                                 entry.affectedFiles.each { file ->
                                 if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/*.yaml$/) list.add(file.path) {
                                 return list
-                                File = list[-1]
-                                println File
+                                nameFile = list[-1]
+                                println nameFile
                                     path = yamlFile.tokenize('/')
                                     println path
 
