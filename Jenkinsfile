@@ -65,10 +65,10 @@ spec:
                 }
 
                 stage('Clone another repo master') {
+                    def list = changeSetList()
+                    def yamlFile = list[-1]
+                    def values = readYaml(file: yamlFile)
                     if (isChangeSet()) {
-                        def list = changeSetList()
-                        def yamlFile = list[-1]
-                        def values = readYaml(file: yamlFile)
                         println "tag from yaml: ${values.image.tag}"
                         checkout([$class           : 'GitSCM',
                                   branches         : [[name: "${values.image.tag}"]],
