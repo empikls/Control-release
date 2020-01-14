@@ -24,27 +24,11 @@ spec:
     command:
     - cat
     tty: true
-  - name: nodejs
-    image: node:latest
-    command:
-    - cat
-    tty: true
   - name: kubectl
     image: bitnami/kubectl:latest
     command:
     - cat
     tty: true
-  - name: docker
-    image: docker:19.03.3-git
-    command:
-    - cat
-    tty: true
-    env:
-    - name: DOCKER_HOST
-      value: tcp://docker-dind:2375
-    volumeMounts:
-    - mountPath: /var/lib/docker
-      name: dind-storage 
   - name: helm
     image: lachlanevenson/k8s-helm:v2.16.1
     command:
@@ -65,6 +49,7 @@ spec:
                 }
 
                 stage('Clone another repo master') {
+<<<<<<< HEAD
                     def checkout()
 //                    if (isChangeSet()) {
 //                        println "tag from yaml: ${values.image.tag}"
@@ -84,6 +69,29 @@ spec:
 //                                  extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
 //                                  userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
 //                    }
+=======
+                    if (isChangeSet()) {
+                        def list = changeSetList()
+                        def yamlFile = list[-1]
+                        def values = readYaml file: yamlFile
+                        println "tag from yaml: ${values.image.tag}"
+                        checkout([$class           : 'GitSCM',
+                                  branches         : [[name: "${values.image.tag}"]],
+                                  extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
+                                  userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
+                    }
+                    if (isBuildingTag()) {
+                        checkout([$class           : 'GitSCM',
+                                  branches         : [[name: "${params.TAG}"]],
+                                  extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
+                                  userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
+                    } else {
+                        checkout([$class           : 'GitSCM',
+                                  branches         : [[name: "${params.COMMIT}"]],
+                                  extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
+                                  userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
+                    }
+>>>>>>> 70aceb74f9ac7639adedbf5e21de0287d1d9ad0d
                 }
                 stage('Deploy DEV release') {
                     if (isMaster()) {
@@ -139,16 +147,19 @@ spec:
                     }
                     if (isChangeSet()) {
 
+<<<<<<< HEAD
                     }
                     if (isMaster()) {
                         namespace = "dev"
                     }
                 }
+=======
+>>>>>>> 70aceb74f9ac7639adedbf5e21de0287d1d9ad0d
                 boolean isMaster() {
                     return ("${params.TAG}" == "master" )
                 }
                 boolean isBuildingTag() {
-                    return ("${params.TAG}" ==~ /^v\d.\d.\d$/ || "${params.TAG}" ==~ /^\d.\d.\d$/ )
+                    return ("${params.TAG}" ==~ /^v\d+.\d+.\d+$/ || "${params.TAG}" ==~ /^\d+.\d+.\d+$/ )
                 }
 
                 def changeSetList () {
@@ -161,9 +172,11 @@ spec:
                                 }
                             }
                         }
+                 
                     }
                         return Set
                 }
+<<<<<<< HEAD
                 def checkout (branchName) {
                     def list = changeSetList()
                     def yamlFile = Set[-1]
@@ -182,3 +195,6 @@ spec:
                               extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
                               userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                 }
+=======
+                
+>>>>>>> 70aceb74f9ac7639adedbf5e21de0287d1d9ad0d
