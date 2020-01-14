@@ -150,7 +150,7 @@ spec:
                 }
 
                 def isChangeSet() {
-                    def List
+                    def prodList
                 currentBuild.changeSets.any { changeSet ->
                     changeSet.items.any { entry ->
                         entry.affectedFiles.any { file ->
