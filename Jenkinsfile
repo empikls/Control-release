@@ -151,7 +151,6 @@ spec:
 
                 def isChangeSet() {
                     def list
-                    def File
                     currentBuild.changeSets.any { changeSet ->
                         changeSet.items.each { entry ->
                             entry.affectedFiles.each { file ->
