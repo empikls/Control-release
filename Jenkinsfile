@@ -126,17 +126,17 @@ spec:
                 }
             }
         }
-                def deploy() {
-                    if (isBuildingTag()) {
-                        namespace = "qa"
-                    }
-                    if (isChangeSet()) {
-                        nemespace = "prod"
-                    }
-                    if (isMaster()) {
-                        namespace = "dev"
-                    }
-                }
+//                def deploy() {
+//                    if (isBuildingTag()) {
+//                        namespace = "qa"
+//                    }
+//                    if (isChangeSet()) {
+//                        nemespace = "prod"
+//                    }
+//                    if (isMaster()) {
+//                        namespace = "dev"
+//                    }
+//                }
 
                 boolean isMaster() {
                     return ("${params.TAG}" == "master" )
