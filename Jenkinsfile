@@ -113,11 +113,11 @@ spec:
                             def yamlFile = list[-1]
                             def dir = yamlFile.tokenize('/')
                             def stage = dir[0]
-//                            def appName = yamlFile.removeExtension()
+                            def appName = yamlFile.removeExtension()
                             container('helm') {
                                 withKubeConfig([credentialsId: 'kubeconfig']) {
                                     sh """
-                            helm upgrade --install prod --namespace=$stage --debug --force ./App/app --values $yamlfile
+                            helm upgrade --install $appName --namespace=$stage --debug --force ./App/app --values $yamlfile
                             """
                                 }
                             }
@@ -146,7 +146,7 @@ spec:
                 }
 
                 def changeSetList () {
-                    def list
+                    def list 
                     currentBuild.changeSets.each { changeSet ->
                         changeSet.items.each { entry ->
                             entry.affectedFiles.each { file ->
@@ -155,8 +155,9 @@ spec:
                                 }
                             }
                         }
+
                     }
-                        return list
+                    return list
                 }
                 def checkout(branchName) {
                     def list = changeSetList()
