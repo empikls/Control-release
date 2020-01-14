@@ -137,29 +137,7 @@ spec:
 //                        namespace = "dev"
 //                    }
 //                }
-
-                boolean isMaster() {
-                    return ("${params.TAG}" == "master" )
-                }
-                boolean isBuildingTag() {
-                    return ("${params.TAG}" ==~ /^v\d+.\d+.\d+$/ || "${params.TAG}" ==~ /^\d+.\d+.\d+$/ )
-                }
-
-                def changeSetList () {
-                    def list 
-                    currentBuild.changeSets.each { changeSet ->
-                        changeSet.items.each { entry ->
-                            entry.affectedFiles.each { file ->
-                                if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/*.yaml$/) {
-                                    list.add(file.path)
-                                }
-                            }
-                        }
-
-                    }
-                    return list
-                }
-                def checkout(branchName) {
+                def checkout() {
                     def list = changeSetList()
                     def yamlFile = list[-1]
                     def values = readYaml file: yamlFile
@@ -173,5 +151,26 @@ spec:
                         branchName = "${values.image.tag}"
                     }
                 }
+                boolean isMaster() {
+                    return ("${params.TAG}" == "master" )
+                }
+                boolean isBuildingTag() {
+                    return ("${params.TAG}" ==~ /^v\d+.\d+.\d+$/ || "${params.TAG}" ==~ /^\d+.\d+.\d+$/ )
+                }
+
+                def changeSetList () {
+                    def list
+                    currentBuild.changeSets.each { changeSet ->
+                        changeSet.items.each { entry ->
+                            entry.affectedFiles.each { file ->
+                                if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/*.yaml$/) {
+                                    list.add(file.path)
+                                }
+                            }
+                        }
+                    }
+                    return list
+                }
+
 
 
