@@ -158,7 +158,7 @@ spec:
                                     return list
                                 }
                                 File config = list[-1]
-                                println fileName
+                                println config
                                 path = yamlFile.tokenize('/')
                                 println path
                             }
