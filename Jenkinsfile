@@ -152,8 +152,8 @@ spec:
                 def isChangeSet() {
                     def list
                         currentBuild.changeSets.any { changeSet ->
-                            changeSet.items.any { entry ->
-                                entry.affectedFiles.any { file ->
+                            changeSet.items.each { entry ->
+                                entry.affectedFiles.each { file ->
                                 if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/*.yaml$/) list.add(file.path) {
                                 return list
                                 File = list[-1]
