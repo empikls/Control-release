@@ -95,7 +95,7 @@ spec:
                          helm upgrade --install app-dev --debug --force ./App/app \
                             --namespace=dev \
                             --set image.tag="${params.COMMIT}" \
-                            --values /dev/values.yaml
+                            --values ./dev/values.yaml
                           """
                             }
                         }
@@ -109,7 +109,7 @@ spec:
                          helm upgrade --install app-qa --debug --force ./App/app \
                             --namespace=qa \
                             --set image.tag="${params.TAG}" \
-                            --values /qa/values.yaml
+                            --values ./qa/values.yaml
                           """
                             }
                         }
