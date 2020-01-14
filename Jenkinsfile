@@ -156,8 +156,11 @@ spec:
                                 entry.affectedFiles.any { file ->
                                 if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/*.yaml$/) list.add(file.path) {
                                 return list
-                                fileName = list[-1]
-                                println(fileName)
+                                File = list[-1]
+                                println File
+                                    path = yamlFile.tokenize('/')
+                                    println path
+
                             }
                         }
                             }
