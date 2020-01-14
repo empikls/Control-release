@@ -50,7 +50,7 @@ spec:
 
                 stage('Clone another repo master') {
                     checkout([$class           : 'GitSCM',
-                              branches         : [[name: "${branchName}"]],
+                              branches         : [[name: $branchName]],
                               extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
                               userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                 }
@@ -137,7 +137,7 @@ spec:
 //                        namespace = "dev"
 //                    }
 //                }
-                def checkout() {
+                def checkout(branchName) {
                     def list = changeSetList()
                     def yamlFile = list[-1]
                     def values = readYaml file: yamlFile
@@ -171,6 +171,5 @@ spec:
                     }
                     return list
                 }
-
 
 
