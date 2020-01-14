@@ -118,10 +118,6 @@ spec:
             }
         }
 
-                def tagDockerImage
-                def nameStage
-                def hostname
-
                 boolean isMaster() {
                     return ("${params.TAG}" == "master" )
                 }
