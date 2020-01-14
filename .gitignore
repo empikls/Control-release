@@ -40,6 +40,7 @@ out/
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
+.idea/modules.xml
 
 # JIRA plugin
 atlassian-ide-plugin.xml
@@ -55,3 +56,9 @@ fabric.properties
 
 # Editor-based Rest Client
 .idea/httpRequests
+
+#Others
+
+.idea/vcs.xml
+.idea/misc.xml
+.idea/control-release.iml
