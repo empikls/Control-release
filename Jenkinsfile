@@ -143,20 +143,20 @@ spec:
                             checkoutAppRepo(branchName)
                         }
                     }
-                    if (isBuildingTag()) {
-                        stage('Checkout app repo') {
-                            branchName = "${params.TAG}"
-                            checkoutAppRepo(branchName)
-                        }
-                    }
-                    if (changeSetList()) {
-                        def list = changeSetList()
-                        def yamlFile = list[-1]
-                        stage('Checkout app repo') {
-                        branchName = "${values.image.tag}"
-                            checkoutAppRepo(branchName)
-                        }
-                    }
+//                    if (isBuildingTag()) {
+//                        stage('Checkout app repo') {
+//                            branchName = "${params.TAG}"
+//                            checkoutAppRepo(branchName)
+//                        }
+//                    }
+//                    if (changeSetList()) {
+//                        def list = changeSetList()
+//                        def yamlFile = list[-1]
+//                        stage('Checkout app repo') {
+//                        branchName = "${values.image.tag}"
+//                            checkoutAppRepo(branchName)
+//                        }
+//                    }
 
                 boolean isMaster() {
                     return ("${params.TAG}" == "master" )
