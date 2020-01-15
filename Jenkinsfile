@@ -49,7 +49,7 @@ spec:
                     echo "dir is $dir "
                     def appNameWithExtention = dir[2]
                     echo "appNameWithExtention is $appNameWithExtention "
-                    def appName = valuesFileWithPath.removeExtension()
+                    def appName = appNameWithExtention.removeExtension()
                     echo "appName is $appName "
                     def nameSpace = dir[1]
                     echo "nameSpace is $nameSpace "
