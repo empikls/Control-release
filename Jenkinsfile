@@ -58,7 +58,7 @@ spec:
                 if (isMaster()) {
                     stage('Deploy DEV release') {
                         confValues = "./dev/*.yaml"
-                        appName = values.removeExtension()
+                        appName = confValues.removeExtension()
                         nameSpace = dev
                         deploy(confValues, appName, nameSpace)
                     }
@@ -66,7 +66,7 @@ spec:
                 if (isBuildingTag()) {
                     stage('Deploy QA release') {
                         confValues = "./qa/*.yaml"
-                        appName = values.removeExtension()
+                        appName = confValues.removeExtension()
                         nameSpace = qa
                         deploy(confValues, appName, nameSpace)
                     }
