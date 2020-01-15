@@ -48,11 +48,11 @@ spec:
                     def dir = valuesFileWithPath.split('/')
                     echo "dir is $dir "
                     def appNameWithExtention = valuesFileWithPath[1]
-                    echo "appNameWithExtention is "$appNameWithExtention" "
+                    echo "appNameWithExtention is $appNameWithExtention "
                     def appName = valuesFileWithPath.removeExtension()
-                    echo "appName is "$appName" "
+                    echo "appName is $appName "
                     def nameSpace = valuesFileWithPath[0]
-                    echo "nameSpace is "$nameSpace" "
+                    echo "nameSpace is $nameSpace "
                 }
                 def branchName = params.tagFromJob1
                 if (ischangeSetList()) {
