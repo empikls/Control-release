@@ -59,19 +59,19 @@ spec:
                 if (isMaster()) {
                     stage('Deploy DEV release') {
                         confValues = "./dev/values.yaml"
-                        appName = app-dev
-                        nameSpace = dev
-                        dockerTag = params.tagFromJob1
+                        appName = "app-dev"
+                        nameSpace = "dev"
+                        dockerTag = "${params.tagFromJob1}"
                         deploy(confValues, appName, nameSpace, dockerTag)
                     }
                 }
                 if (isBuildingTag()) {
                     stage('Deploy QA release') {
                         confValues = "./qa/values.yaml"
-                        appName = app-qa
-                        nameSpace = qa
-                        dockertag = params.tagFromJob1
-                        deploy(confValues, appName, nameSpace)
+                        appName = "app-qa"
+                        nameSpace = "qa"
+                        dockertag = "${params.tagFromJob1}"
+                        deploy(confValues, appName, nameSpace, dockerTag)
                     }
                 }
                 if (ischangeSetList()) {
