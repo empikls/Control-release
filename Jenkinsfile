@@ -52,11 +52,6 @@ spec:
 //                              extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
 //                              userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
 //                }
-                def list = changeSetList()
-                def yamlFile = list[-1]
-                def dir = yamlFile.tokenize('/')
-                def stage = dir[0]
-                def appName = yamlFile.removeExtension()
                 def branchName = params.tagFromJob1
                 if (ischangeSetList()) {
                     branchName = "${values.image.tag}"
@@ -115,19 +110,6 @@ spec:
 
             }
         }
-//                def deploy() {
-//                    if (isBuildingTag()) {
-//                        namespace = "qa"
-//                    }
-//                    if (isChangeSet()) {
-//                        nemespace = "prod"
-//                    }
-//                    if (isMaster()) {
-//                        namespace = "dev"
-//                    }
-//                }
-
-
 
                 boolean isMaster() {
                     return ("${params.TAG}" == "master" )
