@@ -55,12 +55,14 @@ spec:
                               extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
                               userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                 }
+
                 if (isMaster()) {
                     stage('Deploy DEV release') {
                         confValues = "./dev/values.yaml"
                         appName = app-dev
                         nameSpace = dev
-                        deploy(confValues, appName, nameSpace)
+                        dockerTag = params.tagFromJob1
+                        deploy(confValues, appName, nameSpace, dockerTag)
                     }
                 }
                 if (isBuildingTag()) {
@@ -68,6 +70,7 @@ spec:
                         confValues = "./qa/values.yaml"
                         appName = app-qa
                         nameSpace = qa
+                        dockertag = params.tagFromJob1
                         deploy(confValues, appName, nameSpace)
                     }
                 }
@@ -84,11 +87,12 @@ spec:
                 }
             }
         }
-                def deploy(confValues, appName, nameSpace ) {
+                def deploy(confValues, appName, nameSpace, dockerTag ) {
                     container('helm') {
                         withKubeConfig([credentialsId: 'kubeconfig']) {
                             sh """
-                               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./App/app --values $confValues
+                               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./App/app --values $confValues \
+                               --set image.tag="$dockertag"
                         """
                         }
                     }
