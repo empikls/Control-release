@@ -43,9 +43,6 @@ spec:
 
                 stage('Clone config repo') {
                     checkout scm
-//                    def values = readYaml(file: 'values.yaml')
-//                    println "tag from yaml: ${values.image.tag}"
-//                    tagDockerImageFromFile = "${values.image.tag}"
                 }
 
 //                stage('Clone another repo master') {
@@ -77,7 +74,26 @@ spec:
 //                                  userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
 //                    }
 //
-
+                if (isMaster()) {
+                    stage('Checkout app repo') {
+                        branchName = "${params.COMMIT}"
+                        checkoutAppRepo(branchName)
+                    }
+                }
+                if (isBuildingTag()) {
+                    stage('Checkout app repo') {
+                        branchName = "${params.TAG}"
+                        checkoutAppRepo(branchName)
+                    }
+                }
+                if (changeSetList()) {
+                    def list = changeSetList()
+                    def yamlFile = list[-1]
+                    stage('Checkout app repo') {
+                        branchName = "${values.image.tag}"
+                        checkoutAppRepo(branchName)
+                    }
+                }
                 stage('Deploy DEV release') {
                     if (isMaster()) {
                         container('helm') {
@@ -123,26 +139,7 @@ spec:
                         }
                     }
                 }
-                        if (isMaster()) {
-                            stage('Checkout app repo') {
-                                branchName = "${params.COMMIT}"
-                                checkoutAppRepo(branchName)
-                            }
-                        }
-                        if (isBuildingTag()) {
-                            stage('Checkout app repo') {
-                                branchName = "${params.TAG}"
-                                checkoutAppRepo(branchName)
-                            }
-                        }
-                        if (changeSetList()) {
-                            def list = changeSetList()
-                            def yamlFile = list[-1]
-                            stage('Checkout app repo') {
-                                branchName = "${values.image.tag}"
-                                checkoutAppRepo(branchName)
-                            }
-                        }
+
             }
         }
 //                def deploy() {
