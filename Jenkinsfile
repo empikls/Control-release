@@ -107,22 +107,42 @@ spec:
                     }
                 }
 
-                    stage('Deploy PROD release') {
+                stage('Deploy PROD release') {
+                    if (changeSetList()) {
+                        def list = changeSetList()
+                        def yamlFile = list[-1]
+                        def dir = yamlFile.tokenize('/')
+                        def stage = dir[0]
+                        def appName = yamlFile.removeExtension()
+                        container('helm') {
+                            withKubeConfig([credentialsId: 'kubeconfig']) {
+                                sh """
+                        helm upgrade --install $appName --namespace=$stage --debug --force ./App/app --values $yamlfile
+                        """
+                            }
+                        }
+                    }
+                }
+                        if (isMaster()) {
+                            stage('Checkout app repo') {
+                                branchName = "${params.COMMIT}"
+                                checkoutAppRepo(branchName)
+                            }
+                        }
+                        if (isBuildingTag()) {
+                            stage('Checkout app repo') {
+                                branchName = "${params.TAG}"
+                                checkoutAppRepo(branchName)
+                            }
+                        }
                         if (changeSetList()) {
                             def list = changeSetList()
                             def yamlFile = list[-1]
-                            def dir = yamlFile.tokenize('/')
-                            def stage = dir[0]
-                            def appName = yamlFile.removeExtension()
-                            container('helm') {
-                                withKubeConfig([credentialsId: 'kubeconfig']) {
-                                    sh """
-                            helm upgrade --install $appName --namespace=$stage --debug --force ./App/app --values $yamlfile
-                            """
-                                }
+                            stage('Checkout app repo') {
+                                branchName = "${values.image.tag}"
+                                checkoutAppRepo(branchName)
                             }
-                    }
-                }
+                        }
             }
         }
 //                def deploy() {
@@ -137,26 +157,7 @@ spec:
 //                    }
 //                }
 
-                    if (isMaster()) {
-                        stage('Checkout app repo') {
-                            branchName = "${params.COMMIT}"
-                            checkoutAppRepo(branchName)
-                        }
-                    }
-                    if (isBuildingTag()) {
-                        stage('Checkout app repo') {
-                            branchName = "${params.TAG}"
-                            checkoutAppRepo(branchName)
-                        }
-                    }
-                    if (changeSetList()) {
-                        def list = changeSetList()
-                        def yamlFile = list[-1]
-                        stage('Checkout app repo') {
-                        branchName = "${values.image.tag}"
-                            checkoutAppRepo(branchName)
-                        }
-                    }
+
 
                 boolean isMaster() {
                     return ("${params.TAG}" == "master" )
@@ -170,7 +171,7 @@ spec:
                     currentBuild.changeSets.each { changeSet ->
                         changeSet.items.each { entry ->
                             entry.affectedFiles.each { file ->
-                                if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/*.yaml$/) {
+                                if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/values.yaml$/) {
                                     list.add(file.path)
                                 }
                             }
