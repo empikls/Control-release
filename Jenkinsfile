@@ -47,11 +47,11 @@ spec:
                     valuesFileWithPath = "./dev/*.yaml"
                     def dir = valuesFileWithPath.tokenize('/')
                     echo "dir is $dir "
-                    def appNameWithExtention = valuesFileWithPath[4]
+                    def appNameWithExtention = dir[2]
                     echo "appNameWithExtention is $appNameWithExtention "
                     def appName = valuesFileWithPath.removeExtension()
                     echo "appName is $appName "
-                    def nameSpace = valuesFileWithPath[2]
+                    def nameSpace = dir[1]
                     echo "nameSpace is $nameSpace "
                 }
                 def branchName = params.tagFromJob1
