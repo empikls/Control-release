@@ -45,17 +45,13 @@ spec:
                     checkout scm
                     echo "tag from Job1 : ${params.tagFromJob1}"
                 }
-
-//                stage('Clone another repo master') {
-//                    checkout([$class           : 'GitSCM',
-//                              branches         : [[name: $branchName]],
-//                              extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
-//                              userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
-//                }
                 def branchName = params.tagFromJob1
                 if (ischangeSetList()) {
                     branchName = "${values.image.tag}"
                     }
+                else {
+                    return 0
+                }
                 stage('Checkout App repo') {
                     checkout([$class           : 'GitSCM',
                               branches         : [[name: branchName]],
