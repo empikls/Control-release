@@ -92,7 +92,7 @@ spec:
                 }
 
                 stage('Deploy PROD release') {
-                    if (changeSetList()) {
+                    if (ischangeSetList()) {
                         def list = changeSetList()
                         def yamlFile = list[-1]
                         def dir = yamlFile.tokenize('/')
@@ -118,7 +118,7 @@ spec:
                     return ("${params.TAG}" ==~ /^v\d+.\d+.\d+$/ || "${params.TAG}" ==~ /^\d+.\d+.\d+$/ )
                 }
 
-                def changeSetList () {
+                def ischangeSetList () {
                     def list
                     currentBuild.changeSets.each { changeSet ->
                         changeSet.items.each { entry ->
