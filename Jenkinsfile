@@ -70,7 +70,7 @@ spec:
                         confValues = "./qa/values.yaml"
                         appName = "app-qa"
                         nameSpace = "qa"
-                        dockertag = "${params.tagFromJob1}"
+                        dockerTag = "${params.tagFromJob1}"
                         deploy(confValues, appName, nameSpace, dockerTag)
                     }
                 }
