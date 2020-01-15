@@ -50,7 +50,7 @@ spec:
                     branchName = "${values.image.tag}"
                     }
                 else {
-                    if (!isBuildingTag() || !isMaster() || !ischangeSetList()) {
+                    if (!isBuildingTag() || !isMaster()) {
                         return 0
                     }
                 }
