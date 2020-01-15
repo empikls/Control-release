@@ -92,7 +92,7 @@ spec:
                         withKubeConfig([credentialsId: 'kubeconfig']) {
                             sh """
                                helm upgrade --install $appName --namespace=$nameSpace --debug --force ./App/app --values $confValues \
-                               --set image.tag="$dockertag"
+                               --set image.tag=$dockerTag
                         """
                         }
                     }
