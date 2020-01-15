@@ -1,5 +1,5 @@
 #!groovy
-
+import org.apache.commons.io.FilenameUtils
 
 def label = "jenkins"
 
@@ -44,6 +44,9 @@ spec:
                 stage('Clone config repo') {
                     checkout scm
                     echo "tag from Job1 : ${params.tagFromJob1}"
+                    file = "file.txt"
+                    def fileW = FilenameUtils.removeExtension(file)
+                    echo "$fileW"
                 }
                 def branchName = params.tagFromJob1
                 if (ischangeSetList()) {
