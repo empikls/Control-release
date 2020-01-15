@@ -60,7 +60,7 @@ spec:
                         confValues = ".\/dev\/\w+.yaml"
                         appName = values.removeExtension()
                         nameSpace = dev
-                        deploy(values, appName, nameSpace)
+                        deploy(confValues, appName, nameSpace)
                     }
                 }
                 if (isBuildingTag()) {
@@ -68,7 +68,7 @@ spec:
                         confValues = ".\/\qa\/\w+.yaml"
                         appName = values.removeExtension()
                         nameSpace = qa
-                        deploy(values, appName, nameSpace)
+                        deploy(confValues, appName, nameSpace)
                     }
                 }
                 if (ischangeSetList()) {
@@ -78,12 +78,12 @@ spec:
                         def dir = yamlFile.tokenize('/')
                         def nameSpace = dir[0]
                         def appName = yamlFile.removeExtension()
-                        deploy(values, appName, nameSpace)
+                        deploy(confValues, appName, nameSpace)
                     }
                 }
             }
         }
-                def deploy(values, appName, nameSpace ) {
+                def deploy(confValues, appName, nameSpace ) {
                     container('helm') {
                         withKubeConfig([credentialsId: 'kubeconfig']) {
                             sh """
