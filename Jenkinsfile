@@ -52,25 +52,20 @@ spec:
 //                              extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
 //                              userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
 //                }
-                if (isMaster()) {
-                    stage('Checkout app repo') {
-                        branchName = "${params.tag}"
-                        checkoutAppRepo(branchName)
+                def list = changeSetList()
+                def yamlFile = list[-1]
+                def dir = yamlFile.tokenize('/')
+                def stage = dir[0]
+                def appName = yamlFile.removeExtension()
+                def branchName = params.tagFromJob1
+                if (ischangeSetList()) {
+                    branchName = "${values.image.tag}"
                     }
-                }
-                if (isBuildingTag()) {
-                    stage('Checkout app repo') {
-                        branchName = "${params.tag}"
-                        checkoutAppRepo(branchName)
-                    }
-                }
-                if (changeSetList()) {
-                    def list = changeSetList()
-                    def yamlFile = list[-1]
-                    stage('Checkout app repo') {
-                        branchName = "${values.image.tag}"
-                        checkoutAppRepo(branchName)
-                    }
+                stage('Checkout App repo') {
+                    checkout([$class           : 'GitSCM',
+                              branches         : [[name: branchName]],
+                              extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
+                              userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                 }
                 stage('Deploy DEV release') {
                     if (isMaster()) {
