@@ -45,7 +45,7 @@ spec:
                     checkout scm
                     echo "tag from Job1 : ${params.tagFromJob1}"
                     valuesFileWithPath = "./dev/*.yaml"
-                    def dir = valuesFileWithPath.split('/')
+                    def dir = valuesFileWithPath.tokenize('/')
                     echo "dir is $dir "
                     def appNameWithExtention = valuesFileWithPath[4]
                     echo "appNameWithExtention is $appNameWithExtention "
