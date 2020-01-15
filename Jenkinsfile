@@ -43,6 +43,7 @@ spec:
 
                 stage('Clone config repo') {
                     checkout scm
+                    echo "tag from Job1 : ${params.tag}"
                 }
 
 //                stage('Clone another repo master') {
@@ -51,38 +52,15 @@ spec:
 //                              extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
 //                              userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
 //                }
-
-//                    if (isChangeSet()) {
-//                        def list = changeSetList()
-//                        def yamlFile = list[-1]
-//                        def values = readYaml file: yamlFile
-//                        println "tag from yaml: ${values.image.tag}"
-//                        checkout([$class           : 'GitSCM',
-//                                  branches         : [[name: "${values.image.tag}"]],
-//                                  extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
-//                                  userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
-//                    }
-//                    if (isBuildingTag()) {
-//                        checkout([$class           : 'GitSCM',
-//                                  branches         : [[name: "${params.TAG}"]],
-//                                  extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
-//                                  userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
-//                    } else {
-//                        checkout([$class           : 'GitSCM',
-//                                  branches         : [[name: "${params.COMMIT}"]],
-//                                  extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
-//                                  userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
-//                    }
-//
                 if (isMaster()) {
                     stage('Checkout app repo') {
-                        branchName = "${params.COMMIT}"
+                        branchName = "${params.tag}"
                         checkoutAppRepo(branchName)
                     }
                 }
                 if (isBuildingTag()) {
                     stage('Checkout app repo') {
-                        branchName = "${params.TAG}"
+                        branchName = "${params.tag}"
                         checkoutAppRepo(branchName)
                     }
                 }
