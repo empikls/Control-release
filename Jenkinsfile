@@ -57,7 +57,7 @@ spec:
                 }
                 if (isMaster()) {
                     stage('Deploy DEV release') {
-                        confValues = "./dev/\/w.yaml"
+                        confValues = "./dev\/\w+.yaml"
                         appName = values.removeExtension()
                         nameSpace = dev
                         deploy(values, appName, nameSpace)
@@ -65,7 +65,7 @@ spec:
                 }
                 if (isBuildingTag()) {
                     stage('Deploy QA release') {
-                        confValues = "./qa/\/w.yaml"
+                        confValues = "./qa\/\w+.yaml"
                         appName = values.removeExtension()
                         nameSpace = qa
                         deploy(values, appName, nameSpace)
@@ -106,7 +106,7 @@ spec:
                     currentBuild.changeSets.each { changeSet ->
                         changeSet.items.each { entry ->
                             entry.affectedFiles.each { file ->
-                                if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/values.yaml$/) {
+                                if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/\w+.yaml$/) {
                                     list.add(file.path)
                                 }
                             }
