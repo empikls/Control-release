@@ -50,6 +50,7 @@ spec:
                     branchName = "${values.image.tag}"
                     }
                 else {
+                    if (!isBuildingTag() || !isMaster() || !ischangeSetList())
                     return 0
                 }
                 stage('Checkout App repo') {
