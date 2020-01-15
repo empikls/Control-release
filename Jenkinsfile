@@ -50,8 +50,9 @@ spec:
                     branchName = "${values.image.tag}"
                     }
                 else {
-                    if (!isBuildingTag() || !isMaster() || !ischangeSetList())
-                    return 0
+                    if (!isBuildingTag() || !isMaster() || !ischangeSetList()) {
+                        return 0
+                    }
                 }
                 stage('Checkout App repo') {
                     checkout([$class           : 'GitSCM',
