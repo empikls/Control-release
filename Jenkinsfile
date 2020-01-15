@@ -43,7 +43,7 @@ spec:
 
                 stage('Clone config repo') {
                     checkout scm
-                    echo "tag from Job1 : ${params.tag}"
+                    echo "tag from Job1 : ${params.tagFromJob1}"
                 }
 
 //                stage('Clone another repo master') {
