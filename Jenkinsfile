@@ -43,9 +43,6 @@ spec:
                 stage('Clone config repo') {
                     checkout scm
                     echo "tag from Job1 : ${params.tagFromJob1}"
-                    file = "file.txt"
-                    def fileW = FilenameUtils.removeExtension(file)
-                    echo "$fileW"
                 }
                 def branchName = params.tagFromJob1
                 if (ischangeSetList()) {
@@ -79,11 +76,11 @@ spec:
                 if (ischangeSetList()) {
                     stage('Deploy PROD release') {
                         def list = changeSetList()
-                        def yamlFile = list[-1]
+                        def yamlFile = list[0]
                         def dir = yamlFile.tokenize('/')
                         def nameSpace = dir[0]
                         def appNameWithExtention = dir[1]
-                        def appName = appNameWithExtention.removeExtension()
+                        def appName = FilenameUtils.removeExtension(appNameWithExtention)
                         deploy(confValues, appName, nameSpace)
                     }
                 }
