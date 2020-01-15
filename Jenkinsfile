@@ -36,7 +36,6 @@ spec:
     tty: true
 """
   )
-
         {
 
             node(label) {
