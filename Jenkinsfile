@@ -44,6 +44,15 @@ spec:
                 stage('Clone config repo') {
                     checkout scm
                     echo "tag from Job1 : ${params.tagFromJob1}"
+                    valuesFileWithPath = "./dev/*.yaml"
+                    def dir = valuesFileWithPath.tokenize('/')
+                    echo "dir is "$dir" "
+                    def appNameWithExtention = valuesFileWithPath[1]
+                    echo "appNameWithExtention is "$appNameWithExtention" "
+                    def appName = valuesFileWithPath.removeExtension()
+                    echo "appName is "$appName" "
+                    def nameSpace = valuesFileWithPath[0]
+                    echo "nameSpace is "$nameSpace" "
                 }
                 def branchName = params.tagFromJob1
                 if (ischangeSetList()) {
@@ -57,9 +66,15 @@ spec:
                 }
                 if (isMaster()) {
                     stage('Deploy DEV release') {
-                        confValues = "./dev/*.yaml"
-                        appName = confValues.removeExtension()
-                        nameSpace = dev
+//                        valuesFileWithPath = "./dev/*.yaml"
+//                        def dir = valuesFileWithPath.tokenize('/')
+//                        echo "dir is "$dir" "
+//                        def appNameWithExtention = valuesFileWithPath[1]
+//                        echo "appNameWithExtention is "$appNameWithExtention" "
+//                        def appName = valuesFileWithPath.removeExtension()
+//                        echo "appName is "$appName" "
+//                        def nameSpace = valuesFileWithPath[0]
+//                        echo "nameSpace is "$nameSpace" "
                         deploy(confValues, appName, nameSpace)
                     }
                 }
@@ -74,10 +89,11 @@ spec:
                 if (ischangeSetList()) {
                     stage('Deploy PROD release') {
                         def list = changeSetList()
-                        def confValues = list[-1]
+                        def yamlFile = list[-1]
                         def dir = yamlFile.tokenize('/')
                         def nameSpace = dir[0]
-                        def appName = yamlFile.removeExtension()
+                        def appNameWithExtention = dir[1]
+                        def appName = appNameWithExtention.removeExtension()
                         deploy(confValues, appName, nameSpace)
                     }
                 }
