@@ -68,7 +68,7 @@ spec:
                     stage('Deploy QA release') {
                         appName = "app-qa"
                         nameSpace = "qa"
-                        dockerTag = "params.tagFromJob1
+                        dockerTag = params.tagFromJob1
                         deploy(confValues, appName, nameSpace, dockerTag)
                     }
                 }
