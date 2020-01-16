@@ -36,7 +36,6 @@ spec:
                     echo "tag from Job1 : ${params.tagFromJob1}"
                 }
                 def branchName = params.tagFromJob1
-                def confValues
                     if (ischangeSetList () ) {
                         def listOfConfFiles = ischangeSetList()
                         def values = readYaml(file: listOfConfFiles)
