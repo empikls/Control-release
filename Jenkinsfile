@@ -79,7 +79,7 @@ spec:
                             appName = file.split('/')[1]
                             nameSpace = file.split('/')[0]
                         }
-                        def dockerTag = "${values.image.tag}"
+                        dockerTag = "${values.image.tag}"
                         deploy(confValues, appName, nameSpace, dockerTag)
                     }
                 }
