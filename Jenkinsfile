@@ -35,18 +35,18 @@ spec:
                     checkout scm
                     echo "tag from Job1 : ${params.tagFromJob1}"
                 }
-                def listOfValuesFiles = ischangeSetList()
+                def list = ischangeSetList()
                 def branchName = params.tagFromJob1
                     if (ischangeSetList () ) {
-                        def values = readYaml(file: listOfValuesFiles)
+                        def values = readYaml(file: list)
                         branchName = "${values.image.tag}"}
                     if (isBuildingTag()) {
-                        branchName =params.tagFromJob1
-                        confValues = listOfValuesFiles.add("./qa/values.yaml")
+                        branchName = params.tagFromJob1
+                        confValues = list.add("./qa/values.yaml")
                     }
                     if (isMaster()) {
                         branchName = params.tagFromJob1
-                        confValues = listOfValuesFiles.add("./dev/values.yaml")
+                        confValues = list.add("./dev/values.yaml")
                     }
                 stage('Checkout App repo') {
                     checkout([$class           : 'GitSCM',
@@ -58,7 +58,7 @@ spec:
 
                 if (isMaster()) {
                     stage('Deploy DEV release') {
-                        confValues = listOfValuesFiles.add("./dev/values.yaml")
+                        confValues = list.add("./dev/values.yaml")
                         appName = "app-dev"
                         nameSpace = "dev"
                         dockerTag = params.tagFromJob1
@@ -67,7 +67,7 @@ spec:
                 }
                 if (isBuildingTag()) {
                     stage('Deploy QA release') {
-                        confValues = listOfValuesFiles.add("./qa/values.yaml")
+                        confValues = list.add("./qa/values.yaml")
                         appName = "app-qa"
                         nameSpace = "qa"
                         dockerTag = params.tagFromJob1
@@ -76,7 +76,6 @@ spec:
                 }
                 if (ischangeSetList()) {
                     stage('Deploy PROD release') {
-
                         def appName
                         def nameSpace
                         set.each { file ->
