@@ -90,8 +90,6 @@ spec:
                 if (ischangeSetList()) {
                     stage('Deploy PROD release') {
                         def appNameWithoutExtention = FilenameUtils.removeExtension(appName)
-                        def values = readYaml(file: file.path)
-                        dockerTag = "${values.image.tag}"
                         deploy(confValues, appName, nameSpace, dockerTag)
                     }
                 }
