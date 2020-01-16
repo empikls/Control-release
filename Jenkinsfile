@@ -37,6 +37,7 @@ spec:
                 }
                 def branchName = params.tagFromJob1
                 def listOfValuesFiles = ischangeSetList()
+                def branchName = "${params.tagFromJob1}"
                     if (ischangeSetList () ) {
                         def values = readYaml(file: listOfValuesFiles)
                         branchName = "${values.image.tag}"}
@@ -117,13 +118,4 @@ spec:
                     }
                         return list.toSet()
                 }
-
-
-
-//def set = list as Set
-//def appName
-//def nameSpace
-//set.each { file ->
-//    appName = file.split('/')[1]
-//    nameSpace = file.split('/')[0]
 
