@@ -116,7 +116,7 @@ spec:
                             }
                         }
                     }
-                    if (list.size() != 0) {
+                    if (!list.isEmpty()) {
                         return list.toSet()
                     } else {
                         return 0
