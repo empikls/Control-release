@@ -53,9 +53,6 @@ spec:
                         branchName = params.tagFromJob1
                         confValues = list.add("./dev/values.yaml")
                     }
-                    if ( branchName == "Null") {
-                        return 0
-                    }
                 stage('Checkout App repo') {
                     checkout([$class           : 'GitSCM',
                               branches         : [[name: branchName]],
