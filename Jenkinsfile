@@ -36,16 +36,16 @@ spec:
                     echo "tag from Job1 : ${params.tagFromJob1}"
                 }
                 def listOfValuesFiles = ischangeSetList()
-                def branchName = "${params.tagFromJob1}"
+                def branchName = params.tagFromJob1
                     if (ischangeSetList () ) {
                         def values = readYaml(file: listOfValuesFiles)
                         branchName = "${values.image.tag}"}
                     if (isBuildingTag()) {
-                        branchName ="${params.tagFromJob1}"
+                        branchName =params.tagFromJob1
                         confValues = listOfValuesFiles.add("./qa/values.yaml")
                     }
                     if (isMaster()) {
-                        branchName = "${params.tagFromJob1}"
+                        branchName = params.tagFromJob1
                         confValues = listOfValuesFiles.add("./dev/values.yaml")
                     }
                 stage('Checkout App repo') {
