@@ -46,9 +46,6 @@ spec:
                     if (isMaster()) {
                         confValues = listOfConfFiles.add("./dev/values.yaml")
                     }
-                    if (list.size() ==0 ) {
-                        return 0
-                    }
                 stage('Checkout App repo') {
                     checkout([$class           : 'GitSCM',
                               branches         : [[name: branchName]],
