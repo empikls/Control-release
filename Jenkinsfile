@@ -41,9 +41,11 @@ spec:
                         def values = readYaml(file: listOfConfFiles)
                         branchName = "${values.image.tag}"}
                     if (isBuildingTag()) {
+                        branchName ="${params.tagFromJob1}"
                         confValues = listOfConfFiles.add("./qa/values.yaml")
                     }
                     if (isMaster()) {
+                        branchName = "${params.tagFromJob1}"
                         confValues = listOfConfFiles.add("./dev/values.yaml")
                     }
                 stage('Checkout App repo') {
