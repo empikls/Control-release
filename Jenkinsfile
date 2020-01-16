@@ -1,5 +1,6 @@
 #!groovy
 import org.apache.commons.io.FilenameUtils
+import org.codehaus.groovy.tools.shell.commands.SetCommand
 
 def label = "jenkins"
 
@@ -75,13 +76,15 @@ spec:
                 }
                 if (ischangeSetList()) {
                     stage('Deploy PROD release') {
-                        def list = changeSetList()
-                        def yamlFile = list[0]
+                        def SetOfFiles = changeSetList()
+                        def yamlFile = SetOfFiles[0]
                         def dir = yamlFile.tokenize('/')
                         def nameSpace = dir[0]
                         def appNameWithExtention = dir[1]
                         def appName = FilenameUtils.removeExtension(appNameWithExtention)
-                        deploy(confValues, appName, nameSpace)
+                        def values = readYaml(file: file.path)
+                        dockerTag = "${values.image.tag}"
+                        deploy(confValues, appName, nameSpace, dockerTag)
                     }
                 }
             }
@@ -116,8 +119,12 @@ spec:
                             }
                         }
                     }
-                    return list
+                    def SetOfFiles = list as Set
                 }
 
 
-
+//                def res = set.collect {
+//                    it.tokenize('/')
+//                }
+//
+//                println re​s​
