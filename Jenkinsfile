@@ -39,7 +39,7 @@ spec:
                 echo "list is $list "
                 def branchName = params.tagFromJob1
                     if (ischangeSetList () ) {
-                        def values = readYaml(file: list)
+                        def values = readYaml(file: list[0])
                         branchName = "${values.image.tag}"}
                         echo "tag is $branchName"
                     if (isBuildingTag()) {
