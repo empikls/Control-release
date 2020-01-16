@@ -82,12 +82,10 @@ spec:
                     if (list) {
                         stage('Deploy PROD release') {
 
-                            def appName
-                            def nameSpace
-                            list.each { file ->
-                                appName = file.split('/')[1]
-                                nameSpace = file.split('/')[0]
-                            }
+                            def appName = item.split('/')[1]
+                            appName = appName.split('.')[0]
+                            def nameSpace = item.split('/')[0]
+
                             dockerTag = values.image.tag
 
 
