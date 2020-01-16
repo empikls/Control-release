@@ -36,17 +36,18 @@ spec:
                     echo "tag from Job1 : ${params.tagFromJob1}"
                 }
                 def branchName = params.tagFromJob1
+                def listOfValuesFiles = ischangeSetList()
                     if (ischangeSetList () ) {
-                        def listOfConfFiles = ischangeSetList()
-                        def values = readYaml(file: listOfConfFiles)
+                        def listOfValuesFiles = ischangeSetList()
+                        def values = readYaml(file: listOfValuesFiles)
                         branchName = "${values.image.tag}"}
                     if (isBuildingTag()) {
                         branchName ="${params.tagFromJob1}"
-                        confValues = listOfConfFiles.add("./qa/values.yaml")
+                        confValues = listOfValuesFiles.add("./qa/values.yaml")
                     }
                     if (isMaster()) {
                         branchName = "${params.tagFromJob1}"
-                        confValues = listOfConfFiles.add("./dev/values.yaml")
+                        confValues = listOfValuesFiles.add("./dev/values.yaml")
                     }
                 stage('Checkout App repo') {
                     checkout([$class           : 'GitSCM',
@@ -57,25 +58,22 @@ spec:
 
                 if (isMaster()) {
                     stage('Deploy DEV release') {
-                        confValues = confValues = listOfConfFiles.add("./dev/values.yaml")
                         appName = "app-dev"
                         nameSpace = "dev"
                         dockerTag = "${params.tagFromJob1}"
-                        deploy(appName, nameSpace, dockerTag)
+                        deploy(confValues, appName, nameSpace, dockerTag)
                     }
                 }
                 if (isBuildingTag()) {
                     stage('Deploy QA release') {
-                        confValues = listOfConfFiles.add("./qa/values.yaml")
                         appName = "app-qa"
                         nameSpace = "qa"
                         dockerTag = "${params.tagFromJob1}"
-                        deploy(appName, nameSpace, dockerTag)
+                        deploy(confValues, appName, nameSpace, dockerTag)
                     }
                 }
                 if (ischangeSetList()) {
                     stage('Deploy PROD release') {
-                        confValues = ischangeSetList()
                         def appName
                         def nameSpace
                         set.each { file ->
@@ -83,7 +81,7 @@ spec:
                             nameSpace = file.split('/')[0]
                         }
                         def dockerTag = "${values.image.tag}"
-                        deploy(appName, nameSpace, dockerTag)
+                        deploy(confValues, appName, nameSpace, dockerTag)
                     }
                 }
             }
