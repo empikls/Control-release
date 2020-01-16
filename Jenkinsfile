@@ -42,8 +42,9 @@ spec:
                 def list = ischangeSetList()
                 def values
                 echo "list is $list "
-                    if ( list                    ) {
-                        values = readYaml(file: list[0])
+                list.each { item ->
+                    if (list) {
+                        values = readYaml(file: item)
                         branchName = values.image.tag
                     }
                     if (isBuildingTag()) {
@@ -54,42 +55,47 @@ spec:
                         branchName = params.tagFromJob1
                         confValues = list.add("./dev/values.yaml")
                     }
-                stage('Checkout App repo') {
-                    checkout([$class           : 'GitSCM',
-                              branches         : [[name: branchName]],
-                              extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: branchName]],
-                              userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
-                    sh 'ls'
-                }
-                if (isMaster()) {
-                    stage('Deploy DEV release') {
-                        confValues = list.add("./dev/values.yaml")
-                        appName = "app-dev"
-                        nameSpace = "dev"
-                        dockerTag = params.tagFromJob1
-                        deploy(confValues, appName, nameSpace, dockerTag)
+                    stage('Checkout App repo') {
+                        checkout([$class           : 'GitSCM',
+                                  branches         : [[name: branchName]],
+                                  extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: branchName]],
+                                  userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
+                        sh 'ls'
                     }
-                }
-                if (isBuildingTag()) {
-                    stage('Deploy QA release') {
-                        confValues = list.add("./qa/values.yaml")
-                        appName = "app-qa"
-                        nameSpace = "qa"
-                        dockerTag = params.tagFromJob1
-                        deploy(confValues, appName, nameSpace, dockerTag)
-                    }
-                }
-                if (ischangeSetList()) {
-                    stage('Deploy PROD release') {
-                        confValues = ischangeSetList()
-                        def appName
-                        def nameSpace
-                        list.each { file ->
-                            appName = file.split('/')[1]
-                            nameSpace = file.split('/')[0]
+                    if (isMaster()) {
+                        stage('Deploy DEV release') {
+                            confValues = list.add("./dev/values.yaml")
+                            appName = "app-dev"
+                            nameSpace = "dev"
+                            dockerTag = params.tagFromJob1
+                            deploy(confValues, appName, nameSpace, dockerTag)
                         }
-                        dockerTag = values.image.tag
-                        deploy(confValues, appName, nameSpace, dockerTag)
+                    }
+                    if (isBuildingTag()) {
+                        stage('Deploy QA release') {
+                            confValues = list.add("./qa/values.yaml")
+                            appName = "app-qa"
+                            nameSpace = "qa"
+                            dockerTag = params.tagFromJob1
+                            deploy(confValues, appName, nameSpace, dockerTag)
+                        }
+                    }
+                    if (list) {
+                        stage('Deploy PROD release') {
+
+                            def appName
+                            def nameSpace
+                            list.each { file ->
+                                appName = file.split('/')[1]
+                                nameSpace = file.split('/')[0]
+                            }
+                            dockerTag = values.image.tag
+
+
+                            deploy(item, appName, nameSpace, dockerTag)
+
+
+                        }
                     }
                 }
             }
