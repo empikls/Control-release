@@ -80,6 +80,7 @@ spec:
                 }
                 if (ischangeSetList()) {
                     stage('Deploy PROD release') {
+
                         def appName
                         def nameSpace
                         list.each { file ->
