@@ -65,10 +65,9 @@ spec:
                     if (isMaster()) {
                         stage('Deploy DEV release') {
                             confValues = list.add("./dev/values.yaml")
-                            appName = "app-dev"
-                            nameSpace = "dev"
+
                             dockerTag = params.tagFromJob1
-                            deploy(confValues, appName, nameSpace, dockerTag)
+                            deploy(confValues, "app-dev", "dev", dockerTag)
                         }
                     }
                     if (isBuildingTag()) {
