@@ -36,9 +36,10 @@ spec:
                     echo "tag from Job1 : ${params.tagFromJob1}"
                 }
                 def list = ischangeSetList()
+                echo "list is $list "
                 def branchName = params.tagFromJob1
                     if (ischangeSetList () ) {
-                        def values = readYaml(file: list)
+                        def values = readYaml file: list
                         branchName = "${values.image.tag}"}
                     if (isBuildingTag()) {
                         branchName = params.tagFromJob1
