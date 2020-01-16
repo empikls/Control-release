@@ -104,7 +104,6 @@ spec:
                     }
                 }
 
-
                 boolean isMaster() {
                     return ("${params.tagFromJob1}" ==~  "/[a-z0-9]{7}/" )
                 }
