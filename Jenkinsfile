@@ -38,7 +38,6 @@ spec:
                 def branchName = params.tagFromJob1
                 def listOfValuesFiles = ischangeSetList()
                     if (ischangeSetList () ) {
-                        def listOfValuesFiles = ischangeSetList()
                         def values = readYaml(file: listOfValuesFiles)
                         branchName = "${values.image.tag}"}
                     if (isBuildingTag()) {
