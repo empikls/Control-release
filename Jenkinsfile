@@ -83,7 +83,7 @@ spec:
                     stage('Deploy PROD release') {
                         def appName
                         def nameSpace
-                        set.each { file ->
+                        list.each { file ->
                             appName = file.split('/')[1]
                             nameSpace = file.split('/')[0]
                         }
