@@ -60,7 +60,7 @@ spec:
                     stage('Deploy DEV release') {
                         appName = "app-dev"
                         nameSpace = "dev"
-                        dockerTag = "${params.tagFromJob1}"
+                        dockerTag = params.tagFromJob1
                         deploy(confValues, appName, nameSpace, dockerTag)
                     }
                 }
@@ -68,7 +68,7 @@ spec:
                     stage('Deploy QA release') {
                         appName = "app-qa"
                         nameSpace = "qa"
-                        dockerTag = "${params.tagFromJob1}"
+                        dockerTag = "params.tagFromJob1
                         deploy(confValues, appName, nameSpace, dockerTag)
                     }
                 }
@@ -90,7 +90,7 @@ spec:
                     container('helm') {
                         withKubeConfig([credentialsId: 'kubeconfig']) {
                             sh """
-                               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./$dockerTag/app --values $confValues \
+                               helm upgrade --install $appName --namespace=$nameSpace --debug --force /$dockerTag/app --values $confValues \
                                --set image.tag=$dockerTag
                         """
                         }
