@@ -45,6 +45,19 @@ spec:
                     checkout scm
                     echo "tag from Job1 : ${params.tagFromJob1}"
                 }
+                def list
+                if (set.size() !=0 ) {
+                    values = list.add(set)
+                }
+                else {
+                    if (isBuildingTag()) {
+                        values = list.add("./qa/values.yaml")
+                    }
+                    if (isMaster()) {
+                        values = list.add("./dev/values.yaml")
+                    }
+                }
+                def values = readYaml(file: file.path)
                 def branchName = params.tagFromJob1
                 if (ischangeSetList()) {
                     branchName = "${values.image.tag}"
@@ -76,12 +89,7 @@ spec:
                 }
                 if (ischangeSetList()) {
                     stage('Deploy PROD release') {
-                        def SetOfFiles = changeSetList()
-                        def yamlFile = SetOfFiles[0]
-                        def dir = yamlFile.tokenize('/')
-                        def nameSpace = dir[0]
-                        def appNameWithExtention = dir[1]
-                        def appName = FilenameUtils.removeExtension(appNameWithExtention)
+                        def appNameWithoutExtention = FilenameUtils.removeExtension(appName)
                         def values = readYaml(file: file.path)
                         dockerTag = "${values.image.tag}"
                         deploy(confValues, appName, nameSpace, dockerTag)
@@ -119,12 +127,12 @@ spec:
                             }
                         }
                     }
-                    def SetOfFiles = list as Set
+                    def set = list as Set
+                    def appName
+                    def nameSpace
+                    set.each { file ->
+                        appName = file.split('/')[1]
+                        nameSpace = file.split('/')[0]
+                    }
                 }
 
-
-//                def res = set.collect {
-//                    it.tokenize('/')
-//                }
-//
-//                println re​s​
