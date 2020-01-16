@@ -79,7 +79,7 @@ spec:
                             appName = file.split('/')[1]
                             nameSpace = file.split('/')[0]
                         }
-                        def dockerTag = "${values.image.tag}"
+                        dockerTag = "${values.image.tag}"
                         deploy(confValues, appName, nameSpace, dockerTag)
                     }
                 }
@@ -89,7 +89,7 @@ spec:
                     container('helm') {
                         withKubeConfig([credentialsId: 'kubeconfig']) {
                             sh """
-                               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./$branchName/app --values $confValues \
+                               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./$dockerTag/app --values $confValues \
                                --set image.tag=$dockerTag
                         """
                         }
