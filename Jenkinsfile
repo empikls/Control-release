@@ -34,14 +34,16 @@ spec:
         {
 
             node(label) {
-
+                def branchName = params.tagFromJob1
+                if ( branchName = "Null") {
+                    return 0
+                }
                 stage('Clone config repo') {
                     checkout scm
                     echo "tag from Job1 : ${params.tagFromJob1}"
                 }
                 def list = ischangeSetList()
                 echo "list is $list "
-                def branchName = params.tagFromJob1
                     if (ischangeSetList () ) {
                         def values = readYaml(file: list[0])
                         branchName = "${values.image.tag}"}
