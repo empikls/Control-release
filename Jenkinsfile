@@ -35,7 +35,7 @@ spec:
 
             node(label) {
                 def branchName = params.tagFromJob1
-                if ( branchName = "Null") {
+                if ( branchName == "Null") {
                     return 0
                 }
                 stage('Clone config repo') {
