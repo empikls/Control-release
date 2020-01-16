@@ -51,7 +51,7 @@ spec:
                 stage('Checkout App repo') {
                     checkout([$class           : 'GitSCM',
                               branches         : [[name: branchName]],
-                              extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: branchName]],
+                              extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: "${branchName}"]],
                               userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                 }
 
@@ -79,7 +79,7 @@ spec:
                             appName = file.split('/')[1]
                             nameSpace = file.split('/')[0]
                         }
-                        dockerTag = "${values.image.tag}"
+                        def dockerTag = "${values.image.tag}"
                         deploy(confValues, appName, nameSpace, dockerTag)
                     }
                 }
@@ -89,7 +89,7 @@ spec:
                     container('helm') {
                         withKubeConfig([credentialsId: 'kubeconfig']) {
                             sh """
-                               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./$dockerTag/app --values $confValues \
+                               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./$branchName/app --values $confValues \
                                --set image.tag=$dockerTag
                         """
                         }
