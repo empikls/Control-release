@@ -117,11 +117,7 @@ spec:
                             }
                         }
                     }
-                    if (!list.isEmpty()) {
                         return list.toSet()
-                    } else {
-                        return 0
-                    }
                 }
 
 
