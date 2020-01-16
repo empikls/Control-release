@@ -83,8 +83,13 @@ spec:
                         stage('Deploy PROD release') {
 
                             def appNameW = item.split('/')[1]
+                            println appNameW
+
                             def appName = appNameW.split('.')[0]
+                            println appName
+
                             def nameSpace = item.split('/')[0]
+                            println nameSpace
 
                             dockerTag = values.image.tag
 
