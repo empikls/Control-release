@@ -34,14 +34,11 @@ spec:
         {
 
             node(label) {
-                def branchName = params.tagFromJob1
-                if ( branchName == "Null") {
-                    return 0
-                }
                 stage('Clone config repo') {
                     checkout scm
                     echo "tag from Job1 : ${params.tagFromJob1}"
                 }
+                def branchName = params.tagFromJob1
                 def list = ischangeSetList()
                 echo "list is $list "
                     if (ischangeSetList () ) {
@@ -55,6 +52,9 @@ spec:
                     if (isMaster()) {
                         branchName = params.tagFromJob1
                         confValues = list.add("./dev/values.yaml")
+                    }
+                    if ( branchName == "Null") {
+                        return 0
                     }
                 stage('Checkout App repo') {
                     checkout([$class           : 'GitSCM',
