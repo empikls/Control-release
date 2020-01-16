@@ -116,8 +116,15 @@ spec:
                             }
                         }
                     }
-                    return list.toSet()
+                    if (list.size() != 0) {
+                        return list.toSet()
+                    } else {
+                        return 0
+                    }
                 }
+
+
+
 //def set = list as Set
 //def appName
 //def nameSpace
