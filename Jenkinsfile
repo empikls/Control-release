@@ -35,20 +35,20 @@ spec:
                     checkout scm
                     echo "tag from Job1 : ${params.tagFromJob1}"
                 }
+                def branchName = params.tagFromJob1
                     if (ischangeSetList () ) {
                         def listOfConfFiles = ischangeSetList()
-                    }
+                        def values = readYaml(file: listOfConfFiles)
+                        branchName = "${values.image.tag}"}
                     if (isBuildingTag()) {
                         confValues = listOfConfFiles.add("./qa/values.yaml")
                     }
                     if (isMaster()) {
                         confValues = listOfConfFiles.add("./dev/values.yaml")
                     }
-                def values = readYaml(file: file.path)
-                def branchName = params.tagFromJob1
-                if (ischangeSetList()) {
-                    branchName = "${values.image.tag}"
-                }
+                    if (list.size() ==0 ) {
+                        return 0
+                    }
                 stage('Checkout App repo') {
                     checkout([$class           : 'GitSCM',
                               branches         : [[name: branchName]],
