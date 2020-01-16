@@ -51,7 +51,7 @@ spec:
                 stage('Checkout App repo') {
                     checkout([$class           : 'GitSCM',
                               branches         : [[name: branchName]],
-                              extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: '$branchName']],
+                              extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: branchName]],
                               userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                 }
 
