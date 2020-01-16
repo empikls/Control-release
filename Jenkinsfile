@@ -1,9 +1,13 @@
 #!groovy
-import org.apache.commons.io.FilenameUtils
-import org.codehaus.groovy.tools.shell.commands.SetCommand
+
 
 def label = "jenkins"
 
+properties([
+        parameters([
+                string(name: 'tagFromJob1', defaultValue: 'Null', description: 'Short commit ID or Tag from upstream job', )
+        ])
+])
 
 podTemplate(label: label, yaml: """
 apiVersion: v1
