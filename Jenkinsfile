@@ -36,6 +36,7 @@ spec:
                     echo "tag from Job1 : ${params.tagFromJob1}"
                 }
                 def branchName = params.tagFromJob1
+                def confValues
                     if (ischangeSetList () ) {
                         def listOfConfFiles = ischangeSetList()
                         def values = readYaml(file: listOfConfFiles)
@@ -111,7 +112,7 @@ spec:
                         changeSet.items.each { entry ->
                             entry.affectedFiles.each { file ->
                                 if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/\w+.yaml$/) {
-                                    list.add(file.path)
+                                  list.add(file.path)
                                 }
                             }
                         }
