@@ -57,6 +57,7 @@ spec:
 
                 if (isMaster()) {
                     stage('Deploy DEV release') {
+                        confValues = confValues = listOfConfFiles.add("./dev/values.yaml")
                         appName = "app-dev"
                         nameSpace = "dev"
                         dockerTag = "${params.tagFromJob1}"
@@ -65,6 +66,7 @@ spec:
                 }
                 if (isBuildingTag()) {
                     stage('Deploy QA release') {
+                        confValues = listOfConfFiles.add("./qa/values.yaml")
                         appName = "app-qa"
                         nameSpace = "qa"
                         dockerTag = "${params.tagFromJob1}"
@@ -73,6 +75,7 @@ spec:
                 }
                 if (ischangeSetList()) {
                     stage('Deploy PROD release') {
+                        confValues = ischangeSetList()
                         def appName
                         def nameSpace
                         set.each { file ->
