@@ -35,7 +35,6 @@ spec:
                     checkout scm
                     echo "tag from Job1 : ${params.tagFromJob1}"
                 }
-                def branchName = params.tagFromJob1
                 def listOfValuesFiles = ischangeSetList()
                 def branchName = "${params.tagFromJob1}"
                     if (ischangeSetList () ) {
