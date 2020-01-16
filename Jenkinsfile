@@ -35,7 +35,9 @@ spec:
                     checkout scm
                     echo "tag from Job1 : ${params.tagFromJob1}"
                 }
-                def listOfConfFiles = ischangeSetList ()
+                    if (ischangeSetList () ) {
+                        def listOfConfFiles = ischangeSetList()
+                    }
                     if (isBuildingTag()) {
                         confValues = listOfConfFiles.add("./qa/values.yaml")
                     }
