@@ -45,16 +45,16 @@ spec:
                     checkout scm
                     echo "tag from Job1 : ${params.tagFromJob1}"
                 }
-                def list
-                if (set.size() !=0 ) {
-                    values = list.add(set)
+                def listofConfFiles
+                if (set.size()!=0 ) {
+                    confValues = listofConfFiles.add(set)
                 }
                 else {
                     if (isBuildingTag()) {
-                        values = list.add("./qa/values.yaml")
+                        confValues = listofConfFiles.add("./qa/values.yaml")
                     }
                     if (isMaster()) {
-                        values = list.add("./dev/values.yaml")
+                        confValues = listofConfFiles.add("./dev/values.yaml")
                     }
                 }
                 def values = readYaml(file: file.path)
