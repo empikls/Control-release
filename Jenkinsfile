@@ -60,7 +60,6 @@ spec:
                               userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                     sh 'ls'
                 }
-                    def list = []
                 if (isMaster()) {
                     stage('Deploy DEV release') {
                         confValues = list.add("./dev/values.yaml")
