@@ -85,7 +85,7 @@ spec:
                             def appNameW = item.split('/')[1]
                             println appNameW
 
-                            def appName = appNameW[0..-5]
+                            def appName = appNameW[0..-6]
                             println appName
 
                             def nameSpace = item.split('/')[0]
