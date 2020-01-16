@@ -20,16 +20,6 @@ spec:
   - name: dind-storage
     emptyDir: {}
   containers:
-  - name: git
-    image: alpine/git
-    command:
-    - cat
-    tty: true
-  - name: kubectl
-    image: bitnami/kubectl:latest
-    command:
-    - cat
-    tty: true
   - name: helm
     image: lachlanevenson/k8s-helm:v2.16.1
     command:
@@ -45,18 +35,13 @@ spec:
                     checkout scm
                     echo "tag from Job1 : ${params.tagFromJob1}"
                 }
-                def listofConfFiles
-                if (set.size()!=0 ) {
-                    confValues = listofConfFiles.add(set)
-                }
-                else {
+                def listofConfFiles = ischangeSetList ()
                     if (isBuildingTag()) {
                         confValues = listofConfFiles.add("./qa/values.yaml")
                     }
                     if (isMaster()) {
                         confValues = listofConfFiles.add("./dev/values.yaml")
                     }
-                }
                 def values = readYaml(file: file.path)
                 def branchName = params.tagFromJob1
                 if (ischangeSetList()) {
@@ -65,32 +50,36 @@ spec:
                 stage('Checkout App repo') {
                     checkout([$class           : 'GitSCM',
                               branches         : [[name: branchName]],
-                              extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'App']],
+                              extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'branchName']],
                               userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                 }
 
                 if (isMaster()) {
                     stage('Deploy DEV release') {
-                        confValues = "./dev/values.yaml"
                         appName = "app-dev"
                         nameSpace = "dev"
                         dockerTag = "${params.tagFromJob1}"
-                        deploy(confValues, appName, nameSpace, dockerTag)
+                        deploy( appName, nameSpace, dockerTag)
                     }
                 }
                 if (isBuildingTag()) {
                     stage('Deploy QA release') {
-                        confValues = "./qa/values.yaml"
                         appName = "app-qa"
                         nameSpace = "qa"
                         dockerTag = "${params.tagFromJob1}"
-                        deploy(confValues, appName, nameSpace, dockerTag)
+                        deploy(appName, nameSpace, dockerTag)
                     }
                 }
                 if (ischangeSetList()) {
                     stage('Deploy PROD release') {
-                        def appNameWithoutExtention = FilenameUtils.removeExtension(appName)
-                        deploy(confValues, appName, nameSpace, dockerTag)
+                        def appName
+                        def nameSpace
+                        set.each { file ->
+                            appName = file.split('/')[1]
+                            nameSpace = file.split('/')[0]
+                        }
+                        def dockerTag = "${values.image.tag}"
+                        deploy( appName, nameSpace, dockerTag)
                     }
                 }
             }
@@ -99,7 +88,7 @@ spec:
                     container('helm') {
                         withKubeConfig([credentialsId: 'kubeconfig']) {
                             sh """
-                               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./App/app --values $confValues \
+                               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./${branchName}/app --values $confValues \
                                --set image.tag=$dockerTag
                         """
                         }
@@ -125,12 +114,12 @@ spec:
                             }
                         }
                     }
-                    def set = list as Set
-                    def appName
-                    def nameSpace
-                    set.each { file ->
-                        appName = file.split('/')[1]
-                        nameSpace = file.split('/')[0]
-                    }
+                    return list.toSet()
                 }
+//def set = list as Set
+//def appName
+//def nameSpace
+//set.each { file ->
+//    appName = file.split('/')[1]
+//    nameSpace = file.split('/')[0]
 
