@@ -53,6 +53,7 @@ spec:
                               branches         : [[name: branchName]],
                               extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: branchName]],
                               userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
+                    sh 'ls'
                 }
 
                 if (isMaster()) {
