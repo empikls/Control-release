@@ -35,12 +35,12 @@ spec:
                     checkout scm
                     echo "tag from Job1 : ${params.tagFromJob1}"
                 }
-                def listofConfFiles = ischangeSetList ()
+                def listOfConfFiles = ischangeSetList ()
                     if (isBuildingTag()) {
-                        confValues = listofConfFiles.add("./qa/values.yaml")
+                        confValues = listOfConfFiles.add("./qa/values.yaml")
                     }
                     if (isMaster()) {
-                        confValues = listofConfFiles.add("./dev/values.yaml")
+                        confValues = listOfConfFiles.add("./dev/values.yaml")
                     }
                 def values = readYaml(file: file.path)
                 def branchName = params.tagFromJob1
@@ -59,7 +59,7 @@ spec:
                         appName = "app-dev"
                         nameSpace = "dev"
                         dockerTag = "${params.tagFromJob1}"
-                        deploy( appName, nameSpace, dockerTag)
+                        deploy(appName, nameSpace, dockerTag)
                     }
                 }
                 if (isBuildingTag()) {
@@ -79,7 +79,7 @@ spec:
                             nameSpace = file.split('/')[0]
                         }
                         def dockerTag = "${values.image.tag}"
-                        deploy( appName, nameSpace, dockerTag)
+                        deploy(appName, nameSpace, dockerTag)
                     }
                 }
             }
