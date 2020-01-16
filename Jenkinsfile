@@ -5,7 +5,7 @@ def label = "jenkins"
 
 properties([
         parameters([
-                string(name: 'tagFromJob1', defaultValue: 'Null', description: 'Short commit ID or Tag from upstream job', )
+                string(name: 'tagFromJob1', defaultValue: '', description: 'Short commit ID or Tag from upstream job', )
         ])
 ])
 
@@ -82,8 +82,8 @@ spec:
                     if (list) {
                         stage('Deploy PROD release') {
 
-                            def appName = item.split('/')[1]
-                            appName = appName.split('.')[0]
+                            def appNameW = item.split('/')[1]
+                            def appName = appNameW.split('.')[0]
                             def nameSpace = item.split('/')[0]
 
                             dockerTag = values.image.tag
