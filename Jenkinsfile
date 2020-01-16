@@ -58,6 +58,7 @@ spec:
 
                 if (isMaster()) {
                     stage('Deploy DEV release') {
+                        confValues = listOfValuesFiles.add("./dev/values.yaml")
                         appName = "app-dev"
                         nameSpace = "dev"
                         dockerTag = params.tagFromJob1
@@ -66,6 +67,7 @@ spec:
                 }
                 if (isBuildingTag()) {
                     stage('Deploy QA release') {
+                        confValues = listOfValuesFiles.add("./qa/values.yaml")
                         appName = "app-qa"
                         nameSpace = "qa"
                         dockerTag = params.tagFromJob1
@@ -74,6 +76,7 @@ spec:
                 }
                 if (ischangeSetList()) {
                     stage('Deploy PROD release') {
+
                         def appName
                         def nameSpace
                         set.each { file ->
@@ -90,7 +93,7 @@ spec:
                     container('helm') {
                         withKubeConfig([credentialsId: 'kubeconfig']) {
                             sh """
-                               helm upgrade --install $appName --namespace=$nameSpace --debug --force /$dockerTag/app --values $confValues \
+                               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./$dockerTag/app --values $confValues \
                                --set image.tag=$dockerTag
                         """
                         }
