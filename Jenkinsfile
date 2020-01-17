@@ -42,21 +42,14 @@ spec:
                 def list = ischangeSetList()
                 def values
 
-                        stage('Checkout App repo') {
-                            if (isMaster()) {
-                                branchName = params.tagFromJob1
+                    stage('Checkout App repo') {
+                        if (isMaster()) {
                                 checkoutConfRepo(branchName)
                             }
-                            if (isBuildingTag()) {
-                                branchName = params.tagFromJob1
+                        if (isBuildingTag()) {
                                 checkoutConfRepo(branchName)
                             }
-                            if (ischangeSetList()) {
-                                values = readYaml(file: item)
-                                branchName = values.image.tag
-                                checkoutConfRepo(branchName)
-                            }
-                        }
+
                 if (isMaster()) {
                     stage('Deploy DEV release') {
                         confValues = list.add("./dev/values.yaml")
@@ -70,6 +63,11 @@ spec:
                     }
                 }
                 list.each { item ->
+                    if (ischangeSetList()) {
+                        values = readYaml(file: item)
+                        branchName = values.image.tag
+                        checkoutConfRepo(branchName)
+                    }
                     if (ischangeSetList ()) {
                         stage('Deploy PROD release') {
                             def appName = item.split('/')[1].split( /\./ )[0]
@@ -86,7 +84,7 @@ spec:
                               extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: branchName]],
                               userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
                     }
-                def deploy(confValues, appName, nameSpace, dockerTag ) {
+                def deploy(confValues, appName, nameSpace, branchName ) {
                     container('helm') {
                         withKubeConfig([credentialsId: 'kubeconfig']) {
                             sh """
