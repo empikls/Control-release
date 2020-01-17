@@ -47,10 +47,10 @@ spec:
                         branchName = values.image.tag
                     }
                     if (isMaster()) {
-                        def list = list.add("./qa/values.yaml")
+                        list = list.add("./qa/values.yaml")
                     }
                     if (isBuildingTag()) {
-                        def list = list.add("./qa/values.yaml")
+                        list = list.add("./qa/values.yaml")
                     }
                         echo "branchName : $branchName"
                     stage('Checkout App repo') {
