@@ -39,7 +39,7 @@ spec:
                         echo "tag from Job1 : ${params.tagFromJob1}"
                 }
                 def branchName = params.tagFromJob1
-                def list = ischangeSetList()
+
                 def values
 
                     stage('Checkout App repo') {
@@ -51,14 +51,14 @@ spec:
                         }
                     }
                 if (isMaster()) {
-                    def list = []
+                    def list
                     stage('Deploy DEV release') {
                         confValues = list.add("./dev/values.yaml")
                         deploy(confValues, "app-dev", "dev", branchName)
                     }
                 }
                 if (isBuildingTag()) {
-                    def list = []
+                    def list
                     stage('Deploy QA release') {
                         confValues = list.add("./qa/values.yaml")
                         deploy(confValues, "app-qa", "qa", branchName)
