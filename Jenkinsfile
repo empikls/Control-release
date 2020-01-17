@@ -41,16 +41,12 @@ spec:
                 def branchName = params.tagFromJob1
                 def list = ischangeSetList()
                 def values
-                echo "list is $list "
                 list.each { item ->
                     if (ischangeSetList () ) {
                         values = readYaml(file: item)
                         branchName = values.image.tag
                     }
-                    else {
-                        branchName = params.tagFromJob1
-                    }
-                 echo "branchName : $branchName"   
+                 echo "branchName : $branchName"
                     stage('Checkout App repo') {
                         checkout([$class           : 'GitSCM',
                                   branches         : [[name: branchName]],
