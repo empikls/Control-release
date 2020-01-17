@@ -70,7 +70,6 @@ spec:
                     }
                 }
                 list.each { item ->
-                        echo "branchName : $branchName"
                     if (ischangeSetList ()) {
                         stage('Deploy PROD release') {
                             def appName = item.split('/')[1].split( /\./ )[0]
