@@ -55,11 +55,9 @@ spec:
                                   branches         : [[name: branchName]],
                                   extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: branchName]],
                                   userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
-                        sh 'ls'
                     }
                     if (isMaster()) {
                         stage('Deploy DEV release') {
-                            nameSpace =
                             confValues = list.add("./dev/values.yaml")
                             deploy(confValues, "app-dev", "dev", params.tagFromJob1)
                         }
