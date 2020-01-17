@@ -41,16 +41,18 @@ spec:
                         def branchName = params.tagFromJob1
                         def list = ischangeSetList()
                         def values
+                if (isMaster()) {
+                    branchName = params.tagFromJob1
+                    checkoutConfRepo(branchName)
+                }
+                if (isBuildingTag()) {
+                    branchName = params.tagFromJob1
+                    checkoutConfRepo(branchName)
+                }
                 list.each { item ->
                     if (ischangeSetList () ) {
                         values = readYaml(file: item)
                         branchName = values.image.tag
-                    }
-                    if (isMaster()) {
-                        list = list.add("./qa/values.yaml")
-                    }
-                    if (isBuildingTag()) {
-                        list = list.add("./qa/values.yaml")
                     }
                         echo "branchName : $branchName"
                     stage('Checkout App repo') {
@@ -80,7 +82,12 @@ spec:
                     }
                 }
             }
-        }
+        }       def checkoutConfRepo(){
+                    checkout([$class           : 'GitSCM',
+                             branches         : [[name: branchName]],
+                              extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: branchName]],
+                            userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
+}
                 def deploy(confValues, appName, nameSpace, dockerTag ) {
                     container('helm') {
                         withKubeConfig([credentialsId: 'kubeconfig']) {
