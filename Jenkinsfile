@@ -90,8 +90,6 @@ spec:
                     container('helm') {
                         withKubeConfig([credentialsId: 'kubeconfig']) {
                             sh """
-                               echo appVersion: $branchName >> ${params.tagFromJob1}/app/Chart.yaml
-                                echo "values : $confValues"
                                helm upgrade --install $appName --namespace=$nameSpace --debug --force ./$branchName/app --values $confValues \
                                --set image.tag=$branchName
                         """
