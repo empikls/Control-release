@@ -39,7 +39,7 @@ spec:
                         echo "tag from Job1 : ${params.tagFromJob1}"
                 }
                 def branchName = params.tagFromJob1
-                def list = ischangeSetList()
+                def list2 = ischangeSetList()
                 def values
 
                     stage('Checkout App repo') {
@@ -51,27 +51,26 @@ spec:
                         }
                     }
                 if (isMaster()) {
-                    def list = ischangeSetList()
                     stage('Deploy DEV release') {
-                        confValues = list.add("./dev/values.yaml")
+                        confValues = list2.add("./dev/values.yaml")
                         deploy(confValues, "app-dev", "dev", branchName)
                     }
                 }
                 if (isBuildingTag()) {
                     stage('Deploy QA release') {
-                        confValues = list.add("./qa/values.yaml")
+                        confValues = list2.add("./qa/values.yaml")
                         deploy(confValues, "app-qa", "qa", branchName)
                     }
                 }
                 list.each { item ->
-                    if (list) {
+                    if (ischangeSetList()) {
                         stage('Checkout App repo') {
                             values = readYaml(file: item)
                             branchName = values.image.tag
                             checkoutConfRepo(branchName)
                         }
                     }
-                    if (list) {
+                    if (ischangeSetList()) {
                         stage('Deploy PROD release') {
                             def appName = item.split('/')[1].split( /\./ )[0]
                             def nameSpace = item.split('/')[0]
