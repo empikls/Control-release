@@ -57,20 +57,20 @@ spec:
                                 checkoutConfRepo(branchName)
                             }
                         }
+                if (isMaster()) {
+                    stage('Deploy DEV release') {
+                        confValues = list.add("./dev/values.yaml")
+                        deploy(confValues, "app-dev", "dev", confValues)
+                    }
+                }
+                if (isBuildingTag()) {
+                    stage('Deploy QA release') {
+                        confValues = list.add("./qa/values.yaml")
+                        deploy(confValues, "app-qa", "qa", confValues)
+                    }
+                }
                 list.each { item ->
                         echo "branchName : $branchName"
-                    if (isMaster()) {
-                        stage('Deploy DEV release') {
-                            confValues = list.add("./dev/values.yaml")
-                            deploy(confValues, "app-dev", "dev", confValues)
-                        }
-                    }
-                    if (isBuildingTag()) {
-                        stage('Deploy QA release') {
-                            confValues = list.add("./qa/values.yaml")
-                            deploy(confValues, "app-qa", "qa", confValues)
-                        }
-                    }
                     if (ischangeSetList ()) {
                         stage('Deploy PROD release') {
                             def appName = item.split('/')[1].split( /\./ )[0]
