@@ -55,14 +55,7 @@ spec:
                         checkoutConfRepo(branchName)
                     }
                 list.each { item ->
-
                         echo "branchName : $branchName"
-//                    stage('Checkout App repo') {
-//                        checkout([$class           : 'GitSCM',
-//                                  branches         : [[name: branchName]],
-//                                  extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: branchName]],
-//                                  userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
-//                    }
                     if (isMaster()) {
                         stage('Deploy DEV release') {
                             confValues = list.add("./dev/values.yaml")
