@@ -62,6 +62,7 @@ spec:
                         stage('Checkout App repo') {
                             echo "list is $list "
                             values = readYaml file: item
+                            echo "values is $values "
                             branchName = values.image.tag
                             checkoutConfRepo(branchName)
                         }
