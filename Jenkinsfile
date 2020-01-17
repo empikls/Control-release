@@ -60,7 +60,8 @@ spec:
                         deploy("./qa/values.yaml", "app-qa", "qa", branchName)
                     }
                 }
-                list.each { item ->
+                if (list) {
+                    list.each { item ->
 
                         stage('Checkout App repo') {
                             values = readYaml file: item
@@ -70,12 +71,12 @@ spec:
 
 
                         stage('Deploy PROD release') {
-                            def appName = item.split('/')[1].split( /\./ )[0]
+                            def appName = item.split('/')[1].split(/\./)[0]
                             def nameSpace = item.split('/')[0]
                             deploy(item, appName, nameSpace, values.image.tag)
                         }
                     }
-
+                }
             }
         }
                 def checkoutConfRepo(branchName) {
