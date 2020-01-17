@@ -40,15 +40,11 @@ spec:
                 }
                 def branchName = params.tagFromJob1
                 def list = ischangeSetList()
+                echo "list is $list "
                 def values
 
                     stage('Checkout App repo') {
-                        if (isMaster()) {
                             checkoutConfRepo(branchName)
-                        }
-                        if (isBuildingTag()) {
-                            checkoutConfRepo(branchName)
-                        }
                     }
                 if (isMaster()) {
                     stage('Deploy DEV release') {
@@ -64,6 +60,7 @@ spec:
                     list.each { item ->
 
                         stage('Checkout App repo') {
+                            echo "list is $list "
                             values = readYaml file: item
                             branchName = values.image.tag
                             checkoutConfRepo(branchName)
