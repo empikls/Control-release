@@ -39,6 +39,7 @@ spec:
                     checkout scm
                         echo "tag from Job1 : ${params.tagFromJob1}"
                 }
+                        def branchName = params.tagFromJob1
                         def list = ischangeSetList()
                         def values
                 list.each { item ->
@@ -46,11 +47,11 @@ spec:
                         values = readYaml(file: item)
                         branchName = values.image.tag
                     }
-                    if (isMaster() ) {
-                        branchName = params.tagFromJob1
+                    if (isMaster()) {
+                        def list = list.add("./qa/values.yaml")
                     }
-                    if (isBuildingTag() ) {
-                        branchName = params.tagFromJob1
+                    if (isBuildingTag()) {
+                        def list = list.add("./qa/values.yaml")
                     }
                         echo "branchName : $branchName"
                     stage('Checkout App repo') {
