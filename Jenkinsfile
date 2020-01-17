@@ -41,6 +41,7 @@ spec:
                 def branchName = params.tagFromJob1
                 def list = ischangeSetList()
                 echo "list is $list "
+                sh 'ls -la'
                 def values
 
                     stage('Checkout App repo') {
@@ -61,6 +62,7 @@ spec:
 
                         stage('Checkout App repo') {
                             echo "list is $list "
+                            sh 'ls -la'
                             values = readYaml file: item
                             echo "values is $values "
                             branchName = values.image.tag
