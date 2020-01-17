@@ -44,12 +44,12 @@ spec:
 
                     stage('Checkout App repo') {
                         if (isMaster()) {
-                                checkoutConfRepo(branchName)
-                            }
+                            checkoutConfRepo(branchName)
+                        }
                         if (isBuildingTag()) {
-                                checkoutConfRepo(branchName)
-                            }
-
+                            checkoutConfRepo(branchName)
+                        }
+                    }
                 if (isMaster()) {
                     stage('Deploy DEV release') {
                         confValues = list.add("./dev/values.yaml")
