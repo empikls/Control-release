@@ -78,7 +78,7 @@ spec:
                         stage('Deploy PROD release') {
                             def appNameW = item.split('/')[1]
                             println appNameW
-                            def appName = appNameW.findIndexValues{0}
+                            def appName = appNameW.collect{it.split(/\./)[0]}
                             println appName
                             def nameSpace = item.split('/')[0]
                             println nameSpace
