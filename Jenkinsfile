@@ -89,8 +89,8 @@ spec:
                         withKubeConfig([credentialsId: 'kubeconfig']) {
                             sh """
                                echo appVersion: $branchName >> ${params.tagFromJob1}/app/Chart.yaml
-                               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./$dockerTag/app --values $confValues \
-                               --set image.tag=$dockerTag
+                               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./$branchName/app --values $confValues \
+                               --set image.tag=$branchName
                         """
                         }
                     }
