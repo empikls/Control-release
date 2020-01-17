@@ -65,36 +65,24 @@ spec:
                     if (isMaster()) {
                         stage('Deploy DEV release') {
                             confValues = list.add("./dev/values.yaml")
-
-                            dockerTag = params.tagFromJob1
-                            deploy(confValues, "app-dev", "dev", dockerTag)
+                            deploy(confValues, "app-dev", "dev", params.tagFromJob1)
                         }
                     }
                     if (isBuildingTag()) {
                         stage('Deploy QA release') {
                             confValues = list.add("./qa/values.yaml")
-                            appName = "app-qa"
-                            nameSpace = "qa"
-                            dockerTag = params.tagFromJob1
-                            deploy(confValues, appName, nameSpace, dockerTag)
+                            deploy(confValues, "app-qa", "qa", params.tagFromJob1)
                         }
                     }
                     if (list) {
                         stage('Deploy PROD release') {
-
                             def appNameW = item.split('/')[1]
                             println appNameW
-
-                            def appName = appNameW[0..-6]
+                            def appName = appNameW.findIndexValues{0}
                             println appName
-
                             def nameSpace = item.split('/')[0]
                             println nameSpace
-
-                            dockerTag = values.image.tag
-
-
-                            deploy(item, appName, nameSpace, dockerTag)
+                            deploy(item, appName, nameSpace, values.image.tag)
 
 
                         }
