@@ -62,7 +62,7 @@ spec:
                         deploy(confValues, "app-qa", "qa", branchName)
                     }
                 }
-                list.each { item ->
+                list2.each { item ->
                     if (ischangeSetList()) {
                         stage('Checkout App repo') {
                             values = readYaml(file: item)
