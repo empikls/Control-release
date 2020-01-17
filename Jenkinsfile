@@ -66,6 +66,7 @@ spec:
                             values = readYaml file: item
                             echo "values is $values "
                             branchName = values.image.tag
+                            echo "branchName is $branchName "
                             checkoutConfRepo(branchName)
                         }
 
