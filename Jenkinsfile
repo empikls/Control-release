@@ -46,6 +46,12 @@ spec:
                         values = readYaml(file: item)
                         branchName = values.image.tag
                     }
+                    if (isMaster() ) {
+                        branchName = params.tagFromJob1
+                    }
+                    if (isBuildingTag() ) {
+                        branchName = params.tagFromJob1
+                    }
                  echo "branchName : $branchName"
                     stage('Checkout App repo') {
                         checkout([$class           : 'GitSCM',
