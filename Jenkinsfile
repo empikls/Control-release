@@ -51,7 +51,7 @@ spec:
                         }
                     }
                 if (isMaster()) {
-                    def list
+                    def list = ischangeSetList()
                     stage('Deploy DEV release') {
                         confValues = list.add("./dev/values.yaml")
                         deploy(confValues, "app-dev", "dev", branchName)
