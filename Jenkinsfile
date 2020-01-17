@@ -82,12 +82,13 @@ spec:
                     }
                 }
             }
-        }       def checkoutConfRepo(){
+        }
+                def checkoutConfRepo(branchName){
                     checkout([$class           : 'GitSCM',
-                             branches         : [[name: branchName]],
+                              branches         : [[name: branchName]],
                               extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: branchName]],
-                            userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
-}
+                              userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
+                    }
                 def deploy(confValues, appName, nameSpace, dockerTag ) {
                     container('helm') {
                         withKubeConfig([credentialsId: 'kubeconfig']) {
