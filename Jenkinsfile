@@ -60,13 +60,13 @@ spec:
                 if (isMaster()) {
                     stage('Deploy DEV release') {
                         confValues = list.add("./dev/values.yaml")
-                        deploy(confValues, "app-dev", "dev", confValues)
+                        deploy(confValues, "app-dev", "dev", params.tagFromJob1)
                     }
                 }
                 if (isBuildingTag()) {
                     stage('Deploy QA release') {
                         confValues = list.add("./qa/values.yaml")
-                        deploy(confValues, "app-qa", "qa", confValues)
+                        deploy(confValues, "app-qa", "qa", params.tagFromJob1)
                     }
                 }
                 list.each { item ->
