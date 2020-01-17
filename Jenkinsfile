@@ -51,12 +51,14 @@ spec:
                         }
                     }
                 if (isMaster()) {
+                    def list = []
                     stage('Deploy DEV release') {
                         confValues = list.add("./dev/values.yaml")
                         deploy(confValues, "app-dev", "dev", branchName)
                     }
                 }
                 if (isBuildingTag()) {
+                    def list = []
                     stage('Deploy QA release') {
                         confValues = list.add("./qa/values.yaml")
                         deploy(confValues, "app-qa", "qa", branchName)
