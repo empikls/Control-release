@@ -71,12 +71,8 @@ spec:
                     }
                     if (list) {
                         stage('Deploy PROD release') {
-                            def appNameW = item.split('/')[1]
-                            println appNameW
-                            def appName = appNameW.split( /\./ )[0]
-                            println appName
+                            def appName = item.split('/')[1].split( /\./ )[0]
                             def nameSpace = item.split('/')[0]
-                            println nameSpace
                             deploy(item, appName, nameSpace, values.image.tag)
 
 
