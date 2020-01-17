@@ -48,9 +48,6 @@ spec:
                         branchName = values.image.tag
                     }
                     else {
-                        values ​= readYaml(file: "values.yaml")
-                        conf = new File( "values.yaml" ).append( values.image.tag.$tagFromJob1 )​
-                        sh 'cat values.yaml '
                         branchName = params.tagFromJob1
                     }
                     stage('Checkout App repo') {
@@ -62,6 +59,7 @@ spec:
                     }
                     if (isMaster()) {
                         stage('Deploy DEV release') {
+                            nameSpace =
                             confValues = list.add("./dev/values.yaml")
                             deploy(confValues, "app-dev", "dev", params.tagFromJob1)
                         }
