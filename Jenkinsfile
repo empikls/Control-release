@@ -32,7 +32,6 @@ spec:
 """
   )
         {
-
             node(label) {
 
                 stage('Clone config repo') {
