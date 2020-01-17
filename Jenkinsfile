@@ -90,7 +90,7 @@ spec:
                     container('helm') {
                         withKubeConfig([credentialsId: 'kubeconfig']) {
                             sh """
-                               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./$branchName/app --values $confValues \
+                               helm upgrade --install $appName --namespace=$nameSpace --debug --force /$branchName/app --values $confValues \
                                --set image.tag=$branchName
                         """
                         }
