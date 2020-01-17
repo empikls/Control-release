@@ -47,14 +47,6 @@ spec:
                         values = readYaml(file: item)
                         branchName = values.image.tag
                     }
-                    if (isBuildingTag()) {
-                        branchName = params.tagFromJob1
-                        confValues = list.add("./qa/values.yaml")
-                    }
-                    if (isMaster()) {
-                        branchName = params.tagFromJob1
-                        confValues = list.add("./dev/values.yaml")
-                    }
                     stage('Checkout App repo') {
                         checkout([$class           : 'GitSCM',
                                   branches         : [[name: branchName]],
@@ -81,7 +73,7 @@ spec:
                             def appName = appNameW.split( /\./ )[0]
                             println appName
                             def nameSpace = item.split('/')[0]
-                            println nameSpaced
+                            println nameSpace
                             deploy(item, appName, nameSpace, values.image.tag)
 
 
