@@ -64,9 +64,11 @@ spec:
                 }
                 list.each { item ->
                     if (ischangeSetList()) {
-                        values = readYaml(file: item)
-                        branchName = values.image.tag
-                        checkoutConfRepo(branchName)
+                        stage('Checkout App repo') {
+                            values = readYaml(file: item)
+                            branchName = values.image.tag
+                            checkoutConfRepo(branchName)
+                        }
                     }
                     if (ischangeSetList ()) {
                         stage('Deploy PROD release') {
