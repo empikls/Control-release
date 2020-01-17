@@ -52,7 +52,7 @@ spec:
                     }
                 if (isMaster()) {
                     stage('Deploy DEV release') {
-                        deploy("./qa/values.yaml", "app-dev", "dev", branchName)
+                        deploy("./dev/values.yaml", "app-dev", "dev", branchName)
                     }
                 }
                 if (isBuildingTag()) {
