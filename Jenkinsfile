@@ -49,11 +49,13 @@ spec:
                         branchName = params.tagFromJob1
                         checkoutConfRepo(branchName)
                     }
-                list.each { item ->
                     if (ischangeSetList () ) {
                         values = readYaml(file: item)
                         branchName = values.image.tag
+                        checkoutConfRepo(branchName)
                     }
+                list.each { item ->
+
                         echo "branchName : $branchName"
 //                    stage('Checkout App repo') {
 //                        checkout([$class           : 'GitSCM',
