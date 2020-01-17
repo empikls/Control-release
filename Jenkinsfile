@@ -34,13 +34,13 @@ spec:
         {
 
             node(label) {
+
                 stage('Clone config repo') {
                     checkout scm
-                    echo "tag from Job1 : ${params.tagFromJob1}"
+                        echo "tag from Job1 : ${params.tagFromJob1}"
                 }
-                def branchName = params.tagFromJob1
-                def list = ischangeSetList()
-                def values
+                        def list = ischangeSetList()
+                        def values
                 list.each { item ->
                     if (ischangeSetList () ) {
                         values = readYaml(file: item)
@@ -52,7 +52,7 @@ spec:
                     if (isBuildingTag() ) {
                         branchName = params.tagFromJob1
                     }
-                 echo "branchName : $branchName"
+                        echo "branchName : $branchName"
                     stage('Checkout App repo') {
                         checkout([$class           : 'GitSCM',
                                   branches         : [[name: branchName]],
