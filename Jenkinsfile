@@ -48,6 +48,8 @@ spec:
                         branchName = values.image.tag
                     }
                     else {
+                        values ​= readYaml(file: "values.yaml")
+                        conf = new File( "values.yaml" ).append( values.image.tag.$tagFromJob1 )​
                         branchName = params.tagFromJob1
                     }
                     stage('Checkout App repo') {
