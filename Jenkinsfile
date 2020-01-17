@@ -50,6 +50,7 @@ spec:
                     else {
                         branchName = params.tagFromJob1
                     }
+                 echo "branchName : $branchName"   
                     stage('Checkout App repo') {
                         checkout([$class           : 'GitSCM',
                                   branches         : [[name: branchName]],
@@ -82,7 +83,7 @@ spec:
                     container('helm') {
                         withKubeConfig([credentialsId: 'kubeconfig']) {
                             sh """
-                            echo appVersion: $branchName >> ${params.tagFromJob1}/app/Chart.yaml
+                               echo appVersion: $branchName >> ${params.tagFromJob1}/app/Chart.yaml
                                helm upgrade --install $appName --namespace=$nameSpace --debug --force ./$dockerTag/app --values $confValues \
                                --set image.tag=$dockerTag
                         """
