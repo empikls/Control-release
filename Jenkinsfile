@@ -42,17 +42,23 @@ spec:
                 def list = ischangeSetList()
                 def values
                     if (isMaster()) {
-                        branchName = params.tagFromJob1
-                        checkoutConfRepo(branchName)
+                        stage('Checkout branchName') {
+                            branchName = params.tagFromJob1
+                            checkoutConfRepo(branchName)
+                        }
                     }
                     if (isBuildingTag()) {
-                        branchName = params.tagFromJob1
-                        checkoutConfRepo(branchName)
+                        stage('Checkout branchName') {
+                            branchName = params.tagFromJob1
+                            checkoutConfRepo(branchName)
+                        }
                     }
                     if (ischangeSetList () ) {
-                        values = readYaml(file: item)
-                        branchName = values.image.tag
-                        checkoutConfRepo(branchName)
+                        stage('Checkout branchName') {
+                            values = readYaml(file: item)
+                            branchName = values.image.tag
+                            checkoutConfRepo(branchName)
+                        }
                     }
                 list.each { item ->
                         echo "branchName : $branchName"
