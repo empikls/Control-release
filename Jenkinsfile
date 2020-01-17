@@ -41,26 +41,26 @@ spec:
                         def branchName = params.tagFromJob1
                         def list = ischangeSetList()
                         def values
-                if (isMaster()) {
-                    branchName = params.tagFromJob1
-                    checkoutConfRepo(branchName)
-                }
-                if (isBuildingTag()) {
-                    branchName = params.tagFromJob1
-                    checkoutConfRepo(branchName)
-                }
+                    if (isMaster()) {
+                        branchName = params.tagFromJob1
+                        checkoutConfRepo(branchName)
+                    }
+                    if (isBuildingTag()) {
+                        branchName = params.tagFromJob1
+                        checkoutConfRepo(branchName)
+                    }
                 list.each { item ->
                     if (ischangeSetList () ) {
                         values = readYaml(file: item)
                         branchName = values.image.tag
                     }
                         echo "branchName : $branchName"
-                    stage('Checkout App repo') {
-                        checkout([$class           : 'GitSCM',
-                                  branches         : [[name: branchName]],
-                                  extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: branchName]],
-                                  userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
-                    }
+//                    stage('Checkout App repo') {
+//                        checkout([$class           : 'GitSCM',
+//                                  branches         : [[name: branchName]],
+//                                  extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: branchName]],
+//                                  userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
+//                    }
                     if (isMaster()) {
                         stage('Deploy DEV release') {
                             confValues = list.add("./dev/values.yaml")
