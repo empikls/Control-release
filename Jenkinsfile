@@ -43,7 +43,7 @@ spec:
                 def values
                 echo "list is $list "
                 list.each { item ->
-                    if (list) {
+                    if (ischangeSetList () ) {
                         values = readYaml(file: item)
                         branchName = values.image.tag
                     }
