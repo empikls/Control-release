@@ -38,9 +38,9 @@ spec:
                     checkout scm
                         echo "tag from Job1 : ${params.tagFromJob1}"
                 }
-                        def branchName = params.tagFromJob1
-                        def list = ischangeSetList()
-                        def values
+                def branchName = params.tagFromJob1
+                def list = ischangeSetList()
+                def values
                     if (isMaster()) {
                         branchName = params.tagFromJob1
                         checkoutConfRepo(branchName)
@@ -73,7 +73,7 @@ spec:
                             deploy(confValues, "app-qa", "qa", confValues)
                         }
                     }
-                    if (list) {
+                    if (ischangeSetList ()) {
                         stage('Deploy PROD release') {
                             def appName = item.split('/')[1].split( /\./ )[0]
                             def nameSpace = item.split('/')[0]
@@ -108,7 +108,7 @@ spec:
                     return ("${params.tagFromJob1}" ==~ /^v\d+.\d+.\d+$/ || "${params.tagFromJob1}" ==~ /^\d+.\d+.\d+$/ )
                 }
 
-                def ischangeSetList () {
+                def ischangeSetList() {
                     def list = []
                     currentBuild.changeSets.each { changeSet ->
                         changeSet.items.each { entry ->
