@@ -43,7 +43,7 @@ spec:
                 echo "list is $list "
                 sh 'ls -la'
                 def values
-
+                    if (!ischangeSetList())
                     stage('Checkout App repo') {
                             checkoutConfRepo(branchName)
                     }
