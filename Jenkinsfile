@@ -61,21 +61,21 @@ spec:
                     }
                 }
                 list.each { item ->
-                    if (ischangeSetList()) {
+
                         stage('Checkout App repo') {
-                            values = readYaml(file: item)
+                            values = readYaml file: item
                             branchName = values.image.tag
                             checkoutConfRepo(branchName)
                         }
-                    }
-                    if (ischangeSetList()) {
+
+
                         stage('Deploy PROD release') {
                             def appName = item.split('/')[1].split( /\./ )[0]
                             def nameSpace = item.split('/')[0]
                             deploy(item, appName, nameSpace, values.image.tag)
                         }
                     }
-                }
+
             }
         }
                 def checkoutConfRepo(branchName) {
