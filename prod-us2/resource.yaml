@@ -1,5 +1,5 @@
 image:
-  tag: 7.7.8
+  tag: 20.01.2020
 ingress:
   hostName: prod-eu2-173-193-112-65.nip.io
   tls:
