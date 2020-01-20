@@ -41,7 +41,7 @@ spec:
                 def branchName = params.tagFromJob1
                 def list = ischangeSetList()
                 def values
-                if (!ischangeSetList()) {
+                if (isMaster() || isBuildingTag()) {
                     stage('Checkout App repo') {
                         checkoutConfRepo(branchName)
                     }
