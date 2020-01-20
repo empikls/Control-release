@@ -1,5 +1,6 @@
 #!groovy
 
+import org.jenkinsci.plugins.pipeline.modeldefinition.Utils
 
 def label = "jenkins"
 
@@ -46,16 +47,20 @@ spec:
                         checkoutConfRepo(branchName)
                     }
                 }
-                if (isMaster()) {
                     stage('Deploy DEV release') {
-                        deploy("./dev/values.yaml", "app-dev", "dev", branchName)
+                        if (isMaster()) {
+                            deploy("./dev/values.yaml", "app-dev", "dev", branchName)
+                        }
+                        else Utils.markStageSkippedForConditional('Deploy QA release')
                     }
-                }
-                if (isBuildingTag()) {
+
                     stage('Deploy QA release') {
-                        deploy("./qa/values.yaml", "app-qa", "qa", branchName)
+                        if (isBuildingTag()) {
+                            deploy("./qa/values.yaml", "app-qa", "qa", branchName)
+                        }
+                        else Utils.markStageSkippedForConditional('Deploy DEV release')
                     }
-                }
+
                 if (list) {
                     list.each { item ->
 
