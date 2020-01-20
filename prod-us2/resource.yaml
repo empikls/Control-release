@@ -4,5 +4,5 @@ ingress:
   hostName: prod-eu2-173-193-112-65.nip.io
   tls:
     - hosts:
-        - prod-173-193-112-65.nip.io
-      secretName: acme-app-prod-tls
+        - prod-eu2-173-193-112-65.nip.io
+      secretName: acme-app-prod-eu2-tls
