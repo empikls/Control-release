@@ -48,16 +48,16 @@ spec:
             }
         }
 
-        stage('Deploy ' + confValues.split('/')[1]) {
+        stage('Deploy ' ) {
             if (isisMaster()) {
-                def confValues = list.add("./dev/values.yaml")
+                confValues = list.add("./dev/values.yaml")
                 nameSpace = confValues.split('/')[1]
                 checkoutConfRepo(branchName)
                 appName = confValues.split('/')[2].split('.')[0]
                 deploy(confValues, appName, nameSpace, branchName)
             }
             if (isBuildingTag()) {
-                def confValues = list.add("./dev/values.yaml")
+                confValues = list.add("./qa/values.yaml")
                 nameSpace = confValues.split('/')[1]
                 appName = confValues.split('/')[2].split('.')[0]
                 checkoutConfRepo(branchName)
