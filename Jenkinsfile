@@ -93,7 +93,7 @@ spec:
                 }
 
                 boolean isMaster() {
-                    return ("${params.tagFromJob1}" ==~  "/[a-z0-9]{7}/" )
+                    return ("${params.tagFromJob1}" ==~  /[a-z0-9]{7}/ )
                 }
                 boolean isBuildingTag() {
                     return ("${params.tagFromJob1}" ==~ /^v\d+.\d+.\d+$/ || "${params.tagFromJob1}" ==~ /^\d+.\d+.\d+$/ )
