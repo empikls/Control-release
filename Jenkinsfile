@@ -49,6 +49,7 @@ spec:
         }
         stage('Deploy DEV release') {
             if (isMaster()) {
+                confValues = "./dev/values.yaml"
                 nameSpace = confValues.split('/')[1]
                 echo "nameSpace = $nameSpace"
                 appName = confValues.split('/')[1].split('.')[0]
