@@ -49,7 +49,7 @@ spec:
         }
 
         stage('Deploy ' ) {
-            if (isisMaster()) {
+            if (isMaster()) {
                 confValues = list.add("./dev/values.yaml")
                 nameSpace = confValues.split('/')[1]
                 checkoutConfRepo(branchName)
