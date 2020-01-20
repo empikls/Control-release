@@ -32,6 +32,7 @@ spec:
     tty: true
 """
   )
+
 node(label) {
 
     stage('Clone config repo') {
