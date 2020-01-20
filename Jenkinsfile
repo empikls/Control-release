@@ -47,24 +47,25 @@ spec:
                 checkoutConfRepo(branchName)
             }
         }
-        stage('Deploy DEV release') {
-            if (isMaster()) {
-                confValues = "./dev/values.yaml"
+
+        stage('Deploy ' + confValues.split('/')[1]) {
+            if (isisMaster()) {
+                def confValues = list.add("./dev/values.yaml")
                 nameSpace = confValues.split('/')[1]
-                echo "nameSpace = $nameSpace"
-                appName = confValues.split('/')[1].split('.')[0]
-                echo "appName = $appName"
-                deploy("./dev/values.yaml", "app-dev", "dev", branchName)
-            } else Utils.markStageSkippedForConditional('Deploy DEV release')
-        }
-
-        stage('Deploy QA release') {
+                checkoutConfRepo(branchName)
+                appName = confValues.split('/')[2].split('.')[0]
+                deploy(confValues, appName, nameSpace, branchName)
+            }
             if (isBuildingTag()) {
-                deploy("./qa/values.yaml", "app-qa", "qa", branchName)
-            } else Utils.markStageSkippedForConditional('Deploy QA release')
-        }
+                def confValues = list.add("./dev/values.yaml")
+                nameSpace = confValues.split('/')[1]
+                appName = confValues.split('/')[2].split('.')[0]
+                checkoutConfRepo(branchName)
+                deploy(confValues, appName, nameSpace, branchName)
+            }
 
-        if (list) {
+        }
+            if (list) {
             list.each { item ->
                 stage('Deploy release for ' + item.split('/')[0]) {
                     def appName = item.split('/')[1].split(/\./)[0]
