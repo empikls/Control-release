@@ -36,18 +36,16 @@ spec:
 
                 stage('Clone config repo') {
                     checkout scm
-                        echo "tag from Job1 : ${params.tagFromJob1}"
+                    echo "tag from Job1 : ${params.tagFromJob1}"
                 }
                 def branchName = params.tagFromJob1
                 def list = ischangeSetList()
-                echo "list is $list "
-                sh 'ls -la'
                 def values
-                    if (!ischangeSetList()) {
-                        stage('Checkout App repo') {
-                            checkoutConfRepo(branchName)
-                        }
+                if (!ischangeSetList()) {
+                    stage('Checkout App repo') {
+                        checkoutConfRepo(branchName)
                     }
+                }
                 if (isMaster()) {
                     stage('Deploy DEV release') {
                         deploy("./dev/values.yaml", "app-dev", "dev", branchName)
@@ -62,12 +60,8 @@ spec:
                     list.each { item ->
 
                         stage('Checkout App repo') {
-                            echo "list is $list "
-                            sh 'ls -la'
                             values = readYaml file: item
-                            echo "values is $values "
                             branchName = values.image.tag
-                            echo "branchName is $branchName "
                             checkoutConfRepo(branchName)
                         }
 
@@ -93,7 +87,7 @@ spec:
                             sh """
                                helm upgrade --install $appName --namespace=$nameSpace --debug --force ./$branchName/app --values $confValues \
                                --set image.tag=$branchName
-                        """
+                            """
                         }
                     }
                 }
