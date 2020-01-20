@@ -51,14 +51,14 @@ spec:
                         if (isMaster()) {
                             deploy("./dev/values.yaml", "app-dev", "dev", branchName)
                         }
-                        else Utils.markStageSkippedForConditional('Deploy QA release')
+                        else Utils.markStageSkippedForConditional('Deploy DEV release')
                     }
 
                     stage('Deploy QA release') {
                         if (isBuildingTag()) {
                             deploy("./qa/values.yaml", "app-qa", "qa", branchName)
                         }
-                        else Utils.markStageSkippedForConditional('Deploy DEV release')
+                        else Utils.markStageSkippedForConditional('Deploy QA release')
                     }
 
                 if (list) {
