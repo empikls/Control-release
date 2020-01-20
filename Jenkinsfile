@@ -64,16 +64,19 @@ spec:
                 if (list) {
                     list.each { item ->
 
-                        stage('Checkout App repo for ' + item.split('/')[0]) {
-                            values = readYaml file: item
-                            branchName = values.image.tag
-                            checkoutConfRepo(branchName)
-                        }
+//                        stage('Checkout App repo for ' + item.split('/')[0]) {
+//                            values = readYaml file: item
+//                            branchName = values.image.tag
+//                            checkoutConfRepo(branchName)
+//                        }
 
 
                         stage('Deploy release for ' + item.split('/')[0] ) {
                             def appName = item.split('/')[1].split(/\./)[0]
                             def nameSpace = item.split('/')[0]
+                            values = readYaml file: item
+                            branchName = values.image.tag
+                            checkoutConfRepo(branchName)
                             deploy(item, appName, nameSpace, values.image.tag)
                         }
                     }
