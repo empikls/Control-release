@@ -71,7 +71,7 @@ spec:
                         }
 
 
-                        stage('Deploy PROD release for $nameSpace') {
+                        stage(item + 'Deploy') {
                             def appName = item.split('/')[1].split(/\./)[0]
                             def nameSpace = item.split('/')[0]
                             deploy(item, appName, nameSpace, values.image.tag)
