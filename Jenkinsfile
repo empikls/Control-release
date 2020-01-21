@@ -64,7 +64,7 @@ spec:
                         }
                     }
                     map.each {
-                        stage(it.value) {
+                        stage(it.value]) {
 //                                if(it.key ==
                             deployStage(it.key)
                         }
@@ -77,6 +77,7 @@ def deployStage(list) {
     list.each {
         def nameSpace = it.values.split('/')[0]
         def appName = it.values.split('/')[1].split(/\./)[0]
+        println appName
         checkoutConfRepo(it['tag'])
         deploy(it['values'], appName, nameSpace, it['tag'])
     }
