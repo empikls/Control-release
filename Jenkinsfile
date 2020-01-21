@@ -79,9 +79,9 @@ spec:
                             deploy(branchName, appName, nameSpace)
                         }
                     }
-                        if (list) {
-                            list.each { item ->
                                 stage('Deploy release for ' + item.split('/')[0]) {
+                                    if (list) {
+                                        list.each { item ->
                                     def appName = item.split('/')[1].split(/\./)[0]
                                     def nameSpace = item.split('/')[0]
                                     dockerTag = readYaml file: item
