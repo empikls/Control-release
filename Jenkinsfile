@@ -79,7 +79,7 @@ def deployStage(list) {
         def nameSpace = it.values.split('/')[0]
         def appName = it.values.split('/')[1].split(/\./)[0]
         checkoutConfRepo(it['tag'])
-        deploy(it['values'], appName, nameSpace, it['tag'])
+        deploy(it.values, appName, nameSpace, it.tag)
     }
 }
 def checkoutConfRepo(branchName) {
