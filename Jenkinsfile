@@ -36,14 +36,6 @@ spec:
                     {
             node(label) {
 
-                stage('Clone config repo') {
-                    checkout scm
-                    echo "tag from Job1 : ${params.tagFromJob1}"
-                    println "$map.devRelease.tag"
-                }
-                def branchName = params.tagFromJob1
-                def list = ischangeSetList()
-                def values
                 def map = [
                         devRelease    : [values: './dev/values.yaml', tag: 'params.tagFromJob1'],
                         qaRelease     : [values: './qa/values.yaml', tag: 'params.tagFromJob1'],
@@ -52,6 +44,16 @@ spec:
                         prodUs1Release: [values: '', tag: ''],
                         prodUs2Release: [values: '', tag: '']
                 ]
+
+                stage('Clone config repo') {
+                    checkout scm
+                    echo "tag from Job1 : ${params.tagFromJob1}"
+                    println "$map.devRelease.tag"
+                }
+                def branchName = params.tagFromJob1
+                def list = ischangeSetList()
+                def values
+
                 if (isMaster() || isBuildingTag()) {
                     stage('Checkout App repo') {
                         checkoutConfRepo(branchName)
