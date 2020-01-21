@@ -63,12 +63,12 @@ spec:
                         }
                     }
                     map.each {
-                        stage("Deploy" + it.key) {
+                        stage("Deploy " + it.key) {
 //                                if(it.key ==
                             deployStage(it.key)
                         }
                     }
-                }d
+                }
             }
 //            /dev/values.yaml
 //            /prod-eu1/values.yaml
