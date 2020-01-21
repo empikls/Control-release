@@ -10,7 +10,7 @@ properties([
         ])
 ])
 
-        {
+
             podTemplate(label: label, yaml: """
 apiVersion: v1
 kind: Pod
@@ -33,7 +33,7 @@ spec:
     tty: true
 """
             )
-
+                    {
             node(label) {
 
                 stage('Clone config repo') {
