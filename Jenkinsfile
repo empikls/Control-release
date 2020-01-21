@@ -68,7 +68,7 @@ spec:
                         stage("$it.value") {
                             println it.key
 //                                if(it.key ==
-                            deployStage(it.key)
+                            deployStage(it['key'])
                         }
                     }
                 }
