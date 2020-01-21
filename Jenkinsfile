@@ -48,7 +48,21 @@ spec:
             }
         }
 
-        stage('Deploy ' ) {
+
+        ​def map = [
+                devRelease: [values:'./dev/values.yaml', tag: 'params.tagFromJob1'],
+                qaRelease: [values: './qa/values.yaml', tag: 'params.tagFromJob1'],
+                prodAp1Release: [values: '', tag: ''],
+                prodEu1Release: [values: '', tag: ''],
+                prodUs1Release: [values: '', tag: ''],
+                prodUs2Release: [values: '', tag: '']
+        ]
+
+
+        ​println map
+
+
+        stage('Deploy Dev release' ) {
             if (isMaster()) {
                 confValues = list.add("./dev/values.yaml")
                 nameSpace = confValues.split('/')[1]
@@ -56,15 +70,16 @@ spec:
                 appName = confValues.split('/')[2].split('.')[0]
                 deploy(confValues, appName, nameSpace, branchName)
             }
-            if (isBuildingTag()) {
-                confValues = list.add("./qa/values.yaml")
-                nameSpace = confValues.split('/')[1]
-                appName = confValues.split('/')[2].split('.')[0]
-                checkoutConfRepo(branchName)
-                deploy(confValues, appName, nameSpace, branchName)
-            }
-
         }
+            stage('Deploy QA release' ) {
+                if (isBuildingTag()) {
+                    confValues = list.add("./qa/values.yaml")
+                    nameSpace = confValues.split('/')[1]
+                    appName = confValues.split('/')[2].split('.')[0]
+                    checkoutConfRepo(branchName)
+                    deploy(confValues, appName, nameSpace, branchName)
+                }
+            }
             if (list) {
             list.each { item ->
                 stage('Deploy release for ' + item.split('/')[0]) {
