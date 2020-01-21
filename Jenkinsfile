@@ -32,84 +32,68 @@ spec:
     - cat
     tty: true
 """
-            )
-                    {
-            node(label) {
-                def list = ischangeSetList()
-//                def map = [
-//                        dev: [values: '', tag: ''],
-//                        qa: [values: '', tag: ''],
-//                        prod-ap1: [values: '', tag: ''],
-//                        prod-eu1: [values: '', tag: ''],
-//                        prod-us1: [values: '', tag: ''],
-//                        prod-us2: [values: '', tag: '']
-//                ]
-                def map
-                stage('Clone config repo') {
-                    checkout scm
-                    echo "tag from Job1 : ${params.tagFromJob1}"
-                }
-                def branchName = params.tagFromJob1
+            ) {
 
-                if (isMaster() || isBuildingTag()) {
-                    stage('Checkout App repo') {
-                        checkoutConfRepo(branchName)
 
-                    }
-                }
-                stage('Deploy Dev release') {
-                    if (isMaster()) {
-                        branchName = list.add('./dev/values.yaml')
-                        nameSpace = branchName.split('/').split[1]
-                        appName = branchName.split('/')[2].split(/\./)[0]
-                        map = list.collectEntries {
-                            [nameSpace: [values: branchName, tag: params.tagFromJob1]]
-                        }
-                        deploy(branchName, appName, nameSpace)
-                    }
-                }
-                    stage('Deploy QA release') {
-                        if (isMaster()) {
-                            branchName = list.add('./qa/values.yaml')
-                            nameSpace = branchName.split('/').split[1]
-                            appName = branchName.split('/')[2].split(/\./)[0]
-                            map = list.collectEntries {
-                                [nameSpace: [values: branchName, tag: params.tagFromJob1]]
-                            }
-                            deploy(branchName, appName, nameSpace)
-                        }
-                    }
-                                stage('Deploy release for ') {
-                                    if (list) {
-                                        list.each { item ->
-                                    def appName = item.split('/')[1].split(/\./)[0]
-                                    def nameSpace = item.split('/')[0]
-                                    dockerTag = readYaml file: item
-                                    branchName = dockerTag.image.tag
-                                    map = list.collectEntries {
-                                        [(item.split('/')[0]): [values: item, tag: branchName]]
-                                    }
-                                    checkoutConfRepo(branchName)
-                                    deploy(item, appName, nameSpace, dockerTag.image.tag)
-                                }
+
+node(label) {
+    def list = ischangeSetList()
+    def map = [
+            'dev'     : ['values': '', 'tag': ''],
+            'qa'      : ['values': '', 'tag': ''],
+            'prod-ap1': ['values': '', 'tag': ''],
+            'prod-eu1': ['values': '', 'tag': ''],
+            'prod-us1': ['values': '', 'tag': ''],
+            'prod-us2': ['values': '', 'tag': '']
+    ]
+    stage('Clone config repo') {
+        checkout scm
+        echo "tag from Job1 : ${params.tagFromJob1}"
+    }
+    if (isMaster()) {
+        map['dev'] = ['values': 'dev/values.yaml', 'tag': 'params.tagFromJob1']
+    }
+    if (isBuildingTag()) {
+        map['qa'] = ['values': 'qa/values.yaml', 'tag': 'params.tagFromJob1']
+    }
+}
+    if (list) {
+        list.each { item ->
+            def nameSpace = item.split('/')[0]
+            def values = readYaml file: item
+            map[nameSpace] = ['values': item, 'tag': values.image.tag]
+        }
+    }
+    map.each {
+        stage(it.value) {
+//                                if(it.key ==
+        deployStage(it.key)
                             }
                         }
                     }
-                }
-
-
+//            /dev/values.yaml
+//            /prod-eu1/values.yaml
+}
+def deployStage(list) {
+    list.each {
+        def nameSpace = it.values.split('/')[0]
+        def appName = it.values.split('/')[1].split(/\./)[0]
+        checkoutConfRepo(it.tag)
+        deploy(it.value, appName, nameSpace, it.tag)
+    }
+}
 def checkoutConfRepo(branchName) {
     checkout([$class           : 'GitSCM',
               branches         : [[name: branchName]],
               extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: branchName]],
               userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
     }
-def deploy(confValues, appName, nameSpace, branchName ) {
+def deploy( confValues, appName, nameSpace, branchName ) {
     container('helm') {
         withKubeConfig([credentialsId: 'kubeconfig']) {
             sh """
-               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./$branchName/app --values $branchName \
-               --set image.tag=map.item.tag
+               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./$branchName/app --values $confValues  \
+               --set image.tag=$branchName
             """
         }
     }
@@ -121,7 +105,6 @@ boolean isMaster() {
 boolean isBuildingTag() {
     return ("${params.tagFromJob1}" ==~ /^v\d+.\d+.\d+$/ || "${params.tagFromJob1}" ==~ /^\d+.\d+.\d+$/ )
 }
-
 def ischangeSetList() {
     def list = []
     currentBuild.changeSets.each { changeSet ->
