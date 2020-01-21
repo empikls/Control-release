@@ -60,6 +60,7 @@ spec:
                         list.each { item ->
                             def nameSpace = item.split('/')[0]
                             def values = readYaml file: item
+                            println nameSpace
                             map[nameSpace] = {['values': item, 'tag': values.image.tag]}
                         }
                     }
