@@ -11,7 +11,7 @@ properties([
 ])
 
 
-            podTemplate(label: label, yaml: """
+podTemplate(label: label, yaml: """
 apiVersion: v1
 kind: Pod
 metadata:
@@ -32,7 +32,7 @@ spec:
     - cat
     tty: true
 """
-            ) {
+) {
 
 
                 node(label) {
