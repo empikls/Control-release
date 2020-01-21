@@ -65,7 +65,7 @@ spec:
                     }
                     map.each {
                         println it.value
-                        stage(it.value) {
+                        stage("$it.value") {
                             println it.key
 //                                if(it.key ==
                             deployStage(it.key)
