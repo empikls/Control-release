@@ -39,7 +39,7 @@ spec:
                 stage('Clone config repo') {
                     checkout scm
                     echo "tag from Job1 : ${params.tagFromJob1}"
-                    println map.devRelease.tag
+                    println "$map.devRelease.tag"
                 }
                 def branchName = params.tagFromJob1
                 def list = ischangeSetList()
