@@ -58,8 +58,8 @@ spec:
                     if (list) {
                         list.each { item ->
                             def nameSpace = item.split('/')[0]
-                            def values = readYaml file: item
-                            map[nameSpace] = {['values': item, 'tag': values.image.tag]}
+                            def dockerTag = readYaml file: item
+                            map[nameSpace] = {['values': item, 'tag': dockerTag.image.tag]}
                         }
                     }
                     map.each {
