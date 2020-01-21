@@ -79,7 +79,7 @@ spec:
                             deploy(branchName, appName, nameSpace)
                         }
                     }
-                                stage('Deploy release for ' + item.split('/')[0]) {
+                                stage('Deploy release for ') {
                                     if (list) {
                                         list.each { item ->
                                     def appName = item.split('/')[1].split(/\./)[0]
