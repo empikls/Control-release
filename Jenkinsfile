@@ -35,45 +35,44 @@ spec:
             ) {
 
 
+                node(label) {
+                    def list = ischangeSetList()
+                    def map = [
+                            'dev'     : ['values': '', 'tag': ''],
+                            'qa'      : ['values': '', 'tag': ''],
+                            'prod-ap1': ['values': '', 'tag': ''],
+                            'prod-eu1': ['values': '', 'tag': ''],
+                            'prod-us1': ['values': '', 'tag': ''],
+                            'prod-us2': ['values': '', 'tag': '']
+                    ]
+                    stage('Clone config repo') {
+                        checkout scm
+                        echo "tag from Job1 : ${params.tagFromJob1}"
+                    }
+                    if (isMaster()) {
+                        map['dev'] = ['values': 'dev/values.yaml', 'tag': 'params.tagFromJob1']
+                    }
+                    if (isBuildingTag()) {
+                        map['qa'] = ['values': 'qa/values.yaml', 'tag': 'params.tagFromJob1']
+                    }
 
-node(label) {
-    def list = ischangeSetList()
-    def map = [
-            'dev'     : ['values': '', 'tag': ''],
-            'qa'      : ['values': '', 'tag': ''],
-            'prod-ap1': ['values': '', 'tag': ''],
-            'prod-eu1': ['values': '', 'tag': ''],
-            'prod-us1': ['values': '', 'tag': ''],
-            'prod-us2': ['values': '', 'tag': '']
-    ]
-    stage('Clone config repo') {
-        checkout scm
-        echo "tag from Job1 : ${params.tagFromJob1}"
-    }
-    if (isMaster()) {
-        map['dev'] = ['values': 'dev/values.yaml', 'tag': 'params.tagFromJob1']
-    }
-    if (isBuildingTag()) {
-        map['qa'] = ['values': 'qa/values.yaml', 'tag': 'params.tagFromJob1']
-    }
-}
-    if (list) {
-        list.each { item ->
-            def nameSpace = item.split('/')[0]
-            def values = readYaml file: item
-            map[nameSpace] = ['values': item, 'tag': values.image.tag]
-        }
-    }
-    map.each {
-        stage(it.value) {
-//                                if(it.key ==
-        deployStage(it.key)
-                            }
+                    if (list) {
+                        list.each { item ->
+                            def nameSpace = item.split('/')[0]
+                            def values = readYaml file: item
+                            map[nameSpace] = ['values': item, 'tag': values.image.tag]
                         }
                     }
+                    map.each {
+                        stage(it.value) {
+//                                if(it.key ==
+                            deployStage(it.key)
+                        }
+                    }
+                }
+            }
 //            /dev/values.yaml
 //            /prod-eu1/values.yaml
-}
 def deployStage(list) {
     list.each {
         def nameSpace = it.values.split('/')[0]
