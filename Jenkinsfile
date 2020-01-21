@@ -10,7 +10,8 @@ properties([
         ])
 ])
 
-podTemplate(label: label, yaml: """
+        {
+            podTemplate(label: label, yaml: """
 apiVersion: v1
 kind: Pod
 metadata:
@@ -31,69 +32,64 @@ spec:
     - cat
     tty: true
 """
-  )
-{
-    node(label) {
+            )
 
-        stage('Clone config repo') {
-            checkout scm
-            echo "tag from Job1 : ${params.tagFromJob1}"
-        }
-        def branchName = params.tagFromJob1
-        def list = ischangeSetList()
-        def values
-        if (isMaster() || isBuildingTag()) {
-            stage('Checkout App repo') {
-                checkoutConfRepo(branchName)
-            }
-        }
+            node(label) {
 
-
-        ​def map = [
-                devRelease: [values:'./dev/values.yaml', tag: 'params.tagFromJob1'],
-                qaRelease: [values: './qa/values.yaml', tag: 'params.tagFromJob1'],
-                prodAp1Release: [values: '', tag: ''],
-                prodEu1Release: [values: '', tag: ''],
-                prodUs1Release: [values: '', tag: ''],
-                prodUs2Release: [values: '', tag: '']
-        ]
-
-
-        ​println map
-
-
-        stage('Deploy Dev release' ) {
-            if (isMaster()) {
-                confValues = list.add("./dev/values.yaml")
-                nameSpace = confValues.split('/')[1]
-                checkoutConfRepo(branchName)
-                appName = confValues.split('/')[2].split('.')[0]
-                deploy(confValues, appName, nameSpace, branchName)
-            }
-        }
-            stage('Deploy QA release' ) {
-                if (isBuildingTag()) {
-                    confValues = list.add("./qa/values.yaml")
-                    nameSpace = confValues.split('/')[1]
-                    appName = confValues.split('/')[2].split('.')[0]
-                    checkoutConfRepo(branchName)
-                    deploy(confValues, appName, nameSpace, branchName)
+                stage('Clone config repo') {
+                    checkout scm
+                    echo "tag from Job1 : ${params.tagFromJob1}"
                 }
-            }
-            if (list) {
-            list.each { item ->
-                stage('Deploy release for ' + item.split('/')[0]) {
-                    def appName = item.split('/')[1].split(/\./)[0]
-                    def nameSpace = item.split('/')[0]
-                    values = readYaml file: item
-                    branchName = values.image.tag
-                    checkoutConfRepo(branchName)
-                    deploy(item, appName, nameSpace, values.image.tag)
+                def branchName = params.tagFromJob1
+                def list = ischangeSetList()
+                def values
+                def map = [
+                        devRelease    : [values: './dev/values.yaml', tag: 'params.tagFromJob1'],
+                        qaRelease     : [values: './qa/values.yaml', tag: 'params.tagFromJob1'],
+                        prodAp1Release: [values: '', tag: ''],
+                        prodEu1Release: [values: '', tag: ''],
+                        prodUs1Release: [values: '', tag: ''],
+                        prodUs2Release: [values: '', tag: '']
+                ]
+                if (isMaster() || isBuildingTag()) {
+                    stage('Checkout App repo') {
+                        checkoutConfRepo(branchName)
+                        println map
+                    }
+                }
+                stage('Deploy Dev release') {
+                    if (isMaster()) {
+                        confValues = list.add("./dev/values.yaml")
+                        nameSpace = confValues.split('/')[1]
+                        checkoutConfRepo(branchName)
+                        appName = confValues.split('/')[2].split('.')[0]
+                        deploy(confValues, appName, nameSpace, branchName)
+                    }
+                }
+                stage('Deploy QA release') {
+                    if (isBuildingTag()) {
+                        confValues = list.add("./qa/values.yaml")
+                        nameSpace = confValues.split('/')[1]
+                        appName = confValues.split('/')[2].split('.')[0]
+                        checkoutConfRepo(branchName)
+                        deploy(confValues, appName, nameSpace, branchName)
+                    }
+                }
+                if (list) {
+                    list.each { item ->
+                        stage('Deploy release for ' + item.split('/')[0]) {
+                            def appName = item.split('/')[1].split(/\./)[0]
+                            def nameSpace = item.split('/')[0]
+                            values = readYaml file: item
+                            branchName = values.image.tag
+                            checkoutConfRepo(branchName)
+                            deploy(item, appName, nameSpace, values.image.tag)
+                        }
+                    }
                 }
             }
         }
-    }
-}
+
 def checkoutConfRepo(branchName) {
     checkout([$class           : 'GitSCM',
               branches         : [[name: branchName]],
