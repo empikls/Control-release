@@ -63,7 +63,7 @@ spec:
                         }
                     }
                     map.each {
-                        echo "${it.value}"
+                        echo "${it.value[1]}"
                         stage("$it.value") {
 //                                if(it.key ==
                             deployStage(it['key'])
