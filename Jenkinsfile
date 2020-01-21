@@ -45,7 +45,6 @@ spec:
 //                        prod-us2: [values: '', tag: '']
 //                ]
                 def map
-                def list = ischangeSetList()
                 stage('Clone config repo') {
                     checkout scm
                     echo "tag from Job1 : ${params.tagFromJob1}"
