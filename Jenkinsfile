@@ -37,43 +37,20 @@ spec:
             node(label) {
                 def list = ischangeSetList()
 //                def map = [
-//                        devRelease    : [values: '', tag: ''],
-//                        qaRelease     : [values: '', tag: ''],
-//                        prodAp1Release: [values: '', tag: ''],
-//                        prodEu1Release: [values: '', tag: ''],
-//                        prodUs1Release: [values: '', tag: ''],
-//                        prodUs2Release: [values: '', tag: '']
+//                        dev: [values: '', tag: ''],
+//                        qa: [values: '', tag: ''],
+//                        prod-ap1: [values: '', tag: ''],
+//                        prod-eu1: [values: '', tag: ''],
+//                        prod-us1: [values: '', tag: ''],
+//                        prod-us2: [values: '', tag: '']
 //                ]
                 def map
-                if (list) {
-                    list.each { item ->
-                        dockerTag = readYaml file: item
-                        branchName = dockerTag.image.tag
-                        map = list.collectEntries {
-                            [(item.split('/')[0]): [values: item, tag: branchName]]
-                        }
-                    }
-                }
-                if (isBuildingTag()) {
-                    list.add('./dev/values.yaml')
-                    map = list.collectEntries{
-                        [(it.split('/')[1]):[values:it,tag:params.tagFromJob1]]
-                    }
-                }
-                if (isMaster()) {
-                    list.add('./qa/values.yaml')
-                    map = list.collectEntries{
-                        [(it.split('/')[1]):[values:it,tag:params.tagFromJob1]]
-                    }
-                }
+                def list = ischangeSetList()
                 stage('Clone config repo') {
                     checkout scm
                     echo "tag from Job1 : ${params.tagFromJob1}"
-                    println "$map.devRelease.tag"
                 }
                 def branchName = params.tagFromJob1
-
-                def values
 
                 if (isMaster() || isBuildingTag()) {
                     stage('Checkout App repo') {
@@ -83,36 +60,44 @@ spec:
                 }
                 stage('Deploy Dev release') {
                     if (isMaster()) {
-                        confValues = list.add("./dev/values.yaml")
-                        nameSpace = confValues.split('/')[1]
-                        checkoutConfRepo(branchName)
-                        appName = confValues.split('/')[2].split('.')[0]
-                        deploy(confValues, appName, nameSpace, branchName)
+                        branchName = list.add('./dev/values.yaml')
+                        nameSpace = branchName.split('/').split[1]
+                        appName = branchName.split('/')[2].split(/\./)[0]
+                        map = list.collectEntries {
+                            [nameSpace: [values: branchName, tag: params.tagFromJob1]]
+                        }
+                        deploy(branchName, appName, nameSpace)
                     }
                 }
-                stage('Deploy QA release') {
-                    if (isBuildingTag()) {
-                        confValues = list.add("./qa/values.yaml")
-                        nameSpace = confValues.split('/')[1]
-                        appName = confValues.split('/')[2].split('.')[0]
-                        checkoutConfRepo(branchName)
-                        deploy(confValues, appName, nameSpace, branchName)
+                    stage('Deploy QA release') {
+                        if (isMaster()) {
+                            branchName = list.add('./qa/values.yaml')
+                            nameSpace = branchName.split('/').split[1]
+                            appName = branchName.split('/')[2].split(/\./)[0]
+                            map = list.collectEntries {
+                                [nameSpace: [values: branchName, tag: params.tagFromJob1]]
+                            }
+                            deploy(branchName, appName, nameSpace)
+                        }
                     }
-                }
-                if (list) {
-                    list.each { item ->
-                        stage('Deploy release for ' + item.split('/')[0]) {
-                            def appName = item.split('/')[1].split(/\./)[0]
-                            def nameSpace = item.split('/')[0]
-                            dockerTag = readYaml file: item
-                            branchName = dockerTag.image.tag
-                            checkoutConfRepo(branchName)
-                            deploy(item, appName, nameSpace, values.image.tag)
+                        if (list) {
+                            list.each { item ->
+                                stage('Deploy release for ' + item.split('/')[0]) {
+                                    def appName = item.split('/')[1].split(/\./)[0]
+                                    def nameSpace = item.split('/')[0]
+                                    dockerTag = readYaml file: item
+                                    branchName = dockerTag.image.tag
+                                    map = list.collectEntries {
+                                        [(item.split('/')[0]): [values: item, tag: branchName]]
+                                    }
+                                    checkoutConfRepo(branchName)
+                                    deploy(item, appName, nameSpace, dockerTag.image.tag)
+                                }
+                            }
                         }
                     }
                 }
-            }
-        }
+
 
 def checkoutConfRepo(branchName) {
     checkout([$class           : 'GitSCM',
@@ -124,8 +109,8 @@ def deploy(confValues, appName, nameSpace, branchName ) {
     container('helm') {
         withKubeConfig([credentialsId: 'kubeconfig']) {
             sh """
-               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./$branchName/app --values $confValues \
-               --set image.tag=$branchName
+               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./$branchName/app --values $branchName \
+               --set image.tag=map.item.tag
             """
         }
     }
