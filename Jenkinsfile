@@ -64,7 +64,7 @@ spec:
                         }
                     }
                     map.each {
-                        println "${it.value()}"
+                        println "${it.value}"
                         stage("$it.value") {
                             println it.key
 //                                if(it.key ==
