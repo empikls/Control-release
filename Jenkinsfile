@@ -59,14 +59,12 @@ spec:
                         list.each { item ->
                             def nameSpace = item.split('/')[0]
                             def values = readYaml file: item
-                            println nameSpace
                             map[nameSpace] = {['values': item, 'tag': values.image.tag]}
                         }
                     }
                     map.each {
-                        println "${it.value}"
+                        echo "${it.value}"
                         stage("$it.value") {
-                            println it.key
 //                                if(it.key ==
                             deployStage(it['key'])
                         }
@@ -79,7 +77,6 @@ def deployStage(list) {
     list.each {
         def nameSpace = it.values.split('/')[0]
         def appName = it.values.split('/')[1].split(/\./)[0]
-        println appName
         checkoutConfRepo(it['tag'])
         deploy(it['values'], appName, nameSpace, it['tag'])
     }
