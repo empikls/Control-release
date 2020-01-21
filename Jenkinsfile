@@ -55,7 +55,6 @@ spec:
                     if (isBuildingTag()) {
                         map['qa'] = {['values': 'qa/values.yaml', 'tag': params.tagFromJob1]}
                     }
-
                     if (list) {
                         list.each { item ->
                             def nameSpace = item.split('/')[0]
@@ -65,6 +64,7 @@ spec:
                         }
                     }
                     map.each {
+                        println it.value
                         stage(it.value) {
                             println it.key
 //                                if(it.key ==
