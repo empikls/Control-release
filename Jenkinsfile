@@ -63,7 +63,7 @@ spec:
                         }
                     }
                     map.each {
-                        stage("$it.value") {
+                        stage("Deploy" + it.value) {
 //                                if(it.key ==
                             deployStage(it.key)
                         }
