@@ -63,7 +63,7 @@ spec:
                         }
                     }
                     map.each {
-                        print "values is : ${it.values}"
+                        print "values is : ${it.value}"
                         stage('${it.value}') {
 //                                if(it.key ==
                             deployStage(it['key'])
