@@ -38,12 +38,12 @@ spec:
                 node(label) {
                     def list = ischangeSetList()
                     def map = [
-                            'dev'     : ['values': '', 'tag': ''],
-                            'qa'      : ['values': '', 'tag': ''],
-                            'prod-ap1': ['values': '', 'tag': ''],
-                            'prod-eu1': ['values': '', 'tag': ''],
-                            'prod-us1': ['values': '', 'tag': ''],
-                            'prod-us2': ['values': '', 'tag': '']
+                            'dev'     : {['values': '', 'tag': '']},
+                            'qa'      : {['values': '', 'tag': '']},
+                            'prod-ap1': {['values': '', 'tag': '']},
+                            'prod-eu1': {['values': '', 'tag': '']},
+                            'prod-us1': {['values': '', 'tag': '']},
+                            'prod-us2': {['values': '', 'tag': '']}
                     ]
                     stage('Clone config repo') {
                         checkout scm
