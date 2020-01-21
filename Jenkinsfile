@@ -64,7 +64,9 @@ spec:
                     }
                     map.each {
                         stage("Deploy " + it.key) {
-//                                if(it.key ==
+                               if(it.value == 'Null') {
+                                   return 0
+                               }
                             deployStage(it.value)
                         }
                     }
