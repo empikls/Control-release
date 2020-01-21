@@ -50,10 +50,10 @@ spec:
                         echo "tag from Job1 : ${params.tagFromJob1}"
                     }
                     if (isMaster()) {
-                        map['dev'] = ['values': 'dev/values.yaml', 'tag': 'params.tagFromJob1']
+                        map['dev'] = ['values': 'dev/values.yaml', 'tag': params.tagFromJob1]
                     }
                     if (isBuildingTag()) {
-                        map['qa'] = ['values': 'qa/values.yaml', 'tag': 'params.tagFromJob1']
+                        map['qa'] = ['values': 'qa/values.yaml', 'tag': params.tagFromJob1]
                     }
 
                     if (list) {
