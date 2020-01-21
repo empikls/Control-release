@@ -35,23 +35,44 @@ spec:
             )
                     {
             node(label) {
-
-                def map = [
-                        devRelease    : [values: './dev/values.yaml', tag: 'params.tagFromJob1'],
-                        qaRelease     : [values: './qa/values.yaml', tag: 'params.tagFromJob1'],
-                        prodAp1Release: [values: '', tag: ''],
-                        prodEu1Release: [values: '', tag: ''],
-                        prodUs1Release: [values: '', tag: ''],
-                        prodUs2Release: [values: '', tag: '']
-                ]
-
+                def list = ischangeSetList()
+//                def map = [
+//                        devRelease    : [values: '', tag: ''],
+//                        qaRelease     : [values: '', tag: ''],
+//                        prodAp1Release: [values: '', tag: ''],
+//                        prodEu1Release: [values: '', tag: ''],
+//                        prodUs1Release: [values: '', tag: ''],
+//                        prodUs2Release: [values: '', tag: '']
+//                ]
+                def map
+                if (list) {
+                    list.each { item ->
+                        dockerTag = readYaml file: item
+                        branchName = dockerTag.image.tag
+                        map = list.collectEntries {
+                            [(item.split('/')[0]): [values: item, tag: branchName]]
+                        }
+                    }
+                }
+                if (isBuildingTag()) {
+                    list.add('./dev/values.yaml')
+                    map = list.collectEntries{
+                        [(it.split('/')[1]):[values:it,tag:params.tagFromJob1]]
+                    }
+                }
+                if (isMaster()) {
+                    list.add('./qa/values.yaml')
+                    map = list.collectEntries{
+                        [(it.split('/')[1]):[values:it,tag:params.tagFromJob1]]
+                    }
+                }
                 stage('Clone config repo') {
                     checkout scm
                     echo "tag from Job1 : ${params.tagFromJob1}"
                     println "$map.devRelease.tag"
                 }
                 def branchName = params.tagFromJob1
-                def list = ischangeSetList()
+
                 def values
 
                 if (isMaster() || isBuildingTag()) {
@@ -83,8 +104,8 @@ spec:
                         stage('Deploy release for ' + item.split('/')[0]) {
                             def appName = item.split('/')[1].split(/\./)[0]
                             def nameSpace = item.split('/')[0]
-                            values = readYaml file: item
-                            branchName = values.image.tag
+                            dockerTag = readYaml file: item
+                            branchName = dockerTag.image.tag
                             checkoutConfRepo(branchName)
                             deploy(item, appName, nameSpace, values.image.tag)
                         }
@@ -122,7 +143,7 @@ def ischangeSetList() {
     currentBuild.changeSets.each { changeSet ->
         changeSet.items.each { entry ->
             entry.affectedFiles.each { file ->
-                if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/\w+.yaml$/) {
+                if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/\w+.yaml$/ ) {
                   list.add(file.path)
                 }
             }
