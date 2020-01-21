@@ -65,7 +65,7 @@ spec:
                     map.each {
                         stage("Deploy " + it.key) {
 //                                if(it.key ==
-                            deployStage(it.key)
+                            deployStage(it.value)
                         }
                     }
                 }
