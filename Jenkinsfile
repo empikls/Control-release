@@ -36,12 +36,12 @@ spec:
 
 node(label) {
 def map = [
-        'dev'     : '',
-        'qa'      : '',
-        'prod-ap1': '',
-        'prod-eu1': '',
-        'prod-us1': '',
-        'prod-us2': ''
+        'dev'     : [],
+        'qa'      : [],
+        'prod-ap1': [],
+        'prod-eu1': [],
+        'prod-us1': [],
+        'prod-us2': []
 ]
 stage('Clone config repo') {
     checkout scm
@@ -50,10 +50,10 @@ stage('Clone config repo') {
     def list = ischangeSetList()
     println list
 if (isMaster()) {
-    map['dev'] = 'dev/values.yaml'
+    map['dev'].put = 'dev/values.yaml'
 }
 if (isBuildingTag()) {
-    map['qa'] = 'qa/values.yaml'
+    map['qa'].put = 'qa/values.yaml'
 }
 if (list) {
     list.each { item ->
@@ -64,7 +64,7 @@ if (list) {
     map.each {
         stage("Deploy release for " + it.key) {
 //                            it.key = 'dev' , 'qa', 'prod-ap1','prod-eu1','prod-us1','prod-us2'
-            if (it.value != '') {
+            if (it.value) {
                 deployStage(it.value)
             }
             else Utils.markStageSkippedForConditional("Deploy release for " + it.key)
@@ -73,19 +73,19 @@ if (list) {
     }
 }
 }
-def deployStage(file_path) {
-    println file_path
-    def tag = params.tagFromJob1
-    if (ischangeSetList()) {
-        values = readYaml file: file_path
-        tag = values.image.tag
+def deployStage(list) {
+    list.each { file_path ->
+        def tag = params.tagFromJob1
+        if (ischangeSetList()) {
+            values = readYaml file: file_path
+            tag = values.image.tag
+        }
+        def nameSpace = file_path.split('/')[0]
+        def appName = file_path.split('/')[1].split(/\./)[0]
+        checkoutConfRepo(tag)
+        deploy(nameSpace, appName, file_path, tag)
     }
-    def nameSpace = file_path.split('/')[0]
-    def appName = file_path.split('/')[1].split(/\./)[0]
-    checkoutConfRepo(tag)
-    deploy(nameSpace, appName, file_path, tag)
 }
-
 def checkoutConfRepo(tag) {
 
     checkout([$class           : 'GitSCM',
