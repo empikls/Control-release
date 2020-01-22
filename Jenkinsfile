@@ -56,7 +56,7 @@ if (isBuildingTag()) {
 }
 if (list) {
     list.each { item ->
-        def nameSpace = item.split('/')[0]
+        nameSpace = item.split('/')[0]
         map[nameSpace] = item
     }
 }
@@ -75,8 +75,11 @@ def deployStage(file_path) {
         dockeTag = readYaml file: file_path
         tag = file_path.value.tag
     }
+    println tag
     def nameSpace = file_path.split('/')[0]
+    println nameSpace
     def appName = file_path.split('/')[1].split(/\./)[0]
+    println appName
     checkoutConfRepo(tag)
     deploy(nameSpace, appName, file_path, tag)
 }
@@ -92,7 +95,7 @@ def deploy( nameSpace, appName, file_path, tag ) {
     container('helm') {
         withKubeConfig([credentialsId: 'kubeconfig']) {
             sh """
-               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./$tag/app --values $file_path  \
+               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./$tag/app --values .$file_path  \
                --set image.tag=$tag
             """
         }
