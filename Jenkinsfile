@@ -57,7 +57,6 @@ if (isBuildingTag()) {
 if (list) {
     list.each { item ->
         def nameSpace = item.split('/')[0]
-        def appName = item.split('/')[1].split(/\./)[0]
         map[nameSpace] = [item]
     }
 }
