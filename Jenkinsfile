@@ -35,7 +35,6 @@ spec:
 
 
 node(label) {
-def list = ischangeSetList()
 def map = [
         'dev'     : [''],
         'qa'      : [''],
@@ -49,6 +48,7 @@ stage('Clone config repo') {
     echo "tag from Job1 : ${params.tagFromJob1}"
     println list
 }
+    def list = ischangeSetList()
 if (isMaster()) {
     map['dev'] = 'dev/values.yaml'
 }
@@ -111,7 +111,7 @@ def ischangeSetList() {
     currentBuild.changeSets.each { changeSet ->
         changeSet.items.each { entry ->
             entry.affectedFiles.each { file ->
-                if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/\w+.yaml$/ ) {
+                if (file.path ==~ /^prod-(ap1|eu1|us1|us2)\/\w+.yaml$/) {
                     list.add(file.path)
                 }
             }
