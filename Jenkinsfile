@@ -72,6 +72,7 @@ if (list) {
 }
 }
 def deployStage(file_path) {
+    println file_path
     def tag = params.tagFromJob1
     if (ischangeSetList()) {
         values = readYaml file: file_path
