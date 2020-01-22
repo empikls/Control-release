@@ -75,7 +75,7 @@ spec:
                     }
                 }
             }
-def deployStage(list) {
+def deployStage(list, tag) {
     list.each { item ->
         def nameSpace = item.split('/')[0]
         def appName = item.split('/')[1].split(/\./)[0]
