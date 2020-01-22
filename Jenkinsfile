@@ -53,7 +53,7 @@ if (isMaster()) {
     map['dev'].put('dev/values.yaml')
 }
 if (isBuildingTag()) {
-    map['qa'].put('qa/values.yaml)
+    map['qa'].put('qa/values.yaml')
 }
 if (list) {
     list.each { item ->
