@@ -36,7 +36,6 @@ spec:
 
 
     node(label) {
-        def tag =  params.tagFromJob1
         def list = ischangeSetList()
         def map = [
                 'dev'     : ['values': ''],
@@ -75,7 +74,7 @@ spec:
     }
 }
 def deployStage(list) {
-
+    def tag = params.tagFromJob1
     list.each { item ->
         if (isMaster() || isBuildingTag()) {
             tag = params.tagFromJob1
