@@ -73,9 +73,8 @@ def deployStage(file_path) {
     def tag = params.tagFromJob1
     if (ischangeSetList()) {
         dockeTag = readYaml file: file_path
-        tag = file_path.image.tag
+        tag = dockeTag.image.tag
     }
-    println tag
     def nameSpace = file_path.split('/')[0]
     def appName = file_path.split('/')[1].split(/\./)[0]
     checkoutConfRepo(tag)
