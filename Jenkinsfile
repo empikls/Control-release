@@ -68,7 +68,7 @@ spec:
 //                            it.key = 'dev' , 'qa', 'prod-ap1','prod-eu1','prod-us1','prod-us2'
                             if (ischangeSetList() ) {
                                 def dockerTag = readYaml file: item
-                                def tag =params.tagFromJob1
+                                tag = params.tagFromJob1
                             }
                             else tag = params.tagFromJob1
                             deployStage(it.value.values, tag)
