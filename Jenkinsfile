@@ -64,7 +64,7 @@ if (list) {
     map.each {
         stage("Deploy release for " + it.key) {
 //                            it.key = 'dev' , 'qa', 'prod-ap1','prod-eu1','prod-us1','prod-us2'
-            if (it.key == '') deployStage(it.value)
+            if (it.value == '') deployStage(it.value)
             else Utils.markStageSkippedForConditional("Deploy release for " + it.key)
 //                              it.value = 'dev/values.yaml','qa/values.yaml','prod-ap1/*.yaml','prod-eu1/*.yaml','prod-us1/*.yaml','prod-us2/*.yaml'
         }
