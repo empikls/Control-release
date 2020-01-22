@@ -58,7 +58,7 @@ if (isBuildingTag()) {
 if (list) {
     list.each { item ->
         nameSpace = item.split('/')[0]
-        map[nameSpace] = item
+        map[nameSpace].put = item
     }
 }
     map.each {
