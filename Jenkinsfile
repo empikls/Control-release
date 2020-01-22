@@ -74,28 +74,27 @@ if (list) {
 def deployStage(file_path) {
     def tag = params.tagFromJob1
     if (ischangeSetList()) {
-            dockeTag = readYaml file: file_path
-            tag = file_path.value.tag
-        }
-    file_path.each { item ->
-        def nameSpace = item.split('/')[0]
-        def appName = item.split('/')[1].split(/\./)[0]
-        checkoutConfRepo(tag)
-        deploy(nameSpace, appName, item, tag)
+        dockeTag = readYaml file: file_path
+        tag = file_path.value.tag
     }
+    def nameSpace = file_path.split('/')[0]
+    def appName = file_path.split('/')[1].split(/\./)[0]
+    checkoutConfRepo(tag)
+    deploy(nameSpace, appName, file_path, tag)
 }
-def checkoutConfRepo() {
+
+def checkoutConfRepo(tag) {
 
     checkout([$class           : 'GitSCM',
               branches         : [[name: tag]],
               extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: tag]],
               userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
 }
-def deploy( nameSpace, appName, value, tag ) {
+def deploy( nameSpace, appName, file_path, tag ) {
     container('helm') {
         withKubeConfig([credentialsId: 'kubeconfig']) {
             sh """
-               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./$tag/app --values $value  \
+               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./$tag/app --values $file_path  \
                --set image.tag=$tag
             """
         }
