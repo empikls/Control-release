@@ -49,10 +49,10 @@ stage('Clone config repo') {
     echo "tag from Job1 : ${params.tagFromJob1}"
 }
 if (isMaster()) {
-    map['dev'] = ['dev/values.yaml']
+    map['dev'] = 'dev/values.yaml'
 }
 if (isBuildingTag()) {
-    map['qa'] = ['qa/values.yaml']
+    map['qa'] = 'qa/values.yaml'
 }
 if (list) {
     list.each { item ->
