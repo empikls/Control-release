@@ -58,7 +58,7 @@ if (isBuildingTag()) {
 if (list) {
     list.each { item ->
         nameSpace = item.split('/')[0]
-        map[nameSpace] = item
+        map[nameSpace] = "$item"
     }
 }
     map.each {
@@ -93,7 +93,7 @@ def deploy( nameSpace, appName, file_path, tag ) {
     container('helm') {
         withKubeConfig([credentialsId: 'kubeconfig']) {
             sh """
-               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./$tag/app --values .$file_path  \
+               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./$tag/app --values ./$file_path  \
                --set image.tag=$tag
             """
         }
