@@ -76,9 +76,11 @@ def deployStage(list) {
     if (isMaster() || isBuildingTag()) {
         tag = params.tagFromJob1
     }
-    if (ischangeSetList()) { it ->
-            dockerTag = readTaml file: it
-            tag = it.value.tag
+    if (ischangeSetList()) {
+        list.each { item ->
+            dockerTag = readTaml file: item
+            tag = item.value.tag
+        }
     }
     def tag = params.tagFromJob1
     list.each { item ->
