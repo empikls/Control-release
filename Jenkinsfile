@@ -79,7 +79,7 @@ def deployStage(list) {
         deploy(it.values, appName, nameSpace, tag)
     }
 }
-def checkoutConfRepo(branchName) {
+def checkoutConfRepo(tag) {
     checkout([$class           : 'GitSCM',
               branches         : [[name: branchName]],
               extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: branchName]],
