@@ -36,50 +36,47 @@ spec:
 
 
                 node(label) {
+                    def tag =  params.tagFromJob1
                     def list = ischangeSetList()
-                    def map = [
-                            'dev'     : ['values': '', 'tag': ''],
-                            'qa'      : ['values': '', 'tag': ''],
-                            'prod-ap1': ['values': '', 'tag': ''],
-                            'prod-eu1': ['values': '', 'tag': ''],
-                            'prod-us1': ['values': '', 'tag': ''],
-                            'prod-us2': ['values': '', 'tag': '']
+                    def map =
+                            'dev'     : ['values': ''],
+                            'qa'      : ['values': ''],
+                            'prod-ap1': ['values': ''],
+                            'prod-eu1': ['values': ''],
+                            'prod-us1': ['values': ''],
+                            'prod-us2': ['values': '']
                     ]
                     stage('Clone config repo') {
                         checkout scm
                         echo "tag from Job1 : ${params.tagFromJob1}"
                     }
                     if (isMaster()) {
-                        map['dev'] = ['values': 'dev/values.yaml', 'tag': params.tagFromJob1]
+                        map['dev'] = ['values': 'dev/values.yaml']
                     }
                     if (isBuildingTag()) {
-                        map['qa'] = ['values': 'qa/values.yaml', 'tag': params.tagFromJob1]
+                        map['qa'] = ['values': 'qa/values.yaml']
                     }
                     if (list) {
                         list.each { item ->
                             def nameSpace = item.split('/')[0]
                             def dockerTag = readYaml file: item
-                            map[nameSpace] = ['values': item, 'tag': dockerTag.image.tag]
+                            tag = dockerTag.image.tag
+                            map[nameSpace] = ['values': item]
                         }
                     }
                     map.each {
                         stage("Deploy " + it.key) {
-                               if(it.value == 'Null') {
-                                   return 0
-                               }
                             deployStage(it.value)
                         }
                     }
                 }
             }
-//            /dev/values.yaml
-//            /prod-eu1/values.yaml
 def deployStage(list) {
     list.each {
         def nameSpace = it.values.split('/')[0]
         def appName = it.values.split('/')[1].split(/\./)[0]
-        checkoutConfRepo(it['tag'])
-        deploy(it.values, appName, nameSpace, it.tag)
+        checkoutConfRepo(tag)
+        deploy(it.values, appName, nameSpace, tag)
     }
 }
 def checkoutConfRepo(branchName) {
@@ -88,12 +85,12 @@ def checkoutConfRepo(branchName) {
               extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: branchName]],
               userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
     }
-def deploy( confValues, appName, nameSpace, branchName ) {
+def deploy( it.values, appName, nameSpace, tag ) {
     container('helm') {
         withKubeConfig([credentialsId: 'kubeconfig']) {
             sh """
-               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./$branchName/app --values $confValues  \
-               --set image.tag=$branchName
+               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./$tag/app --values $it.values  \
+               --set image.tag=$tag
             """
         }
     }
