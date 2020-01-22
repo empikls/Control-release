@@ -56,7 +56,7 @@ spec:
                     if (isBuildingTag()) {
                         map['qa'] = ['values': 'qa/values.yaml']
                     }
-                    if (list) {
+                    if (ischangeSetList()) {
                         list.each { item ->
                             def nameSpace = item.split('/')[0]
                             def dockerTag = readYaml file: item
@@ -66,30 +66,33 @@ spec:
                     }
                     map.each {
                         stage("Deploy " + it.key) {
-                            deployStage(it.value)
+//                            it.key = 'dev' , 'qa', 'prod-ap1','prod-eu1','prod-us1','prod-us2'
+                            deployStage(it.value.values)
+//                            it.value = 'values':'dev/values.yaml','values':'qa/values.yaml','values':'prod-ap1/*.yaml','values':'prod-eu1/*.yaml','values':'prod-us1/*.yaml','values':'prod-us2/*.yaml'
+//                              it.value.values = 'dev/values.yaml','qa/values.yaml','prod-ap1/*.yaml','prod-eu1/*.yaml','prod-us1/*.yaml','prod-us2/*.yaml'
                         }
                     }
                 }
             }
 def deployStage(list) {
-    list.each {
-        def nameSpace = it.values.split('/')[0]
-        def appName = it.values.split('/')[1].split(/\./)[0]
+    list.each { item ->
+        def nameSpace = item.split('/')[0]
+        def appName = item.split('/')[1].split(/\./)[0]
         checkoutConfRepo(tag)
-        deploy(it.value, appName, nameSpace, tag)
+        deploy(nameSpace, appName, item ,tag)
     }
 }
 def checkoutConfRepo(tag) {
     checkout([$class           : 'GitSCM',
-              branches         : [[name: branchName]],
-              extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: branchName]],
+              branches         : [[name: tag]],
+              extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: tag]],
               userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
     }
-def deploy( it.value, appName, nameSpace, tag ) {
+def deploy( nameSpace, appName, confValues, tag ) {
     container('helm') {
         withKubeConfig([credentialsId: 'kubeconfig']) {
             sh """
-               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./$tag/app --values $it.value  \
+               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./$tag/app --values $confValues  \
                --set image.tag=$tag
             """
         }
