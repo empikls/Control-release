@@ -59,7 +59,7 @@ spec:
                     if (list) {
                         list.each { item ->
                             def nameSpace = item.split('/')[0]
-                            appName = item.split('/')[1].split(/\./)[0]
+                            def appName = item.split('/')[1].split(/\./)[0]
                             def dockerTag = readYaml file: item
                             tag = dockerTag.image.tag
                             map[nameSpace] = ['values': item]
@@ -68,14 +68,14 @@ spec:
                     map.each {
                         stage("Deploy release for " + it.key) {
 //                            it.key = 'dev' , 'qa', 'prod-ap1','prod-eu1','prod-us1','prod-us2'
-                            deployStage(it.value.values, tag)
+                            deployStage(it.value.values)
 //                            it.value = 'values':'dev/values.yaml','values':'qa/values.yaml','values':'prod-ap1/*.yaml','values':'prod-eu1/*.yaml','values':'prod-us1/*.yaml','values':'prod-us2/*.yaml'
 //                              it.value.values = 'dev/values.yaml','qa/values.yaml','prod-ap1/*.yaml','prod-eu1/*.yaml','prod-us1/*.yaml','prod-us2/*.yaml'
                         }
                     }
                 }
             }
-def deployStage(list, tag) {
+def deployStage(list) {
     list.each { item ->
         def nameSpace = item.split('/')[0]
         def appName = item.split('/')[1].split(/\./)[0]
