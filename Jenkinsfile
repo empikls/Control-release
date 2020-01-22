@@ -76,7 +76,7 @@ def deployStage(list) {
         def nameSpace = it.values.split('/')[0]
         def appName = it.values.split('/')[1].split(/\./)[0]
         checkoutConfRepo(tag)
-        deploy(it.values, appName, nameSpace, tag)
+        deploy(it.value, appName, nameSpace, tag)
     }
 }
 def checkoutConfRepo(tag) {
@@ -85,11 +85,11 @@ def checkoutConfRepo(tag) {
               extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: branchName]],
               userRemoteConfigs: [[url: "https://github.com/empikls/node.is"]]])
     }
-def deploy( it.values, appName, nameSpace, tag ) {
+def deploy( it.value, appName, nameSpace, tag ) {
     container('helm') {
         withKubeConfig([credentialsId: 'kubeconfig']) {
             sh """
-               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./$tag/app --values $it.values  \
+               helm upgrade --install $appName --namespace=$nameSpace --debug --force ./$tag/app --values $it.value  \
                --set image.tag=$tag
             """
         }
