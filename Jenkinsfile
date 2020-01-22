@@ -76,20 +76,12 @@ def deployStage(list) {
     if (isMaster() || isBuildingTag()) {
         tag = params.tagFromJob1
     }
-    if (ischangeSetList()) {
-        list.each { item ->
-            dockerTag = readTaml file: item
-            tag = item.value.tag
-        }
-    }
-    def tag = params.tagFromJob1
     list.each { item ->
         def nameSpace = item.split('/')[0]
         def appName = item.split('/')[1].split(/\./)[0]
         checkoutConfRepo(tag)
-        deploy(nameSpace, appName, item ,tag)
+        deploy(nameSpace, appName, item, tag)
     }
-}
 def checkoutConfRepo(tag) {
     checkout([$class           : 'GitSCM',
               branches         : [[name: tag]],
