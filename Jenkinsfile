@@ -57,7 +57,6 @@ if (isBuildingTag()) {
 if (list) {
     list.each { item ->
         nameSpace = item.split('/')[0]
-        println nameSpace
         map[nameSpace] = item
     }
 }
@@ -65,7 +64,7 @@ if (list) {
         stage("Deploy release for " + it.key) {
 //                            it.key = 'dev' , 'qa', 'prod-ap1','prod-eu1','prod-us1','prod-us2'
             deployStage(it.value)
-//                              it.value.values = 'dev/values.yaml','qa/values.yaml','prod-ap1/*.yaml','prod-eu1/*.yaml','prod-us1/*.yaml','prod-us2/*.yaml'
+//                              it.value = 'dev/values.yaml','qa/values.yaml','prod-ap1/*.yaml','prod-eu1/*.yaml','prod-us1/*.yaml','prod-us2/*.yaml'
         }
     }
 }
@@ -74,13 +73,11 @@ def deployStage(file_path) {
     def tag = params.tagFromJob1
     if (ischangeSetList()) {
         dockeTag = readYaml file: file_path
-        tag = file_path.value.tag
+        tag = file_path.image.tag
     }
     println tag
     def nameSpace = file_path.split('/')[0]
-    println nameSpace
     def appName = file_path.split('/')[1].split(/\./)[0]
-    println appName
     checkoutConfRepo(tag)
     deploy(nameSpace, appName, file_path, tag)
 }
