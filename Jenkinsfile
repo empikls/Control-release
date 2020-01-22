@@ -31,8 +31,7 @@ spec:
     command:
     - cat
     tty: true
-"""
-) {
+""") {
 
 
     node(label) {
@@ -74,15 +73,15 @@ spec:
     }
 }
 def deployStage(list) {
+    if (isMaster() || isBuildingTag()) {
+        tag = params.tagFromJob1
+    }
+    if (ischangeSetList()) { it ->
+            dockerTag = readTaml file: it
+            tag = it.value.tag
+    }
     def tag = params.tagFromJob1
     list.each { item ->
-        if (isMaster() || isBuildingTag()) {
-            tag = params.tagFromJob1
-        }
-        else {
-            dockerTag = readTaml file: item
-            tag = item.value.tag
-        }
         def nameSpace = item.split('/')[0]
         def appName = item.split('/')[1].split(/\./)[0]
         checkoutConfRepo(tag)
