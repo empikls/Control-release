@@ -38,7 +38,7 @@ spec:
                 node(label) {
                     def tag =  params.tagFromJob1
                     def list = ischangeSetList()
-                    def map =
+                    def map = [
                             'dev'     : ['values': ''],
                             'qa'      : ['values': ''],
                             'prod-ap1': ['values': ''],
