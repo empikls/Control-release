@@ -73,9 +73,7 @@ spec:
     }
 }
 def deployStage(list) {
-    if (isMaster() || isBuildingTag()) {
-        tag = params.tagFromJob1
-    }
+    def tag = params.tagFromJob1
     list.each { item ->
         def nameSpace = item.split('/')[0]
         def appName = item.split('/')[1].split(/\./)[0]
