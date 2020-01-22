@@ -78,9 +78,11 @@ def deployStage(list) {
     if (isMaster() || isBuildingTag()) {
         tag = params.tagFromJob1
     }
-    if (ischangeSetList()) { item ->
-        dockerTag = readYaml file: item
-        tag = item.value.tag
+    if (ischangeSetList()) {
+        list.each { item ->
+            dockerTag = readYaml file: item
+            tag = item.value.tag
+        }
     }
     list.each { item ->
         def nameSpace = item.split('/')[0]
