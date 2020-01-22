@@ -79,6 +79,11 @@ def deployStage(list) {
     list.each { item ->
         def nameSpace = item.split('/')[0]
         def appName = item.split('/')[1].split(/\./)[0]
+        if (ischangeSetList() ) {
+            def dockerTag = readYaml file: item
+            tag =params.tagFromJob1
+        }
+        else tag = params.tagFromJob1
         checkoutConfRepo(tag)
         deploy(nameSpace, appName, item ,tag)
     }
