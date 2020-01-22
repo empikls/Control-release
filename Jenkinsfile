@@ -60,8 +60,6 @@ spec:
                         list.each { item ->
                             def nameSpace = item.split('/')[0]
                             def appName = item.split('/')[1].split(/\./)[0]
-                            def dockerTag = readYaml file: item
-                            tag = dockerTag.image.tag
                             map[nameSpace] = ['values': item]
                         }
                     }
