@@ -82,6 +82,7 @@ def deployStage(list) {
         checkoutConfRepo(tag)
         deploy(nameSpace, appName, item, tag)
     }
+}
 def checkoutConfRepo(tag) {
     checkout([$class           : 'GitSCM',
               branches         : [[name: tag]],
