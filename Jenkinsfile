@@ -36,12 +36,12 @@ spec:
 
 node(label) {
 def map = [
-        'dev'     : [''],
-        'qa'      : [''],
-        'prod-ap1': [''],
-        'prod-eu1': [''],
-        'prod-us1': [''],
-        'prod-us2': ['']
+        'dev'     : '',
+        'qa'      : '',
+        'prod-ap1': '',
+        'prod-eu1': '',
+        'prod-us1': '',
+        'prod-us2': ''
 ]
 stage('Clone config repo') {
     checkout scm
@@ -58,7 +58,7 @@ if (isBuildingTag()) {
 if (list) {
     list.each { item ->
         nameSpace = item.split('/')[0]
-        map[nameSpace] = item.toString()
+        map[nameSpace] = item
     }
 }
     map.each {
