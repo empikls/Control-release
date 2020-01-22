@@ -72,6 +72,13 @@ if (list) {
 }
 }
 def deployStage(list) {
+    def tag = params.tagFromJob1
+    if (list) {
+        list.each { item ->
+            dockeTag = readYaml file: item
+            tag = item.value.tag
+        }
+    }
     list.each { item ->
         def nameSpace = item.split('/')[0]
         def appName = item.split('/')[1].split(/\./)[0]
@@ -80,13 +87,7 @@ def deployStage(list) {
     }
 }
 def checkoutConfRepo() {
-    def tag = params.tagFromJob1
-    if (list) {
-        list.each { item ->
-            dockeTag = readYaml file: item
-            tag = item.value.tag
-        }
-    }
+
     checkout([$class           : 'GitSCM',
               branches         : [[name: tag]],
               extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: tag]],
