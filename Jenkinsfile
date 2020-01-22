@@ -72,8 +72,8 @@ if (list) {
 def deployStage(file_path) {
     def tag = params.tagFromJob1
     if (ischangeSetList()) {
-        dockeTag = readYaml file: file_path
-        tag = dockeTag.image.tag
+        values = readYaml file: file_path
+        tag = values.image.tag
     }
     def nameSpace = file_path.split('/')[0]
     def appName = file_path.split('/')[1].split(/\./)[0]
@@ -117,4 +117,5 @@ def ischangeSetList() {
         }
     }
     return list.toSet()
+    println list
 }
