@@ -1,5 +1,5 @@
 #!groovy
-
+import groovy.text.SimpleTemplateEngine
 import org.jenkinsci.plugins.pipeline.modeldefinition.Utils
 
 def label = "jenkins"
@@ -66,19 +66,22 @@ spec:
                     map.each {
                         stage("Deploy release for " + it.key) {
 //                            it.key = 'dev' , 'qa', 'prod-ap1','prod-eu1','prod-us1','prod-us2'
-                            if (ischangeSetList() ) {
-                                def dockerTag = readYaml file: item
-                                tag = params.tagFromJob1
-                            }
-                            else tag = params.tagFromJob1
-                            deployStage(it.value.values, tag)
+
+                            deployStage(it.value.values)
 //                            it.value = 'values':'dev/values.yaml','values':'qa/values.yaml','values':'prod-ap1/*.yaml','values':'prod-eu1/*.yaml','values':'prod-us1/*.yaml','values':'prod-us2/*.yaml'
 //                              it.value.values = 'dev/values.yaml','qa/values.yaml','prod-ap1/*.yaml','prod-eu1/*.yaml','prod-us1/*.yaml','prod-us2/*.yaml'
                         }
                     }
                 }
             }
-def deployStage(list, tag) {
+def deployStage(list) {
+    if (isMaster() || isBuildingTag()) {
+        tag = params.tagFromJob1
+    }
+    if (ischangeSetList()) { item ->
+        dockerTag = readYaml file: item
+        tag = item.value.tag
+    }
     list.each { item ->
         def nameSpace = item.split('/')[0]
         def appName = item.split('/')[1].split(/\./)[0]
