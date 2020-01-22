@@ -46,9 +46,9 @@ def map = [
 stage('Clone config repo') {
     checkout scm
     echo "tag from Job1 : ${params.tagFromJob1}"
-    println list
 }
     def list = ischangeSetList()
+    println list
 if (isMaster()) {
     map['dev'] = 'dev/values.yaml'
 }
