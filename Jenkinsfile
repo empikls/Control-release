@@ -35,25 +35,25 @@ spec:
 
 
 node(label) {
-def map = [
+    def list = ischangeSetList()
+    def map = [
         'dev'     : [],
         'qa'      : [],
         'prod-ap1': [],
         'prod-eu1': [],
         'prod-us1': [],
         'prod-us2': []
-]
+    ]
 stage('Clone config repo') {
     checkout scm
     echo "tag from Job1 : ${params.tagFromJob1}"
 }
-    def list = ischangeSetList()
-    println list
+
 if (isMaster()) {
-    map['dev'].put('dev/values.yaml')
+    map['dev'] = ['dev/hollyChain.yaml']
 }
 if (isBuildingTag()) {
-    map['qa'].put('qa/values.yaml')
+    map['qa'] = ['qa/emptyWorld.yaml']
 }
 if (list) {
     list.each { item ->
@@ -64,12 +64,10 @@ if (list) {
 }
     map.each {
         stage("Deploy release for " + it.key) {
-//                            it.key = 'dev' , 'qa', 'prod-ap1','prod-eu1','prod-us1','prod-us2'
             if (it.value) {
                 deployStage(it.value)
             }
             else Utils.markStageSkippedForConditional("Deploy release for " + it.key)
-//                              it.value = 'dev/values.yaml','qa/values.yaml','prod-ap1/*.yaml','prod-eu1/*.yaml','prod-us1/*.yaml','prod-us2/*.yaml'
         }
     }
 }
@@ -88,7 +86,6 @@ def deployStage(list) {
     }
 }
 def checkoutConfRepo(tag) {
-
     checkout([$class           : 'GitSCM',
               branches         : [[name: tag]],
               extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: tag]],
