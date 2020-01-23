@@ -57,6 +57,7 @@ if (isBuildingTag()) {
     map['qa'] = ['qa/emptyworld.yaml']
 }
 if (list) {
+    println list
     list.each { item ->
         nameSpace = item.split('/')[0]
         println nameSpace
