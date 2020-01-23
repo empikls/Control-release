@@ -1,8 +1,8 @@
 image:
   tag: 11.1.7
 ingress:
-  hostName: prod-eu2-173-193-112-65.nip.io
+  hostName: prod-eu2-184-172-214-107.nip.io
   tls:
     - hosts:
-        - prod-eu2-173-193-112-65.nip.io
+        - prod-eu2-184-172-214-107.nip.io
       secretName: acme-app-prod-eu2-tls

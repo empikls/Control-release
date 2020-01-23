@@ -1,6 +1,6 @@
 ingress:
-  hostName: dev-173-193-112-65.nip.io
+  hostName: dev-184-172-214-107.nip.io
   tls:
     - hosts:
-      - dev-173-193-112-65.nip.io
+      - dev-184-172-214-107.nip.io
       secretName: acme-app-dev-tls
