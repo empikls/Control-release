@@ -1,5 +1,4 @@
 #!groovy
-
 import groovy.text.SimpleTemplateEngine
 import org.jenkinsci.plugins.pipeline.modeldefinition.Utils
 
@@ -35,45 +34,44 @@ spec:
 """) {
 
 
-node(label) {
-    def list = ischangeSetList()
-    def map = [
-        'dev'     : [],
-        'qa'      : [],
-        'prod-ap1': [],
-        'prod-eu1': [],
-        'prod-us1': [],
-        'prod-us2': []
-    ]
-stage('Clone config repo') {
-    checkout scm
-    echo "tag from Job1 : ${params.tagFromJob1}"
-}
-
-if (isMaster()) {
-    map['dev'] = ['dev/hollychain.yaml']
-}
-if (isBuildingTag()) {
-    map['qa'] = ['qa/emptyworld.yaml']
-}
-if (list) {
-    println list
-    list.each { item ->
-        nameSpace = item.split('/')[0]
-        println nameSpace
-        map[nameSpace] = [item]
-        println map
-    }
-}
-    map.each {
-        stage("Deploy release for " + it.key) {
-            if (it.value) {
-                deployStage(it.value)
+    node(label) {
+        def map = [
+                'dev'     : [],
+                'qa'      : [],
+                'prod-ap1': [],
+                'prod-eu1': [],
+                'prod-us1': [],
+                'prod-us2': []
+        ]
+        stage('Clone config repo') {
+            checkout scm
+            echo "tag from Job1 : ${params.tagFromJob1}"
+        }
+        def list = ischangeSetList()
+        println list
+        if (isMaster()) {
+            map['dev'] = ['dev/values.yaml']
+        }
+        if (isBuildingTag()) {
+            map['qa'] =['qa/values.yaml']
+        }
+        if (list) {
+            list.each { item ->
+                def nameSpace = item.split('/')[0]
+                map[nameSpace] = [item]
             }
-            else Utils.markStageSkippedForConditional("Deploy release for " + it.key)
+        }
+        map.each {
+            stage("Deploy release for " + it.key) {
+//                            it.key = 'dev' , 'qa', 'prod-ap1','prod-eu1','prod-us1','prod-us2'
+                if (it.value) {
+                    deployStage(it.value)
+                }
+                else Utils.markStageSkippedForConditional("Deploy release for " + it.key)
+//                              it.value = 'dev/values.yaml','qa/values.yaml','prod-ap1/*.yaml','prod-eu1/*.yaml','prod-us1/*.yaml','prod-us2/*.yaml'
+            }
         }
     }
-}
 }
 def deployStage(list) {
     list.each { file_path ->
@@ -89,6 +87,7 @@ def deployStage(list) {
     }
 }
 def checkoutConfRepo(tag) {
+
     checkout([$class           : 'GitSCM',
               branches         : [[name: tag]],
               extensions       : [[$class: 'RelativeTargetDirectory', relativeTargetDir: tag]],
