@@ -1,5 +1,5 @@
 image:
-  tag: v2.2.2
+  tag: 20.01.2021
 ingress:
   hostName: prod-ap1-184-172-214-107.nip.io
   tls:
