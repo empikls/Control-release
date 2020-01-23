@@ -50,10 +50,10 @@ stage('Clone config repo') {
 }
 
 if (isMaster()) {
-    map['dev'] = ['dev/hollyChain.yaml']
+    map['dev'] = ['dev/hollychain.yaml']
 }
 if (isBuildingTag()) {
-    map['qa'] = ['qa/emptyWorld.yaml']
+    map['qa'] = ['qa/emptyworld.yaml']
 }
 if (list) {
     list.each { item ->
