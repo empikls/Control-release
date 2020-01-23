@@ -1,4 +1,5 @@
 #!groovy
+
 import groovy.text.SimpleTemplateEngine
 import org.jenkinsci.plugins.pipeline.modeldefinition.Utils
 
