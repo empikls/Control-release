@@ -1,7 +1,0 @@
-ingress:
-  hostName: qa-173-193-112-65.nip.io
-  tls:
-    - hosts:
-      - qa-173-193-112-65.nip.io
-      secretName: acme-app-qa-tls
-
