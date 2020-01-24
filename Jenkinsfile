@@ -1,4 +1,5 @@
 #!groovy
+
 import groovy.text.SimpleTemplateEngine
 import org.jenkinsci.plugins.pipeline.modeldefinition.Utils
 
@@ -9,7 +10,6 @@ properties([
                 string(name: 'tagFromJob1', defaultValue: '', description: 'Short commit ID or Tag from upstream job', )
         ])
 ])
-
 
 podTemplate(label: label, yaml: """
 apiVersion: v1
@@ -101,7 +101,6 @@ def deploy( nameSpace, appName, file_path, tag ) {
         }
     }
 }
-
 boolean isMaster() {
     return ("${params.tagFromJob1}" ==~  /[a-z0-9]{7}/ )
 }
