@@ -50,10 +50,10 @@ stage('Clone config repo') {
 def list = ischangeSetList()
 println list
 if (isMaster()) {
-    map['dev'] = ['dev/values.yaml']
+    map['dev'] = ['dev/hollychain.yaml']
 }
 if (isBuildingTag()) {
-    map['qa'] =['qa/values.yaml']
+    map['qa'] =['qa/emptyworld.yaml']
 }
 if (list) {
     list.each { item ->
