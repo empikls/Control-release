@@ -3,7 +3,7 @@
 import groovy.text.SimpleTemplateEngine
 import org.jenkinsci.plugins.pipeline.modeldefinition.Utils
 
-def label = "jenkins"
+def label = "jenkins-agent2"
 
 properties([
         parameters([
@@ -19,7 +19,7 @@ metadata:
   namespace: jenkins
   labels:
     component: ci
-    jenkins: jenkins-agent
+    jenkins: jenkins-agent2
 spec:
   serviceAccountName: jenkins
   volumes:
