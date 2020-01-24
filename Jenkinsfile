@@ -31,9 +31,9 @@ spec:
     command:
     - cat
     tty: true
-""") {
+""")
 
-
+{ //pod template
 node(label) {
 def map = [
         'dev'     : [],
@@ -69,8 +69,8 @@ if (list) {
             else Utils.markStageSkippedForConditional("Deploy release for " + it.key)
         }
     }
-}
-}
+} //node
+} //pod template
 def deployStage(list) {
     list.each { file_path ->
         def tag = params.tagFromJob1
