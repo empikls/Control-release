@@ -1,5 +1,5 @@
 image:
-  tag: v2.2.2
+  tag: 1.0.12
 ingress:
   hostName: prod-us1-184-172-214-107.nip.io
   tls:
