@@ -46,6 +46,7 @@ def map = [
     stage('SSH') {
         sshagent(['ssh-key']) {
             sh """
+    git init
     git tag
     """
         }
