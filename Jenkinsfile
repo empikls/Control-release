@@ -43,15 +43,7 @@ def map = [
         'prod-us1': [],
         'prod-us2': []
 ]
-    stage('SSH') {
-        sshagent(['ssh-key']) {
-            sh """
-   git clone git@github.com:empikls/node.is.git
-   git tag
-    """
-        }
-    }
-    
+
     stage('Clone config repo') {
     checkout scm
     echo "tag from Job1 : ${params.tagFromJob1}"
