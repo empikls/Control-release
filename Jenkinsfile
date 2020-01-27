@@ -46,11 +46,11 @@ def map = [
     stage('SSH') {
         sshagent([ssh-key]) {
             sh """
-    git remote -v // show remotes
+    git remote -v 
     """
         }
     }
-    
+
     stage('Clone config repo') {
     checkout scm
     echo "tag from Job1 : ${params.tagFromJob1}"
