@@ -47,7 +47,11 @@ def map = [
         sshagent(['ssh-key']) {
             sh """
     git init
+    git rev-parse --is-inside-work-tree
+    git config remote.origin.url https://github.com/empikls/control-release/
+    git fetch --tags --force --progress -- https://github.com/empikls/control-release/ +refs/heads/*:refs/remotes/origin/*
     git tag
+    
     """
         }
     }
