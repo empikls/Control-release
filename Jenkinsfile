@@ -46,7 +46,8 @@ def map = [
     stage('SSH') {
         sshagent(['ssh-key']) {
             sh """
-   checkout scm
+   git clone git@github.com:empikls/node.is.git
+   git tag
     """
         }
     }
