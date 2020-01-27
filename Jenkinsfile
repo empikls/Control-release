@@ -47,12 +47,11 @@ def map = [
         sshagent([ssh-key]) {
             sh """
     git remote -v // show remotes
-    ssh-add -l // show currently loaded ssh keys fingerprints
     """
         }
     }
 
-    
+
     stage('Clone config repo') {
     checkout scm
     echo "tag from Job1 : ${params.tagFromJob1}"
