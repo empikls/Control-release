@@ -44,7 +44,7 @@ def map = [
         'prod-us2': []
 ]
     stage('SSH') {
-        sshagent(credentials:['ssh-key']) {
+        sshagent(['ssh-key']) {
             sh """
     git remote -v 
     """
