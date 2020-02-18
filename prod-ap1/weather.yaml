@@ -1,7 +1,7 @@
 image:
   tag: v1.1.1
 ingress:
-  hostName: prod-ap1-184-172-214-107.nip.io
+  hostName: prod-ap1-184-173-1-84.nip.io
   tls:
     - hosts:
         - prod-ap1-184-172-214-107.nip.io
